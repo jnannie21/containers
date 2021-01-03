@@ -13,9 +13,6 @@ namespace ft {
 
 	template < class T, class Alloc = allocator<T> >
 	class list {
-	private:
-
-
 	public:
 		//typedefs
 		typedef T value_type;
@@ -24,16 +21,20 @@ namespace ft {
 		typedef allocator_type::const_reference const_reference;
 		typedef allocator_type::pointer pointer;
 		typedef allocator_type::const_pointer const_pointer;
-		typedef list_itetator iterator;
-		typedef const_list_iterator const_iterator;
+		typedef list_itetator<T> iterator;
+		typedef list_iterator<const T> const_iterator;
 		typedef reverse_iterator<iterator> reverse_iterator;
 		typedef reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef list_iterator::difference_type difference_type;
 		typedef size_t size_type;
 
 
+	private:
+		node _first;
+		node _last;
 
 
+	public:
 		//constructor
 		//default (1)
 		explicit list (const allocator_type& alloc = allocator_type());
@@ -169,6 +170,9 @@ namespace ft {
 
 	template <class T, class Alloc>
 	void swap (list<T,Alloc>& x, list<T,Alloc>& y);
+
+
+#include "list_iterator.tpp"
 
 
 } //namespace ft

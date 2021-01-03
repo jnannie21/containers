@@ -20,25 +20,27 @@ namespace ft {
 	template <class T>
 	class list_iterator : public ft::iterator<std::bidirectional_iterator_tag, T> {
 		list_iterator();
-		list_iterator(list_iterator const & other);
+		list_iterator(const list_iterator& other);
 		~list_iterator();
-		list_iterator const & operator=(list_iterator const & rhs);
+		const list_iterator& operator=(const list_iterator& rhs);
 
-		bool operator==(list_iterator const &rhs);
-		bool operator!=(list_iterator const &rhs);
+		bool operator==(const list_iterator& rhs);
+		bool operator!=(const list_iterator& rhs);
 
-		T & operator*();
-		T const & operator*() const;
-		T & operator->();
-		T const & operator->() const;
+		reference operator*();
+		pointer operator->();
 
-		list_iterator & operator++();
-		list_iterator & operator++();
-		*a++
+		list_iterator& operator++(); //prefix increment
+		list_iterator& operator++(int); //postfix increment
+
+		list_iterator& operator--();
+		list_iterator& operator--(int);
 
 	};
 
-}
+#include "list_iterator.tpp"
+
+} //namespace ft
 
 
 #endif //LIST_ITERATOR_HPP
