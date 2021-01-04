@@ -5,8 +5,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-//#include <memory>
-//#include <iterator>
+#include "node.hpp"
 #include "list_iterator.hpp"
 
 namespace ft {
@@ -30,21 +29,48 @@ namespace ft {
 
 
 	private:
-		node _first;
-		node _last;
+		allocator_type _alloc;
+		node *_first;
+		node *_last;
+		size_type _length;
 
 
 	public:
 		//constructor
 		//default (1)
-		explicit list (const allocator_type& alloc = allocator_type());
+		explicit list (const allocator_type& alloc = allocator_type())
+						: _alloc(alloc), _first(NULL), _last(NULL)), length(0) {
+			_first = new node<value_type>();
+			_last = new node<value_type>();
+		}
+
 		//fill (2)
 		explicit list (size_type n, const value_type& val = value_type(),
-					   const allocator_type& alloc = allocator_type());
+						const allocator_type& alloc = allocator_type())
+						: _alloc(alloc), _first(NULL), _last(NULL), _length(0) {
+			_first = new node<value_type>();
+			_last = new node<value_type>();
+
+			_first->next = _last;
+			_last->prev = _first;
+
+			this->assign(n, val);
+		}
+
 		//range (3)
 		template <class InputIterator>
 		list (InputIterator first, InputIterator last,
-			  const allocator_type& alloc = allocator_type());
+			  const allocator_type& alloc = allocator_type())
+			  : _alloc(alloc), _first(NULL), _last(NULL), _length(0) {
+			_first = new node<value_type>();
+			_last = new node<value_type>();
+
+			_first->next = _last;
+			_last->prev = _first;
+
+			this->assign(first, last);
+		}
+
 		//copy (4)
 		list (const list& x);
 
@@ -170,9 +196,6 @@ namespace ft {
 
 	template <class T, class Alloc>
 	void swap (list<T,Alloc>& x, list<T,Alloc>& y);
-
-
-#include "list_iterator.tpp"
 
 
 } //namespace ft

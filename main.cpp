@@ -4,8 +4,11 @@
 
 #include "list/node.hpp"
 #include <iostream>
+#include <iterator>
 
 int main() {
+	iterator_traits<int *> it;
+
 	node<int> n();
 
 	std::cout << n.content() << std::endl;

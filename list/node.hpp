@@ -9,26 +9,33 @@ namespace ft {
 
 	template < class T >
 	class node {
-		node(const T& content = T());
-		node(const node& other);
-		~node();
-		const node& operator=(const node& rhs);
-
-		node* prev();
-		node* next();
-
-		T& content();
-		const T& content() const;
-
-	private:
+	public:
 		node* _prev;
 		node* _next;
-		T _content;
+		T _value;
+
+		node() : _prev(NULL), _next(NULL), _value() { }
+		node(const node& other) { *this = other; }
+		~node() { }
+
+		const node& operator=(const node& rhs) {
+			if (this == &rhs)
+				return *this;
+
+			this->_prev = rhs._prev;
+			this->_next = rhs._next;
+			this->_value = rhs._value;
+
+			return *this;
+		}
+
+		node* prev() { return _prev; }
+		node* next() { return _next; }
+
+		T& _value() { return _value; }
 
 	};
 
 }
-
-#include "node.tpp"
 
 #endif //NODE_HPP
