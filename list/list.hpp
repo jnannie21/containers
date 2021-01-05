@@ -22,8 +22,8 @@ namespace ft {
 		typedef allocator_type::const_pointer const_pointer;
 		typedef list_itetator<T> iterator;
 		typedef list_iterator<const T> const_iterator;
-		typedef reverse_iterator<iterator> reverse_iterator;
-		typedef reverse_iterator<const_iterator> const_reverse_iterator;
+		typedef list_reverse_iterator<iterator> reverse_iterator;
+		typedef list_reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef list_iterator::difference_type difference_type;
 		typedef size_t size_type;
 
@@ -42,6 +42,9 @@ namespace ft {
 						: _alloc(alloc), _first(NULL), _last(NULL)), length(0) {
 			_first = new node<value_type>();
 			_last = new node<value_type>();
+
+			_first->next = _last;
+			_last->prev = _first;
 		}
 
 		//fill (2)
@@ -72,20 +75,49 @@ namespace ft {
 		}
 
 		//copy (4)
-		list (const list& x);
+		list (const list& x)
+				: _first(NULL), _last(NULL), _length(0) {
+			_first = new node<value_type>();
+			_last = new node<value_type>();
+
+			*this = x;
+		}
 
 		//destructor
-		~list();
+		~list() {
+			delete _first;
+			delete _last;
+		}
 
 		//copy
-		list& operator= (const list& x);
+		list& operator= (const list& x) {
+			if (this == &x)
+				return *this;
+
+			this->_alloc = x._alloc;
+			*this->_first = *x._first;
+			*this->_last = *x._last;
+			this->_length = x._length;
+
+			return *this;
+		}
 
 		//iterators
-		iterator begin();
-		const_iterator begin() const;
+		iterator begin() {
+			return iterator(_first->_next);
+		}
 
-		iterator end();
-		const_iterator end() const;
+		const_iterator begin() const {
+			return const_iterator(_first->_next);
+		}
+
+		iterator end() {
+			return iterator(_last->_prev);
+		}
+
+		const_iterator end() const {
+			return const_iterator(_last->_prev);
+		}
 
 		reverse_iterator rbegin();
 		const_reverse_iterator rbegin() const;
@@ -108,7 +140,18 @@ namespace ft {
 		//modifiers
 		//range (1)
 		template <class InputIterator>
-		void assign (InputIterator first, InputIterator last);
+		void assign (InputIterator first, InputIterator last) {
+			this->clear();
+			_length = 0;
+
+			while (first != last)
+			{
+				this->push_back(*first);
+				first++;
+				_length++;
+			}
+		}
+
 		//fill (2)
 		void assign (size_type n, const value_type& val);
 
@@ -116,9 +159,26 @@ namespace ft {
 
 		void pop_front();
 
-		void push_back (const value_type& val);
+		void push_back (const value_type& val) {
+			node* temp = new node(val);
 
-		void pop_back();
+			temp->_prev = _last->_prev;
+			temp->_next = _last;
+			_last->_prev->_next = temp;
+			_last->_prev = temp;
+
+			_length++;
+		}
+
+		void pop_back() {
+			if (_length > 0)
+			{
+				node* temp = _last->_prev;
+				_last->_prev = _last->_prev->_prev;
+				delete temp;
+				_length--;
+			}
+		}
 
 		//single element (1)
 		iterator insert (iterator position, const value_type& val);
@@ -135,7 +195,10 @@ namespace ft {
 
 		void resize (size_type n, value_type val = value_type());
 
-		void clear();
+		void clear() {
+			while (_length--)
+				this->pop_back();
+		}
 
 		//operations
 		//entire list (1)

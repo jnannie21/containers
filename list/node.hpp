@@ -16,6 +16,7 @@ namespace ft {
 
 		node() : _prev(NULL), _next(NULL), _value() { }
 		node(const node& other) { *this = other; }
+		node(const T& value) : _prev(NULL), _next(NULL), _value(value) { }
 		~node() { }
 
 		const node& operator=(const node& rhs) {
@@ -32,7 +33,7 @@ namespace ft {
 		node* prev() { return _prev; }
 		node* next() { return _next; }
 
-		T& _value() { return _value; }
+		T& value() { return _value; }
 
 	};
 
