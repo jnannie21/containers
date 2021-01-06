@@ -11,29 +11,58 @@
 namespace ft {
 
 	template <class Iterator>
-	class list_reverse_iterator {
-	private:
-		Iterator _it;
+	class reverse_iterator {
 	public:
-		list_reverse_iterator();
-		list_reverse_iterator(const list_reverse_iterator& other);
-		list_reverse_iterator(node<Iterator::value_type>* p) : Iterator(p) { }
-		~list_reverse_iterator();
-		const list_reverse_iterator& operator=(const list_reverse_iterator& rhs);
+		//typedefs
+		typedef Iterator iterator_type;
+		typedef Iterator::iterator_category iterator_category;
+		typedef Iterator::value_type value_type;
+		typedef Iterator::difference_type difference_type;
+		typedef Iterator::pointer pointer;
+		typedef Iterator::reference reference;
 
-		bool operator==(const list_reverse_iterator& rhs);
-		bool operator!=(const list_reverse_iterator& rhs);
+	private:
+		iterator_type _base;
 
-		reference operator*();
-		pointer operator->();
+	public:
+		//default (1)
+		reverse_iterator() : _base() { }
 
-		list_reverse_iterator& operator++(); //prefix increment
-		list_reverse_iterator& operator++(int); //postfix increment
+		//initialization (2)
+		explicit reverse_iterator (iterator_type it) : _base(it) { }
 
-		list_reverse_iterator& operator--();
-		list_reverse_iterator& operator--(int);
+		//copy (3)
+		template <class Iter>
+		reverse_iterator (const reverse_iterator<Iter>& rev_it) { _base = rev_it._base; }
+
+//		bool operator==(const reverse_iterator& rhs);
+//		bool operator!=(const reverse_iterator& rhs);
+
+		friend bool operator== (const reverse_iterator& lhs, const reverse_iterator& rhs);
+		friend bool operator!= (const reverse_iterator& lhs, const reverse_iterator& rhs);
+
+		reference operator*() { iterator_type tmp = _base; return *--tmp; }
+		pointer operator->() { return &(operator*()); }
+
+		reverse_iterator& operator++() { --_base; return *this;} //prefix increment
+		reverse_iterator& operator++(int) { } //postfix increment
+
+		reverse_iterator& operator--();
+		reverse_iterator& operator--(int);
 
 	};
+
+
+	template <class T>
+	bool operator== (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) {
+		return lhs._p == rhs._p;
+	}
+
+	template <class T>
+	bool operator!= (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) {
+		return !(lhs == rhs);
+	}
+
 
 } //namespace ft
 

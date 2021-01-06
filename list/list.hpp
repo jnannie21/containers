@@ -27,35 +27,31 @@ namespace ft {
 		typedef list_iterator::difference_type difference_type;
 		typedef size_t size_type;
 
-
 	private:
 		allocator_type _alloc;
-		node *_first;
-		node *_last;
+		node *_before_before_first;
+		node *_after_last;
 		size_type _length;
-
 
 	public:
 		//constructor
 		//default (1)
 		explicit list (const allocator_type& alloc = allocator_type())
-						: _alloc(alloc), _first(NULL), _last(NULL)), length(0) {
-			_first = new node<value_type>();
-			_last = new node<value_type>();
-
-			_first->next = _last;
-			_last->prev = _first;
-		}
+						: _alloc(alloc), _before_before_first(NULL), _after_last(NULL)), length(0) {
+			_before_before_first = new node<value_type>();
+			_after_last = new node<value_type>();
+			_before_first->_next = _after_last;
+			_after_last->_prev = _before_first;
+	}
 
 		//fill (2)
 		explicit list (size_type n, const value_type& val = value_type(),
 						const allocator_type& alloc = allocator_type())
-						: _alloc(alloc), _first(NULL), _last(NULL), _length(0) {
-			_first = new node<value_type>();
-			_last = new node<value_type>();
-
-			_first->next = _last;
-			_last->prev = _first;
+						: _alloc(alloc), _before_first(NULL), _after_last(NULL), _length(0) {
+			_before_first = new node<value_type>();
+			_after_last = new node<value_type>();
+			_before_first->_next = _after_last;
+			_after_last->_prev = _before_first;
 
 			this->assign(n, val);
 		}
@@ -64,29 +60,28 @@ namespace ft {
 		template <class InputIterator>
 		list (InputIterator first, InputIterator last,
 			  const allocator_type& alloc = allocator_type())
-			  : _alloc(alloc), _first(NULL), _last(NULL), _length(0) {
-			_first = new node<value_type>();
-			_last = new node<value_type>();
-
-			_first->next = _last;
-			_last->prev = _first;
+			  : _alloc(alloc), _before_first(NULL), _after_last(NULL), _length(0) {
+			_before_first = new node<value_type>();
+			_after_last = new node<value_type>();
+			_before_first->_next = _after_last;
+			_after_last->_prev = _before_first;
 
 			this->assign(first, last);
 		}
 
 		//copy (4)
 		list (const list& x)
-				: _first(NULL), _last(NULL), _length(0) {
-			_first = new node<value_type>();
-			_last = new node<value_type>();
+				: _before_first(NULL), _after_last(NULL), _length(0) {
+			_before_first = new node<value_type>();
+			_after_last = new node<value_type>();
 
 			*this = x;
 		}
 
 		//destructor
 		~list() {
-			delete _first;
-			delete _last;
+			delete _before_first;
+			delete _after_last;
 		}
 
 		//copy
@@ -94,29 +89,29 @@ namespace ft {
 			if (this == &x)
 				return *this;
 
-			this->_alloc = x._alloc;
-			*this->_first = *x._first;
-			*this->_last = *x._last;
-			this->_length = x._length;
+			_alloc = x._alloc;
+			*_before_first = *x._before_first;
+			*_after_last = *x._after_last;
+			_length = x._length;
 
 			return *this;
 		}
 
 		//iterators
 		iterator begin() {
-			return iterator(_first->_next);
+			return iterator(_before_first->_next);
 		}
 
 		const_iterator begin() const {
-			return const_iterator(_first->_next);
+			return const_iterator(_before_first->_next);
 		}
 
 		iterator end() {
-			return iterator(_last->_prev);
+			return iterator(_after_last);
 		}
 
 		const_iterator end() const {
-			return const_iterator(_last->_prev);
+			return const_iterator(_after_last);
 		}
 
 		reverse_iterator rbegin();
@@ -162,19 +157,25 @@ namespace ft {
 		void push_back (const value_type& val) {
 			node* temp = new node(val);
 
-			temp->_prev = _last->_prev;
-			temp->_next = _last;
-			_last->_prev->_next = temp;
-			_last->_prev = temp;
+			if (_before_first == _after_last)
+				_before_first = _temp;
+
+			temp->_prev = _after_last->_prev;
+			temp->_next = _after_last;
+			_after_last->_prev = temp;
+
+			if (temp->_prev)
+				temp->_prev->_next = temp;
 
 			_length++;
 		}
 
 		void pop_back() {
-			if (_length > 0)
+			if (_length > 0 && _after_last->_prev)
 			{
-				node* temp = _last->_prev;
-				_last->_prev = _last->_prev->_prev;
+				node* temp = _after_last->_prev;
+				_after_last->_prev = _after_last->_prev->_prev;
+				_after_last->_prev->_next = _after_last;
 				delete temp;
 				_length--;
 			}

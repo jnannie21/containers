@@ -5,8 +5,11 @@
 #include "list/node.hpp"
 #include <iostream>
 #include <iterator>
+#include <list>
 
 int main() {
+	list<int> l;
+
 	iterator_traits<int *> it;
 
 	node<int> n();

@@ -16,25 +16,55 @@ namespace ft {
 		node<T>* _p;
 
 	public:
-		list_iterator();
-		list_iterator(const list_iterator& other);
+		list_iterator() : _p(NULL) { }
+		list_iterator(const list_iterator& other) : _p(other._p) { }
 		list_iterator(node<T>* p) : _p(p) { }
-		~list_iterator();
-		const list_iterator& operator=(const list_iterator& rhs);
+		~list_iterator() { }
 
-		bool operator==(const list_iterator& rhs);
-		bool operator!=(const list_iterator& rhs);
+		const list_iterator& operator=(const list_iterator& rhs) { _p = rhs._p; }
 
-		reference operator*();
-		pointer operator->();
+//		bool operator==(const list_iterator& rhs) const { return _p == rhs._p;}
+//		bool operator!=(const list_iterator& rhs) const { return _p != rhs._p;}
 
-		list_iterator& operator++(); //prefix increment
-		list_iterator& operator++(int); //postfix increment
+		friend bool operator== (const list_iterator& lhs, const list_iterator& rhs);
+		friend bool operator!= (const list_iterator& lhs, const list_iterator& rhs);
 
-		list_iterator& operator--();
-		list_iterator& operator--(int);
+		reference operator*() const { return _p->_value; }
+		pointer operator->() const { return &_p->_value; }
+
+		list_iterator& operator++() { //prefix increment
+			_p = _p->_next;
+			return *this;
+		}
+
+		list_iterator operator++(int) { //postfix increment
+			list_iterator temp = *this;
+			++(*this);
+			return temp;
+		}
+
+		list_iterator& operator--() {
+			_p = _p->_prev;
+			return *this;
+		}
+
+		list_iterator& operator--(int) {
+			list_iterator temp = *this;
+			--(*this);
+			return temp;
+		}
 
 	};
+
+	template <class T>
+	bool operator== (const list_iterator<T>& lhs, const list_iterator<T>& rhs) {
+		return lhs._p == rhs._p;
+	}
+
+	template <class T>
+	bool operator!= (const list_iterator<T>& lhs, const list_iterator<T>& rhs) {
+		return !(lhs == rhs);
+	}
 
 } //namespace ft
 
