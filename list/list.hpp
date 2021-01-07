@@ -7,6 +7,8 @@
 
 #include "node.hpp"
 #include "list_iterator.hpp"
+#include "utils.hpp"
+#include <memory>
 
 namespace ft {
 
@@ -20,8 +22,8 @@ namespace ft {
 		typedef allocator_type::const_reference const_reference;
 		typedef allocator_type::pointer pointer;
 		typedef allocator_type::const_pointer const_pointer;
-		typedef list_itetator<T> iterator;
-		typedef list_iterator<const T> const_iterator;
+		typedef list_itetator<value_type> iterator;
+		typedef list_iterator<value_type> const_iterator;
 		typedef list_reverse_iterator<iterator> reverse_iterator;
 		typedef list_reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef list_iterator::difference_type difference_type;
@@ -29,8 +31,8 @@ namespace ft {
 
 	private:
 		allocator_type _alloc;
-		node *_before_before_first;
-		node *_after_last;
+		node<T> *_before_before_first;
+		node<T> *_after_last;
 		size_type _length;
 
 	public:
@@ -40,6 +42,7 @@ namespace ft {
 						: _alloc(alloc), _before_before_first(NULL), _after_last(NULL)), length(0) {
 			_before_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
+
 			_before_first->_next = _after_last;
 			_after_last->_prev = _before_first;
 	}
@@ -50,6 +53,7 @@ namespace ft {
 						: _alloc(alloc), _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
+
 			_before_first->_next = _after_last;
 			_after_last->_prev = _before_first;
 
@@ -63,6 +67,7 @@ namespace ft {
 			  : _alloc(alloc), _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
+
 			_before_first->_next = _after_last;
 			_after_last->_prev = _before_first;
 
@@ -71,7 +76,7 @@ namespace ft {
 
 		//copy (4)
 		list (const list& x)
-				: _before_first(NULL), _after_last(NULL), _length(0) {
+			: _alloc(), _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
 
@@ -114,23 +119,54 @@ namespace ft {
 			return const_iterator(_after_last);
 		}
 
-		reverse_iterator rbegin();
-		const_reverse_iterator rbegin() const;
+		reverse_iterator rbegin() {
+			return reverse_iterator(end());
+		}
 
-		reverse_iterator rend();
-		const_reverse_iterator rend() const;
+		const_reverse_iterator rbegin() const {
+			return const_reverse_iterator(end());
+		}
+
+		reverse_iterator rend() {
+			return reverse_iterator(begin());
+		}
+
+		const_reverse_iterator rend() const {
+			return const_reverse_iterator(begin());
+		}
 
 		//capacity
-		bool empty() const;
-		size_type size() const;
-		size_type max_size() const;
+		bool empty() const {
+			return (begin() == end());
+		}
+
+		size_type size() const {
+			return _length;
+		}
+
+		size_type max_size() const {
+			return ft::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
+//			return min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(value_type)), std::numeric_limits<difference_type>::max());
+		}
 
 		//element access
-		reference front();
-		const_reference front() const;
+		reference front() {
+			return _before_before_first->_next->_value;
+//			return *begin();
+		}
 
-		reference back();
-		const_reference back() const;
+		const_reference front() const {
+			return _before_before_first->_next->_value;
+//			return *begin();
+		}
+
+		reference back() {
+			return _after_last->_prev->_value;
+		}
+
+		const_reference back() const {
+			return _after_last->_prev->_value;
+		}
 
 		//modifiers
 		//range (1)

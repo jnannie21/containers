@@ -13,12 +13,12 @@ namespace ft {
 	template <class T>
 	class list_iterator : public iterator<std::bidirectional_iterator_tag, T> {
 	private:
-		node<T>* _p;
+		node<value_type>* _p;
 
 	public:
 		list_iterator() : _p(NULL) { }
 		list_iterator(const list_iterator& other) : _p(other._p) { }
-		list_iterator(node<T>* p) : _p(p) { }
+		list_iterator(node<value_type>* p) : _p(p) { }
 		~list_iterator() { }
 
 		const list_iterator& operator=(const list_iterator& rhs) { _p = rhs._p; }

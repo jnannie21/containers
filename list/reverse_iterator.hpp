@@ -44,11 +44,19 @@ namespace ft {
 		reference operator*() { iterator_type tmp = _base; return *--tmp; }
 		pointer operator->() { return &(operator*()); }
 
-		reverse_iterator& operator++() { --_base; return *this;} //prefix increment
-		reverse_iterator& operator++(int) { } //postfix increment
+		reverse_iterator& operator++() { --_base; return *this; } //prefix increment
+		reverse_iterator operator++(int) { //postfix increment
+			reverse_iterator temp = *this;
+			++(*this);
+			return temp;
+		}
 
-		reverse_iterator& operator--();
-		reverse_iterator& operator--(int);
+		reverse_iterator& operator--() { ++_base; return *this; }
+		reverse_iterator& operator--(int) {
+			reverse_iterator temp = *this;
+			--(*this);
+			return temp;
+		}
 
 	};
 
