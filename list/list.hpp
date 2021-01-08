@@ -298,7 +298,10 @@ namespace ft {
 		}
 
 		void resize (size_type n, value_type val = value_type()) {
-
+			while (_length > n)
+				pop_back();
+			while (_length < n)
+				push_back(val);
 		}
 
 		void clear() {
@@ -308,11 +311,45 @@ namespace ft {
 
 		//operations
 		//entire list (1)
-		void splice (iterator position, list& x);
+		void splice (iterator position, list& x) {
+			splice(position, x, x.begin(), x.end());
+		}
+
 		//single element (2)
-		void splice (iterator position, list& x, iterator i);
+		void splice (iterator position, list& x, iterator i) {
+			iterator last(i);
+
+			++last;
+			splice(position, x, i, last);
+		}
+
 		//element range (3)
-		void splice (iterator position, list& x, iterator first, iterator last);
+		void splice (iterator position, list& x, iterator first, iterator last) {
+			if (first == last)
+				return ;
+
+			node* p = position.get_p();
+			node* f = first.get_p();
+			node* l = last.get_p();
+
+			node* before_f = f->_prev;
+
+			f->_prev = p->_prev;
+			f->_prev->_next = f;
+
+			l->_prev->_next = p;
+			p->_prev = l->_prev;
+
+			while (f != l)
+			{
+				--x._length;
+				--_length;
+				++f;
+			}
+
+			before_f->_next = l;
+			l->_prev = before_f;
+		}
 
 		void remove (const value_type& val);
 
@@ -364,7 +401,9 @@ namespace ft {
 
 
 	template <class T, class Alloc>
-	void swap (list<T,Alloc>& x, list<T,Alloc>& y);
+	void swap (list<T,Alloc>& x, list<T,Alloc>& y) {
+		x.swap(y);
+	}
 
 
 } //namespace ft
