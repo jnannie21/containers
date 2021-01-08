@@ -145,8 +145,8 @@ namespace ft {
 		}
 
 		size_type max_size() const {
-			return ft::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
-//			return min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(value_type)), std::numeric_limits<difference_type>::max());
+			return ft::min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(node<value_type>)), std::numeric_limits<difference_type>::max());
+//			return ft::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
 		}
 
 		//element access
