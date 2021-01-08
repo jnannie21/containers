@@ -31,7 +31,7 @@ namespace ft {
 
 	private:
 		allocator_type _alloc;
-		node<T> *_before_before_first;
+		node<T> *_before_first;
 		node<T> *_after_last;
 		size_type _length;
 
@@ -39,8 +39,8 @@ namespace ft {
 		//constructor
 		//default (1)
 		explicit list (const allocator_type& alloc = allocator_type())
-						: _alloc(alloc), _before_before_first(NULL), _after_last(NULL)), length(0) {
-			_before_before_first = new node<value_type>();
+						: _alloc(alloc), _before_first(NULL), _after_last(NULL)), length(0) {
+			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
 
 			_before_first->_next = _after_last;
@@ -57,7 +57,7 @@ namespace ft {
 			_before_first->_next = _after_last;
 			_after_last->_prev = _before_first;
 
-			this->assign(n, val);
+			assign(n, val);
 		}
 
 		//range (3)
@@ -71,7 +71,7 @@ namespace ft {
 			_before_first->_next = _after_last;
 			_after_last->_prev = _before_first;
 
-			this->assign(first, last);
+			assign(first, last);
 		}
 
 		//copy (4)
@@ -151,12 +151,12 @@ namespace ft {
 
 		//element access
 		reference front() {
-			return _before_before_first->_next->_value;
+			return _before_first->_next->_value;
 //			return *begin();
 		}
 
 		const_reference front() const {
-			return _before_before_first->_next->_value;
+			return _before_first->_next->_value;
 //			return *begin();
 		}
 
@@ -172,42 +172,60 @@ namespace ft {
 		//range (1)
 		template <class InputIterator>
 		void assign (InputIterator first, InputIterator last) {
-			this->clear();
+			clear();
 			_length = 0;
 
 			while (first != last)
 			{
-				this->push_back(*first);
+				push_back(*first);
 				first++;
-				_length++;
 			}
 		}
 
 		//fill (2)
-		void assign (size_type n, const value_type& val);
+		void assign (size_type n, const value_type& val) {
+			clear();
+			_length = 0;
 
-		void push_front (const value_type& val);
+			while (n--)
+				push_back(val);
+		}
 
-		void pop_front();
+		void push_front (const value_type& val) {
+			node* temp = new node(val);
+
+			temp->_prev = _before_first;
+			temp->_next = _before_first->_next;
+			_before_first->_next = temp;
+			temp->_next->_prev = temp;
+
+			_length++;
+		}
+
+		void pop_front() {
+			if (_length > 0)
+			{
+				node* temp = _before_first->_next;
+				_before_first->_next = _before_first->_next->_next;
+				_before_first->_next->_prev = _before_first;
+				delete temp;
+				_length--;
+			}
+		}
 
 		void push_back (const value_type& val) {
 			node* temp = new node(val);
 
-			if (_before_first == _after_last)
-				_before_first = _temp;
-
 			temp->_prev = _after_last->_prev;
 			temp->_next = _after_last;
 			_after_last->_prev = temp;
-
-			if (temp->_prev)
-				temp->_prev->_next = temp;
+			temp->_prev->_next = temp;
 
 			_length++;
 		}
 
 		void pop_back() {
-			if (_length > 0 && _after_last->_prev)
+			if (_length > 0)
 			{
 				node* temp = _after_last->_prev;
 				_after_last->_prev = _after_last->_prev->_prev;
@@ -218,7 +236,16 @@ namespace ft {
 		}
 
 		//single element (1)
-		iterator insert (iterator position, const value_type& val);
+		iterator insert (iterator position, const value_type& val) {
+			node* temp = new node(val);
+
+			temp->_prev = _after_last->_prev;
+			temp->_next = _after_last;
+			_after_last->_prev = temp;
+			temp->_prev->_next = temp;
+
+			_length++;
+		}
 		//fill (2)
 		void insert (iterator position, size_type n, const value_type& val);
 		//range (3)
@@ -234,7 +261,7 @@ namespace ft {
 
 		void clear() {
 			while (_length--)
-				this->pop_back();
+				pop_back();
 		}
 
 		//operations
