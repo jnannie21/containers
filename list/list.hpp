@@ -196,8 +196,8 @@ namespace ft {
 
 			temp->_prev = _before_first;
 			temp->_next = _before_first->_next;
-			_before_first->_next = temp;
 			temp->_next->_prev = temp;
+			_before_first->_next = temp;
 
 			_length++;
 		}
@@ -218,8 +218,8 @@ namespace ft {
 
 			temp->_prev = _after_last->_prev;
 			temp->_next = _after_last;
-			_after_last->_prev = temp;
 			temp->_prev->_next = temp;
+			_after_last->_prev = temp;
 
 			_length++;
 		}
@@ -237,23 +237,54 @@ namespace ft {
 
 		//single element (1)
 		iterator insert (iterator position, const value_type& val) {
+			node* p = position.get_p();
+
 			node* temp = new node(val);
 
-			temp->_prev = _after_last->_prev;
-			temp->_next = _after_last;
-			_after_last->_prev = temp;
+			temp->_prev = p->_prev;
+			temp->_next = p;
 			temp->_prev->_next = temp;
+			p->_prev = temp
 
 			_length++;
+			return temp;
 		}
+
 		//fill (2)
-		void insert (iterator position, size_type n, const value_type& val);
+		void insert (iterator position, size_type n, const value_type& val) {
+			while (n--)
+				insert(position, val);
+		}
+
 		//range (3)
 		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last);
+		void insert (iterator position, InputIterator first, InputIterator last) {
+			while (first != last)
+			{
+				insert(position, *first);
+				first++;
+			}
+		}
 
-		iterator erase (iterator position);
-		iterator erase (iterator first, iterator last);
+		iterator erase (iterator position) {
+			if (position == end())
+				return ;
+
+			node* p = position.get_p();
+			p->_prev->_next = _p->_next;
+			p->_next->_prev = _p->_prev;
+
+			++position;
+			delete p;
+			return position;
+		}
+
+		iterator erase (iterator first, iterator last) {
+			while (first != last)
+				erase(first);
+
+			return last;
+		}
 
 		void swap (list& x);
 
