@@ -85,6 +85,7 @@ namespace ft {
 
 		//destructor
 		~list() {
+			clear();
 			delete _before_first;
 			delete _after_last;
 		}
@@ -94,10 +95,8 @@ namespace ft {
 			if (this == &x)
 				return *this;
 
-			_alloc = x._alloc;
-			*_before_first = *x._before_first;
-			*_after_last = *x._after_last;
-			_length = x._length;
+			clear();
+			assign(x.begin(), x.end());
 
 			return *this;
 		}
@@ -286,9 +285,21 @@ namespace ft {
 			return last;
 		}
 
-		void swap (list& x);
+		void swap (list& x) {
+//			ft::swap(_alloc, x._alloc);
 
-		void resize (size_type n, value_type val = value_type());
+			ft::swap(_before_first->_next, x._before_first->_next);
+			ft::swap(_before_first->_next->_prev, x._before_first->_next->_prev);
+
+			ft::swap(_after_last->_prev, x._after_last->_prev);
+			ft::swap(_after_last->_prev->_next, x._after_last->_prev->_next);
+
+			ft::swap(_length, x._length);
+		}
+
+		void resize (size_type n, value_type val = value_type()) {
+
+		}
 
 		void clear() {
 			while (_length--)
