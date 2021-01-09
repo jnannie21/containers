@@ -351,13 +351,24 @@ namespace ft {
 			l->_prev = before_f;
 		}
 
-		void remove (const value_type& val);
+		void remove (const value_type& val) {
+			remove_if(equality_check<value_type>(val));
+		}
 
 		template <class Predicate>
-		void remove_if (Predicate pred);
+		void remove_if (Predicate pred) {
+			for (iterator i = begin(); i < end(); ++i)
+			{
+				if (pred(*i))
+					erase(i);
+			}
+		}
 
 		//(1)
-		void unique();
+		void unique() {
+
+		}
+
 		//(2)
 		template <class BinaryPredicate>
 		void unique (BinaryPredicate binary_pred);
