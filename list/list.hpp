@@ -343,7 +343,7 @@ namespace ft {
 			while (f != l)
 			{
 				--x._length;
-				--_length;
+				++_length;
 				++f;
 			}
 
@@ -357,7 +357,7 @@ namespace ft {
 
 		template <class Predicate>
 		void remove_if (Predicate pred) {
-			for (iterator i = begin(); i < end(); )
+			for (iterator i = begin(); i != end(); )
 			{
 				if (pred(*i))
 				{
@@ -395,7 +395,10 @@ namespace ft {
 		}
 
 		//(1)
-		void merge (list& x);
+		void merge (list& x) {
+
+		}
+
 		//(2)
 		template <class Compare>
 		void merge (list& x, Compare comp);
