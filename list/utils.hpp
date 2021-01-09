@@ -17,6 +17,17 @@ namespace ft {
 		T c(a); a=b; b=c;
 	}
 
+	template <class T>
+	class equality_check
+	{
+		const T _value;
+
+	public:
+		equality_check(const T& value) : _value(value) { }
+
+		bool operator()(const T& x) { return _value == x; }
+	};
+
 }
 
 #endif //UTILS_HPP
