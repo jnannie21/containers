@@ -29,20 +29,20 @@ namespace ft {
 //	typedef integral_constant<false,true> false_type;
 
 
-//	struct binary_comparement { };
-	struct const_comparement { };
+//	struct binary_predicate { };
+//	struct const_predicate { };
 
 //	template <class T, class Binary>
 //	class equality_check { };
 
-	template <class T, class Binary>
-	class equality_check {
+	template <class T>
+	class binary_predicate {
 	public:
 		bool operator()(const T& cur, const T& prev) { return cur == prev; }
 	};
 
 	template <class T>
-	class equality_check<T, const_comparement> {
+	class const_predicate {
 		equality_check();
 		const T _value;
 

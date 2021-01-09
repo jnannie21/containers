@@ -352,26 +352,47 @@ namespace ft {
 		}
 
 		void remove (const value_type& val) {
-			remove_if(equality_check<value_type>(val));
+			remove_if(ft::const_predicate(val));
 		}
 
 		template <class Predicate>
 		void remove_if (Predicate pred) {
-			for (iterator i = begin(); i < end(); ++i)
+			for (iterator i = begin(); i < end(); )
 			{
 				if (pred(*i))
-					erase(i);
+				{
+					iterator temp = i;
+					++i;
+					erase(temp);
+				}
+				else
+					++i;
 			}
 		}
 
 		//(1)
 		void unique() {
-
+			unique(ft::binary_predicate());
 		}
 
 		//(2)
 		template <class BinaryPredicate>
-		void unique (BinaryPredicate binary_pred);
+		void unique (BinaryPredicate binary_pred) {
+			for (iterator prev = begin(), iterator next = ++begin(); next != end(); )
+			{
+				if (binary_pred(*next, *prev))
+				{
+					iterator temp = next;
+					++next;
+					erase(temp);
+				}
+				else
+				{
+					++prev;
+					++next;
+				}
+			}
+		}
 
 		//(1)
 		void merge (list& x);
