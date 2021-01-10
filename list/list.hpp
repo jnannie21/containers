@@ -417,13 +417,19 @@ namespace ft {
 				else
 					++it;
 			}
+			splice(it, x, xit, x.end());
 		}
 
 		//(1)
-		void sort();
+		void sort() {
+
+		}
+
 		//(2)
 		template <class Compare>
-		void sort (Compare comp);
+		void sort (Compare comp) {
+
+		}
 
 		void reverse();
 
