@@ -481,7 +481,7 @@ namespace ft {
 //(1)
 	template <class T, class Alloc>
 	bool operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
-		if (lhs._length != rhs._length)
+		if (lhs.size() != rhs.size())
 			return false;
 
 		for (iterator lit = lhs.begin(), iterator rit = rhs.begin(); lit != lhs.end(); ++lit, ++rit)
