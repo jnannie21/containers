@@ -49,13 +49,13 @@ namespace ft {
 	template <class T>
 	class equal_binary_pred {
 	public:
-		bool operator()(const T& cur, const T& prev) { return cur == prev; }
+		bool operator()(const T& val1, const T& val2) { return val1 == val2; }
 	};
 
 	template <class T>
 	class less_than_binary_pred {
 	public:
-		bool operator()(const T& cur, const T& prev) { return cur < prev; }
+		bool operator()(const T& val1, const T& val2) { return val1 < val2; }
 	};
 
 }

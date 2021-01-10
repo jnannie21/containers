@@ -480,22 +480,54 @@ namespace ft {
 	//non-member function overloads
 //(1)
 	template <class T, class Alloc>
-	bool operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	bool operator== (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		if (lhs._length != rhs._length)
+			return false;
+
+		for (iterator lit = lhs.begin(), iterator rit = rhs.begin(); lit != lhs.end(); ++lit, ++rit)
+		{
+			if (!(*lit == *rit))
+				return false;
+		}
+		return true;
+	}
+
 //(2)
 	template <class T, class Alloc>
-	bool operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	bool operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return (!(lhs == rhs));
+	}
+
 //(3)
 	template <class T, class Alloc>
-	bool operator<  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	bool operator<  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		for (iterator lit = lhs.begin(), iterator rit = rhs.begin(); lit != lhs.end() && rit != end(); ++lit, ++rit)
+		{
+			if (*lit < *rit)
+				return true;
+			else if (*rit < *lit)
+				return false;
+		}
+		return (rit != end());
+	}
+
 //(4)
 	template <class T, class Alloc>
-	bool operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	bool operator<= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return !(rhs < lhs);
+	}
+
 //(5)
 	template <class T, class Alloc>
-	bool operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	bool operator>  (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return (rhs < lhs);
+	}
+
 //(6)
 	template <class T, class Alloc>
-	bool operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs);
+	bool operator>= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
+		return !(lhs < rhs);
+	}
 
 
 	template <class T, class Alloc>
