@@ -15,11 +15,11 @@ namespace ft {
 	public:
 		//typedefs
 		typedef Iterator iterator_type;
-		typedef Iterator::iterator_category iterator_category;
-		typedef Iterator::value_type value_type;
-		typedef Iterator::difference_type difference_type;
-		typedef Iterator::pointer pointer;
-		typedef Iterator::reference reference;
+		typedef typename Iterator::iterator_category iterator_category;
+		typedef typename Iterator::value_type value_type;
+		typedef typename Iterator::difference_type difference_type;
+		typedef typename Iterator::pointer pointer;
+		typedef typename Iterator::reference reference;
 
 	private:
 		iterator_type _base;

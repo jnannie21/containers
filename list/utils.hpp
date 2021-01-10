@@ -37,11 +37,12 @@ namespace ft {
 
 	template <class T>
 	class equal_const_pred {
-		equality_check();
 		const T _value;
 
+		equal_const_pred();
+
 	public:
-		equality_check(const T& value) : _value(value) { }
+		equal_const_pred(const T& value) : _value(value) { }
 
 		bool operator()(const T& x) { return _value == x; }
 	};
