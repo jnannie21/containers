@@ -136,7 +136,7 @@ namespace ft {
 
 		//capacity
 		bool empty() const {
-			return (begin() == end());
+			return (!_length);
 		}
 
 		size_type size() const {
@@ -378,6 +378,9 @@ namespace ft {
 		//(2)
 		template <class BinaryPredicate>
 		void unique (BinaryPredicate binary_pred) {
+			if (empty())
+				return ;
+
 			for (iterator prev = begin(), iterator next = ++begin(); next != end(); )
 			{
 				if (binary_pred(*next, *prev))
@@ -428,6 +431,9 @@ namespace ft {
 		//(2)
 		template <class Compare>
 		void sort (Compare comp) {
+			if (empty())
+				return ;
+
 			iterator prev = begin(), next = ++begin();
 
 			while (next != end())
@@ -447,7 +453,26 @@ namespace ft {
 			}
 		}
 
-		void reverse();
+		void reverse() {
+			if (empty())
+				return;
+
+			iterator to = end();
+			iterator cur = begin();
+			iterator next = ++begin();
+
+			while (next != to) {
+				while (next != to) {
+					splice(cur, *this, next);
+					ft::swap(prev, next);
+					++cur;
+					++next;
+				}
+				--to;
+				cur = begin();
+				next = ++begin();
+			}
+		}
 
 	};
 
