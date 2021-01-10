@@ -352,7 +352,7 @@ namespace ft {
 		}
 
 		void remove (const value_type& val) {
-			remove_if(ft::const_predicate(val));
+			remove_if(ft::equal_const_pred(val));
 		}
 
 		template <class Predicate>
@@ -372,7 +372,7 @@ namespace ft {
 
 		//(1)
 		void unique() {
-			unique(ft::binary_predicate());
+			unique(ft::equal_binary_pred());
 		}
 
 		//(2)
@@ -396,12 +396,28 @@ namespace ft {
 
 		//(1)
 		void merge (list& x) {
-
+			merge(ft::less_than_binary_pred());
 		}
 
 		//(2)
 		template <class Compare>
-		void merge (list& x, Compare comp);
+		void merge (list& x, Compare comp) {
+			if (this == &x)
+				return ;
+
+			iterator it = begin(), xit = x.begin();
+			while (it != end() && xit != x.end())
+			{
+				if (comp(*xit, *it))
+				{
+					iterator temp = xit;
+					++xit;
+					splice(it, x, temp);
+				}
+				else
+					++it;
+			}
+		}
 
 		//(1)
 		void sort();

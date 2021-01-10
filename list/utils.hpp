@@ -36,13 +36,7 @@ namespace ft {
 //	class equality_check { };
 
 	template <class T>
-	class binary_predicate {
-	public:
-		bool operator()(const T& cur, const T& prev) { return cur == prev; }
-	};
-
-	template <class T>
-	class const_predicate {
+	class equal_const_pred {
 		equality_check();
 		const T _value;
 
@@ -52,7 +46,17 @@ namespace ft {
 		bool operator()(const T& x) { return _value == x; }
 	};
 
+	template <class T>
+	class equal_binary_pred {
+	public:
+		bool operator()(const T& cur, const T& prev) { return cur == prev; }
+	};
 
+	template <class T>
+	class less_than_binary_pred {
+	public:
+		bool operator()(const T& cur, const T& prev) { return cur < prev; }
+	};
 
 }
 
