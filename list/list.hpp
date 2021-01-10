@@ -317,10 +317,10 @@ namespace ft {
 
 		//single element (2)
 		void splice (iterator position, list& x, iterator i) {
-			iterator last(i);
+			iterator next(i);
 
-			++last;
-			splice(position, x, i, last);
+			++next;
+			splice(position, x, i, next);
 		}
 
 		//element range (3)
@@ -422,13 +422,29 @@ namespace ft {
 
 		//(1)
 		void sort() {
-
+			sort(ft::less_than_binary_pred());
 		}
 
 		//(2)
 		template <class Compare>
 		void sort (Compare comp) {
+			iterator prev = begin(), next = ++begin();
 
+			while (next != end())
+			{
+				while (comp(*next, *prev) && next != begin())
+				{
+					splice(prev, *this, next);
+					ft::swap(prev, next);
+					--prev;
+					--next;
+				}
+				else
+				{
+					++next;
+					++prev;
+				}
+			}
 		}
 
 		void reverse();
