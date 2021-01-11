@@ -2,8 +2,8 @@
 // Created by jnannie on 1/5/21.
 //
 
-#ifndef LIST_REVERSE_ITERATOR_HPP
-#define LIST_REVERSE_ITERATOR_HPP
+#ifndef REVERSE_ITERATOR_HPP
+#define REVERSE_ITERATOR_HPP
 
 #include "node.hpp"
 #include "iterator.hpp"

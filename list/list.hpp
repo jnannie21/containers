@@ -32,8 +32,8 @@ namespace ft {
 
 	private:
 		allocator_type _alloc;
-		node<T> *_before_first;
-		node<T> *_after_last;
+		node<value_type>* _before_first;
+		node<value_type>* _after_last;
 		size_type _length;
 
 	public:
@@ -108,7 +108,7 @@ namespace ft {
 		}
 
 		const_iterator begin() const {
-			return const_iterator(_before_first->_next);
+			return const_iterator(reinterpret_cast< node<const value_type>* >(_before_first->_next));
 		}
 
 		iterator end() {
@@ -116,7 +116,7 @@ namespace ft {
 		}
 
 		const_iterator end() const {
-			return const_iterator(_after_last);
+			return const_iterator(reinterpret_cast< node<const value_type>* >(_after_last));
 		}
 
 		reverse_iterator rbegin() {

@@ -13,7 +13,7 @@ int main ()
 		int arr1[3] = {10, 20, 30};
 		std::list<int> a(arr1, arr1 + 3);
 		int arr3[4] = {10, 20, 30, 0};
-		std::list<int> b(arr3, arr3 + 4);
+		std::list<int> b(arr3, arr3 + 3);
 		int arr2[3] = {30, 20, 10};
 		std::list<int> c(arr2, arr2 + 2);
 
@@ -32,7 +32,7 @@ int main ()
 		int arr1[3] = {10, 20, 30};
 		ft::list<int> a(arr1, arr1 + 3);
 		int arr3[4] = {10, 20, 30, 0};
-		ft::list<int> b(arr3, arr3 + 4);
+		ft::list<int> b(arr3, arr3 + 3);
 		int arr2[3] = {30, 20, 10};
 		ft::list<int> c(arr2, arr2 + 2);
 
