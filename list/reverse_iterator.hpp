@@ -35,9 +35,6 @@ namespace ft {
 		template <class Iter>
 		reverse_iterator (const reverse_iterator<Iter>& rev_it) { _base = rev_it._base; }
 
-//		bool operator==(const reverse_iterator& rhs);
-//		bool operator!=(const reverse_iterator& rhs);
-
 		friend bool operator== (const reverse_iterator& lhs, const reverse_iterator& rhs);
 		friend bool operator!= (const reverse_iterator& lhs, const reverse_iterator& rhs);
 
@@ -57,6 +54,8 @@ namespace ft {
 			--(*this);
 			return temp;
 		}
+
+		reverse_iterator  operator+ (difference_type n) const { return reverse_iterator(_base - n); }
 
 	};
 

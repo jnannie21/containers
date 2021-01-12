@@ -5,6 +5,16 @@
 #include <iostream>
 #include <list>
 #include "list/list.hpp"
+#include <algorithm>
+
+ struct sss {
+     void *str1;
+     void *str2;
+     int i;
+     int i2;
+     int i3;
+
+ };
 
 int main ()
 {
@@ -24,6 +34,21 @@ int main ()
 		if (c > b) std::cout << "c is greater than b\n";
 		if (a <= b) std::cout << "a is less than or equal to b\n";
 		if (a >= b) std::cout << "a is greater than or equal to b\n";
+
+		std::list<sss> d;
+		std::cout << "a max_size: " << d.max_size() << "\n";
+
+		std::reverse_iterator<std::list<int>::iterator> rit1 = a.rbegin();
+ //		std::reverse_iterator<std::list<int>::iterator> rit2 = b.rbegin();
+		std::cout << *rit1++ << "\n";
+		std::cout << *rit1 << "\n";
+
+		int mycount = std::count (a.begin(), a.end(), 10);
+		std::cout << mycount << "\n";
+
+//		std::cout << rit1[0] << "\n";
+
+//		std::cout << (rit1 == rit2) << "a is greater than or equal to b\n";
 	}
 
 
@@ -43,6 +68,21 @@ int main ()
 		if (c > b) std::cout << "c is greater than b\n";
 		if (a <= b) std::cout << "a is less than or equal to b\n";
 		if (a >= b) std::cout << "a is greater than or equal to b\n";
+
+		ft::list<sss> d;
+		std::cout << "a max_size: " << d.max_size() << "\n";
+
+		ft::list<int>::reverse_iterator rit1 = a.rbegin();
+//		ft::list<int>::reverse_iterator rit2 = b.rbegin();
+		std::cout << *rit1++ << "\n";
+		std::cout << *rit1 << "\n";
+
+		int mycount = std::count (a.begin(), a.end(), 10);
+		std::cout << mycount << "\n";
+//
+//		std::cout << rit1[0] << "\n";
+
+//		std::cout << (rit1 == rit2) << "a is greater than or equal to b\n";
 	}
 
 	return 0;

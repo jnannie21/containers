@@ -6,18 +6,8 @@
 #define LIST_ITERATOR_HPP
 
 #include "node.hpp"
-//#include "iterator.hpp"
 
 namespace ft {
-
-	template <class T>
-	class list_iterator;
-
-	template <class T>
-	bool operator== (const list_iterator<T>& lhs, const list_iterator<T>& rhs);
-
-	template <class T>
-	bool operator!= (const list_iterator<T>& lhs, const list_iterator<T>& rhs);
 
 	template <class T>
 	class list_iterator {
@@ -35,13 +25,14 @@ namespace ft {
 		list_iterator() : _p(NULL) { }
 		list_iterator(const list_iterator<value_type>& other) : _p(other._p) { }
 		list_iterator(node<value_type>* p) : _p(p) { }
-//		list_iterator(node<const value_type>* p) : _p(p) { }
 		~list_iterator() { }
 
 		const list_iterator& operator=(const list_iterator& rhs) { _p = rhs._p; }
 
-		friend bool operator==<> (const list_iterator& lhs, const list_iterator& rhs);
-		friend bool operator!=<> (const list_iterator& lhs, const list_iterator& rhs);
+		template <class T1>
+		friend bool operator== (const list_iterator<T1>& lhs, const list_iterator<T1>& rhs);
+		template <class T1>
+		friend bool operator!= (const list_iterator<T1>& lhs, const list_iterator<T1>& rhs);
 
 		reference operator*() const { return _p->_value; }
 		pointer operator->() const { return &_p->_value; }
@@ -72,13 +63,13 @@ namespace ft {
 
 	};
 
-	template <class T>
-	bool operator== (const list_iterator<T>& lhs, const list_iterator<T>& rhs) {
+	template <class T1>
+	bool operator== (const list_iterator<T1>& lhs, const list_iterator<T1>& rhs) {
 		return lhs._p == rhs._p;
 	}
 
-	template <class T>
-	bool operator!= (const list_iterator<T>& lhs, const list_iterator<T>& rhs) {
+	template <class T1>
+	bool operator!= (const list_iterator<T1>& lhs, const list_iterator<T1>& rhs) {
 		return !(lhs == rhs);
 	}
 

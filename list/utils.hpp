@@ -17,23 +17,6 @@ namespace ft {
 		T c(a); a=b; b=c;
 	}
 
-//	template <class T, T v>
-//	struct integral_constant {
-//		static const T value = v;
-//		typedef T value_type;
-//		typedef integral_constant<T,v> type;
-//		operator T() const { return v; }
-//	};
-//
-//	typedef integral_constant<bool,true> true_type;
-//	typedef integral_constant<false,true> false_type;
-
-
-//	struct binary_predicate { };
-//	struct const_predicate { };
-
-//	template <class T, class Binary>
-//	class equality_check { };
 
 	template <class T>
 	class equal_const_pred {
