@@ -6,7 +6,6 @@
 #define REVERSE_ITERATOR_HPP
 
 #include "node.hpp"
-#include "iterator.hpp"
 
 namespace ft {
 

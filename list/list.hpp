@@ -9,7 +9,6 @@
 #include "list_iterator.hpp"
 #include "reverse_iterator.hpp"
 #include "utils.hpp"
-#include <memory>
 
 namespace ft {
 
