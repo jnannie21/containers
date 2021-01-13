@@ -139,5 +139,46 @@ int main ()
 		std::cout << '\n';
 	}
 
+	std::cout << "------------- swap test" << std::endl;
+	std::cout << "------------- std" << std::endl;
+
+	{
+		std::list<int> first (3,100);   // three ints with a value of 100
+		std::list<int> second (5,200);  // five ints with a value of 200
+		std::list<int>::iterator eit=first.end();
+
+		first.swap(second);
+
+		std::cout << "first contains:";
+		for (std::list<int>::iterator it=first.begin(); it!=eit; it++)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+
+		std::cout << "second contains:";
+		for (std::list<int>::iterator it=second.begin(); it!=second.end(); it++)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+
+	{
+		ft::list<int> first (3,100);   // three ints with a value of 100
+		ft::list<int> second (5,200);  // five ints with a value of 200
+		ft::list<int>::iterator eit=first.end();
+
+		first.swap(second);
+
+		std::cout << "first contains:";
+		for (ft::list<int>::iterator it=first.begin(); it!=eit; it++)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+
+		std::cout << "second contains:";
+		for (ft::list<int>::iterator it=second.begin(); it!=second.end(); it++)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+	}
+
 	return 0;
 }

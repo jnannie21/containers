@@ -63,9 +63,8 @@ namespace ft {
 		//range (3)
 		template <class InputIterator>
 		list (InputIterator first, InputIterator last,
-			  const allocator_type& alloc = allocator_type())
-//			  typename enable_if<__is_input_iterator<_InpIter>::value>::type* = 0,
-//			  typename ft::check_type<typename ft::iterator_traits<InputIterator>::iterator_category>::type* = 0))
+			  const allocator_type& alloc = allocator_type(),
+			  typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) //is_pointer<InputIterator>::value ||
 			  : _alloc(alloc), _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
@@ -81,6 +80,9 @@ namespace ft {
 			: _alloc(), _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
+
+			_before_first->_next = _after_last;
+			_after_last->_prev = _before_first;
 
 			*this = x;
 		}
@@ -232,7 +234,7 @@ namespace ft {
 				_after_last->_prev = _after_last->_prev->_prev;
 				_after_last->_prev->_next = _after_last;
 				delete temp;
-				_length--;
+				--_length;
 			}
 		}
 
@@ -307,7 +309,7 @@ namespace ft {
 		}
 
 		void clear() {
-			while (_length--)
+			while (_length)
 				pop_back();
 		}
 

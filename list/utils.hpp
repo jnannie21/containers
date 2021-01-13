@@ -42,6 +42,64 @@ namespace ft {
 		bool operator()(const T& val1, const T& val2) { return val1 < val2; }
 	};
 
+
+	template<bool Cond, class T = void> struct enable_if {};
+	template<class T> struct enable_if<true, T> { typedef T type; };
+
+
+	template <class InpIter>
+	struct is_pointer
+	{
+		template <class U>
+		static char is_ptr(U *);
+
+		static double is_ptr(...);
+
+		static InpIter t;
+		enum { value = sizeof(is_ptr(t)) == sizeof(char) };
+
+	};
+
+	template <typename Iter>
+	struct is_iterator
+	{
+		template <class U>
+		static char is_iter(typename U::iterator_category*);
+
+		template <typename>
+		static double is_iter(...);
+
+		enum { value = (sizeof(is_iter<Iter>(NULL)) == sizeof(char)
+						|| is_pointer<Iter>::value)
+		};
+	};
+
+	template <typename InpIter>
+	struct is_input_iterator
+	{
+		template <class U>
+		static char is_input_iter(typename U::iterator_category*);
+
+		template <typename>
+		static double is_input_iter(...);
+
+//		static std::input_iterator_tag* input_iterator;
+//		static std::forward_iterator_tag* forward_iterator;
+//		static std::bidirectional_iterator_tag* bidirectional_iterator;
+//		static std::random_access_iterator_tag* random_access_iterator;
+		static std::output_iterator_tag* output_iterator;
+
+		enum { value = ((is_iterator<InpIter>::value
+						&& !(sizeof(is_input_iter<InpIter>(output_iterator)) == sizeof(char))))
+		};
+//		enum { value = (sizeof(is_input_iter<InpIter>(input_iterator)) == sizeof(char)
+//						|| sizeof(is_input_iter<InpIter>(forward_iterator)) == sizeof(char)
+//						|| sizeof(is_input_iter<InpIter>(bidirectional_iterator)) == sizeof(char)
+//						|| sizeof(is_input_iter<InpIter>(random_access_iterator)) == sizeof(char)
+//						|| is_pointer<InpIter>::value)
+//		};
+	};
+
 }
 
 #endif //UTILS_HPP
