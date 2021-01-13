@@ -34,8 +34,10 @@ namespace ft {
 		template <class Iter>
 		reverse_iterator (const reverse_iterator<Iter>& rev_it) { _base = rev_it._base; }
 
-		friend bool operator== (const reverse_iterator& lhs, const reverse_iterator& rhs);
-		friend bool operator!= (const reverse_iterator& lhs, const reverse_iterator& rhs);
+		template <class T1>
+		friend bool operator== (const reverse_iterator<T1>& lhs, const reverse_iterator<T1>& rhs);
+		template <class T1>
+		friend bool operator!= (const reverse_iterator<T1>& lhs, const reverse_iterator<T1>& rhs);
 
 		reference operator*() { iterator_type tmp = _base; return *--tmp; }
 		pointer operator->() { return &(operator*()); }
@@ -61,7 +63,7 @@ namespace ft {
 
 	template <class T>
 	bool operator== (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) {
-		return lhs._p == rhs._p;
+		return lhs._base.get_p() == rhs._base.get_p();
 	}
 
 	template <class T>

@@ -64,6 +64,8 @@ namespace ft {
 		template <class InputIterator>
 		list (InputIterator first, InputIterator last,
 			  const allocator_type& alloc = allocator_type())
+//			  typename enable_if<__is_input_iterator<_InpIter>::value>::type* = 0,
+//			  typename ft::check_type<typename ft::iterator_traits<InputIterator>::iterator_category>::type* = 0))
 			  : _alloc(alloc), _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();

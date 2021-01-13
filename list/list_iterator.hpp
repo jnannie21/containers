@@ -59,7 +59,7 @@ namespace ft {
 			return temp;
 		}
 
-		node<value_type>* get_p() { return _p; }
+		node<value_type>* get_p() const { return _p; }
 
 	};
 
