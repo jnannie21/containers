@@ -44,7 +44,6 @@ namespace ft {
 			_p = _p->_next;
 			return *this;
 		}
-
 		list_iterator operator++(int) { //postfix increment
 			list_iterator temp = *this;
 			++(*this);
@@ -55,8 +54,7 @@ namespace ft {
 			_p = _p->_prev;
 			return *this;
 		}
-
-		list_iterator& operator--(int) {
+		list_iterator operator--(int) {
 			list_iterator temp = *this;
 			--(*this);
 			return temp;

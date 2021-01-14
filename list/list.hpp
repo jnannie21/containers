@@ -7,8 +7,8 @@
 
 #include "node.hpp"
 #include "list_iterator.hpp"
-#include "reverse_iterator.hpp"
-#include "utils.hpp"
+#include "../common/reverse_iterator.hpp"
+#include "../common/utils.hpp"
 
 namespace ft {
 
