@@ -18,6 +18,9 @@ namespace ft {
 		typedef T& reference;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
+		template <class F, class R>
+		friend class list;
+
 	private:
 		node<value_type>* _p;
 
@@ -58,8 +61,6 @@ namespace ft {
 			--(*this);
 			return temp;
 		}
-
-		node<value_type>* get_p() const { return _p; }
 
 	};
 

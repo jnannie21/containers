@@ -241,7 +241,7 @@ namespace ft {
 
 		//single element (1)
 		iterator insert (iterator position, const value_type& val) {
-			node<value_type>* p = position.get_p();
+			node<value_type>* p = position._p;
 
 			node<value_type>* temp = new node<value_type>(val);
 
@@ -275,7 +275,7 @@ namespace ft {
 			if (position == end())
 				return position;
 
-			node<value_type>* p = position.get_p();
+			node<value_type>* p = position._p;
 			p->_prev->_next = p->_next;
 			p->_next->_prev = p->_prev;
 
@@ -293,8 +293,6 @@ namespace ft {
 		}
 
 		void swap (list& x) {
-//			ft::swap(_alloc, x._alloc);
-
 			ft::swap(_before_first->_next, x._before_first->_next);
 			ft::swap(_before_first->_next->_prev, x._before_first->_next->_prev);
 
@@ -335,9 +333,9 @@ namespace ft {
 			if (first == last)
 				return ;
 
-			node<value_type>* p = position.get_p();
-			node<value_type>* f = first.get_p();
-			node<value_type>* l = last.get_p();
+			node<value_type>* p = position._p;
+			node<value_type>* f = first._p;
+			node<value_type>* l = last._p;
 
 			node<value_type>* before_f = f->_prev;
 

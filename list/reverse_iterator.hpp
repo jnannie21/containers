@@ -63,7 +63,7 @@ namespace ft {
 
 	template <class T>
 	bool operator== (const reverse_iterator<T>& lhs, const reverse_iterator<T>& rhs) {
-		return lhs._base.get_p() == rhs._base.get_p();
+		return lhs._base == rhs._base;
 	}
 
 	template <class T>

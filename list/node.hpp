@@ -31,10 +31,6 @@ namespace ft {
 			return *this;
 		}
 
-//		node*& prev() { return _prev; }
-//		node*& next() { return _next; }
-//		T& value() { return _value; }
-
 	};
 
 }
