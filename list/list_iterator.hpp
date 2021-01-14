@@ -27,7 +27,7 @@ namespace ft {
 		list_iterator(node<value_type>* p) : _p(p) { }
 		~list_iterator() { }
 
-		const list_iterator& operator=(const list_iterator& rhs) { _p = rhs._p; }
+		const list_iterator& operator=(const list_iterator& rhs) { _p = rhs._p; return *this; }
 
 		template <class T1>
 		friend bool operator== (const list_iterator<T1>& lhs, const list_iterator<T1>& rhs);

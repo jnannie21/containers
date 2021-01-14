@@ -174,7 +174,8 @@ namespace ft {
 		//modifiers
 		//range (1)
 		template <class InputIterator>
-		void assign (InputIterator first, InputIterator last) {
+		void assign (InputIterator first, InputIterator last,
+					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
 			clear();
 			_length = 0;
 
@@ -261,7 +262,8 @@ namespace ft {
 
 		//range (3)
 		template <class InputIterator>
-		void insert (iterator position, InputIterator first, InputIterator last) {
+		void insert (iterator position, InputIterator first, InputIterator last,
+					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
 			while (first != last)
 			{
 				insert(position, *first);
@@ -271,7 +273,7 @@ namespace ft {
 
 		iterator erase (iterator position) {
 			if (position == end())
-				return ;
+				return position;
 
 			node<value_type>* p = position.get_p();
 			p->_prev->_next = p->_next;

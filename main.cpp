@@ -6,101 +6,12 @@
 #include <list>
 #include "list/list.hpp"
 #include <algorithm>
-
- struct sss {
-     void *str1;
-     void *str2;
-     int i;
-     int i2;
-     int i3;
- };
+#include <vector>
 
 int main ()
 {
-	{
-		std::cout << "------------ real list" << std::endl;
-		int arr1[3] = {10, 20, 30};
-		std::list<int> a(arr1, arr1 + 3);
-		int arr3[4] = {10, 20, 30, 0};
-		std::list<int> b(arr3, arr3 + 3);
-		int arr2[3] = {30, 20, 10};
-		std::list<int> c(arr2, arr2 + 2);
-
-		if (a == b) std::cout << "a and b are equal\n";
-		if (a != b) std::cout << "a and b are not equal\n";
-		if (b != c) std::cout << "b and c are not equal\n";
-		if (b < c) std::cout << "b is less than c\n";
-		if (c > b) std::cout << "c is greater than b\n";
-		if (a <= b) std::cout << "a is less than or equal to b\n";
-		if (a >= b) std::cout << "a is greater than or equal to b\n";
-
-		std::list<sss> d;
-		std::cout << "a max_size: " << d.max_size() << "\n";
-
-		std::reverse_iterator<std::list<int>::iterator> rit1 = a.rbegin();
-
-		std::cout << *rit1++ << "\n";
-		std::cout << *rit1 << "\n";
-
-		std::cout << std::count (a.begin(), a.end(), 10) << "\n";
-
-		--rit1;
-		std::reverse_iterator<std::list<int>::iterator> rit2 = b.rbegin();
-		std::cout << "(rit1 == rit2): " << ((rit1 == rit2) ? "true" : "false") << "\n";
-		std::reverse_iterator<std::list<int>::iterator> rit3 = a.rbegin();
-		std::cout << "(rit1 == rit3): " << ((rit1 == rit3) ? "true" : "false") << "\n";
-
-		std::list<int>::iterator it1 = a.begin();
-
-		std::cout << *it1++ << "\n";
-		std::cout << *it1 << "\n";
-
-	}
-
-
-	{
-		std::cout << "------------ my list" << std::endl;
-		int arr1[3] = {10, 20, 30};
-		ft::list<int> a(arr1, arr1 + 3);
-		int arr2[4] = {10, 20, 30, 0};
-		ft::list<int> b(arr2, arr2 + 3);
-		int arr3[3] = {30, 20, 10};
-		ft::list<int> c(arr3, arr3 + 2);
-
-		if (a == b) std::cout << "a and b are equal\n";
-		if (a != b) std::cout << "a and b are not equal\n";
-		if (b != c) std::cout << "b and c are not equal\n";
-		if (b < c) std::cout << "b is less than c\n";
-		if (c > b) std::cout << "c is greater than b\n";
-		if (a <= b) std::cout << "a is less than or equal to b\n";
-		if (a >= b) std::cout << "a is greater than or equal to b\n";
-
-		ft::list<sss> d;
-		std::cout << "a max_size: " << d.max_size() << "\n";
-
-		ft::list<int>::reverse_iterator rit1 = a.rbegin();
-
-		std::cout << *rit1++ << "\n";
-		std::cout << *rit1 << "\n";
-
-		std::cout << std::count (a.begin(), a.end(), 10) << "\n";
-
-		--rit1;
-		ft::list<int>::reverse_iterator rit2 = b.rbegin();
-		std::cout << "(rit1 == rit2): " << ((rit1 == rit2) ? "true" : "false") << "\n";
-		ft::list<int>::reverse_iterator rit3 = a.rbegin();
-		std::cout << "(rit1 == rit3): " << ((rit1 == rit3) ? "true" : "false") << "\n";
-
-		ft::list<int>::iterator it1 = a.begin();
-
-		std::cout << *it1++ << "\n";
-		std::cout << *it1 << "\n";
-
-	}
-
-	std::cout << "------------- constructors test" << std::endl;
+	std::cout << std::endl << "------------- constructors" << std::endl;
 	std::cout << "------------- std" << std::endl;
-
 	{
 		// constructors used in the same order as described above:
 		std::list<int> first;                                // empty list of ints
@@ -120,7 +31,6 @@ int main ()
 	}
 
 	std::cout << "------------- my" << std::endl;
-
 	{
 		// constructors used in the same order as described above:
 		ft::list<int> first;                                // empty list of ints
@@ -139,9 +49,9 @@ int main ()
 		std::cout << '\n';
 	}
 
-	std::cout << "------------- swap test" << std::endl;
-	std::cout << "------------- std" << std::endl;
 
+	std::cout << std::endl << "------------- swap" << std::endl;
+	std::cout << "------------- std" << std::endl;
 	{
 		std::list<int> first (3,100);   // three ints with a value of 100
 		std::list<int> second (5,200);  // five ints with a value of 200
@@ -161,7 +71,6 @@ int main ()
 	}
 
 	std::cout << "------------- my" << std::endl;
-
 	{
 		ft::list<int> first (3,100);   // three ints with a value of 100
 		ft::list<int> second (5,200);  // five ints with a value of 200
@@ -177,6 +86,522 @@ int main ()
 		std::cout << "second contains:";
 		for (ft::list<int>::iterator it=second.begin(); it!=second.end(); it++)
 			std::cout << ' ' << *it;
+		std::cout << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- assignment operator" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> first (3);      // list of 3 zero-initialized ints
+		std::list<int> second (5);     // list of 5 zero-initialized ints
+
+		second = first;
+		first = std::list<int>();
+
+		std::cout << "Size of first: " << int (first.size()) << '\n';
+		std::cout << "Size of second: " << int (second.size()) << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> first (3);      // list of 3 zero-initialized ints
+		ft::list<int> second (5);     // list of 5 zero-initialized ints
+
+		second = first;
+		first = ft::list<int>();
+
+		std::cout << "Size of first: " << int (first.size()) << '\n';
+		std::cout << "Size of second: " << int (second.size()) << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- begin/end" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		int myints[] = {75,23,65,42,13};
+		std::list<int> mylist (myints,myints+5);
+
+		std::cout << "mylist contains:";
+		for (std::list<int>::iterator it=mylist.begin(); it != mylist.end(); ++it)
+			std::cout << ' ' << *it;
+
+		std::cout << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		int myints[] = {75,23,65,42,13};
+		ft::list<int> mylist (myints,myints+5);
+
+		std::cout << "mylist contains:";
+		for (ft::list<int>::iterator it=mylist.begin(); it != mylist.end(); ++it)
+			std::cout << ' ' << *it;
+
+		std::cout << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- rbegin/rend" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+		for (int i=1; i<=5; ++i) mylist.push_back(i);
+
+		std::cout << "mylist backwards:";
+		for (std::list<int>::reverse_iterator rit=mylist.rbegin(); rit!=mylist.rend(); ++rit)
+			std::cout << ' ' << *rit;
+
+		std::cout << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+		for (int i=1; i<=5; ++i) mylist.push_back(i);
+
+		std::cout << "mylist backwards:";
+		for (ft::list<int>::reverse_iterator rit=mylist.rbegin(); rit!=mylist.rend(); ++rit)
+			std::cout << ' ' << *rit;
+
+		std::cout << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- empty" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+		int sum (0);
+
+		for (int i=1;i<=10;++i) mylist.push_back(i);
+
+		while (!mylist.empty())
+		{
+			sum += mylist.front();
+			mylist.pop_front();
+		}
+
+		std::cout << "total: " << sum << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+		int sum (0);
+
+		for (int i=1;i<=10;++i) mylist.push_back(i);
+
+		while (!mylist.empty())
+		{
+			sum += mylist.front();
+			mylist.pop_front();
+		}
+
+		std::cout << "total: " << sum << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- size" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> myints;
+		std::cout << "0. size: " << myints.size() << '\n';
+
+		for (int i=0; i<10; i++) myints.push_back(i);
+		std::cout << "1. size: " << myints.size() << '\n';
+
+		myints.insert (myints.begin(),10,100);
+		std::cout << "2. size: " << myints.size() << '\n';
+
+		myints.pop_back();
+		std::cout << "3. size: " << myints.size() << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> myints;
+		std::cout << "0. size: " << myints.size() << '\n';
+
+		for (int i=0; i<10; i++) myints.push_back(i);
+		std::cout << "1. size: " << myints.size() << '\n';
+
+		myints.insert (myints.begin(),10,100);
+		std::cout << "2. size: " << myints.size() << '\n';
+
+		myints.pop_back();
+		std::cout << "3. size: " << myints.size() << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- max_size" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		size_t i;
+		std::list<int> mylist;
+
+		i = std::numeric_limits<size_t>::max();
+
+		if (i<mylist.max_size()) mylist.resize(i);
+		else std::cout << "That size exceeds the limit.\n";
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		size_t i;
+		ft::list<int> mylist;
+
+		i = std::numeric_limits<size_t>::max();
+
+		if (i<mylist.max_size()) mylist.resize(i);
+		else std::cout << "That size exceeds the limit.\n";
+	}
+
+
+	std::cout << std::endl << "------------- front" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+
+		mylist.push_back(77);
+		mylist.push_back(22);
+
+		// now front equals 77, and back 22
+
+		mylist.front() -= mylist.back();
+
+		std::cout << "mylist.front() is now " << mylist.front() << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+
+		mylist.push_back(77);
+		mylist.push_back(22);
+
+		// now front equals 77, and back 22
+
+		mylist.front() -= mylist.back();
+
+		std::cout << "mylist.front() is now " << mylist.front() << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- back" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+
+		mylist.push_back(10);
+
+		while (mylist.back() != 0)
+		{
+			mylist.push_back ( mylist.back() -1 );
+		}
+
+		std::cout << "mylist contains:";
+		for (std::list<int>::iterator it=mylist.begin(); it!=mylist.end() ; ++it)
+			std::cout << ' ' << *it;
+
+		std::cout << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+
+		mylist.push_back(10);
+
+		while (mylist.back() != 0)
+		{
+			mylist.push_back ( mylist.back() -1 );
+		}
+
+		std::cout << "mylist contains:";
+		for (ft::list<int>::iterator it=mylist.begin(); it!=mylist.end() ; ++it)
+			std::cout << ' ' << *it;
+
+		std::cout << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- assign" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> first;
+		std::list<int> second;
+
+		first.assign (7,100);                      // 7 ints with value 100
+
+		second.assign (first.begin(),first.end()); // a copy of first
+
+		int myints[]={1776,7,4};
+		first.assign (myints,myints+3);            // assigning from array
+
+		std::cout << "Size of first: " << int (first.size()) << '\n';
+		std::cout << "Size of second: " << int (second.size()) << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> first;
+		ft::list<int> second;
+
+		first.assign (7,100);                      // 7 ints with value 100
+
+		second.assign (first.begin(),first.end()); // a copy of first
+
+		int myints[]={1776,7,4};
+		first.assign (myints,myints+3);            // assigning from array
+
+		std::cout << "Size of first: " << int (first.size()) << '\n';
+		std::cout << "Size of second: " << int (second.size()) << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- push_front" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist (2,100);         // two ints with a value of 100
+		mylist.push_front (200);
+		mylist.push_front (300);
+
+		std::cout << "mylist contains:";
+		for (std::list<int>::iterator it=mylist.begin(); it!=mylist.end(); ++it)
+			std::cout << ' ' << *it;
+
+		std::cout << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist (2,100);         // two ints with a value of 100
+		mylist.push_front (200);
+		mylist.push_front (300);
+
+		std::cout << "mylist contains:";
+		for (ft::list<int>::iterator it=mylist.begin(); it!=mylist.end(); ++it)
+			std::cout << ' ' << *it;
+
+		std::cout << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- pop_front" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+		mylist.push_back (100);
+		mylist.push_back (200);
+		mylist.push_back (300);
+
+		std::cout << "Popping out the elements in mylist:";
+		while (!mylist.empty())
+		{
+			std::cout << ' ' << mylist.front();
+			mylist.pop_front();
+		}
+
+		std::cout << "\nFinal size of mylist is " << mylist.size() << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+		mylist.push_back (100);
+		mylist.push_back (200);
+		mylist.push_back (300);
+
+		std::cout << "Popping out the elements in mylist:";
+		while (!mylist.empty())
+		{
+			std::cout << ' ' << mylist.front();
+			mylist.pop_front();
+		}
+
+		std::cout << "\nFinal size of mylist is " << mylist.size() << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- push_back" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+
+		mylist.push_back (1);
+		mylist.push_back (2);
+		mylist.push_back (3);
+
+		std::cout << "mylist stores " << mylist.size() << " numbers.\n";
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		std::list<int> mylist;
+
+		mylist.push_back (1);
+		mylist.push_back (2);
+		mylist.push_back (3);
+
+		std::cout << "mylist stores " << mylist.size() << " numbers.\n";
+	}
+
+
+	std::cout << std::endl << "------------- pop_back" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+		int sum (0);
+		mylist.push_back (100);
+		mylist.push_back (200);
+		mylist.push_back (300);
+
+		while (!mylist.empty())
+		{
+			sum+=mylist.back();
+			mylist.pop_back();
+		}
+
+		std::cout << "The elements of mylist summed " << sum << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+		int sum (0);
+		mylist.push_back (100);
+		mylist.push_back (200);
+		mylist.push_back (300);
+
+		while (!mylist.empty())
+		{
+			sum+=mylist.back();
+			mylist.pop_back();
+		}
+
+		std::cout << "The elements of mylist summed " << sum << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- insert" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+		std::list<int>::iterator it;
+
+		// set some initial values:
+		for (int i=1; i<=5; ++i) mylist.push_back(i); // 1 2 3 4 5
+
+		it = mylist.begin();
+		++it;       // it points now to number 2           ^
+
+		mylist.insert (it,10);                        // 1 10 2 3 4 5
+
+		// "it" still points to number 2                      ^
+		mylist.insert (it,2,20);                      // 1 10 20 20 2 3 4 5
+
+		--it;       // it points now to the second 20            ^
+
+		std::vector<int> myvector (2,30);
+		mylist.insert (it,myvector.begin(),myvector.end());
+		// 1 10 20 30 30 20 2 3 4 5
+		//               ^
+		std::cout << "mylist contains:";
+		for (it=mylist.begin(); it!=mylist.end(); ++it)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+		ft::list<int>::iterator it;
+
+		// set some initial values:
+		for (int i=1; i<=5; ++i) mylist.push_back(i); // 1 2 3 4 5
+
+		it = mylist.begin();
+		++it;       // it points now to number 2           ^
+
+		mylist.insert (it,10);                        // 1 10 2 3 4 5
+
+		// "it" still points to number 2                      ^
+		mylist.insert (it,2,20);                      // 1 10 20 20 2 3 4 5
+
+		--it;       // it points now to the second 20            ^
+
+		std::vector<int> myvector (2,30);
+		mylist.insert (it,myvector.begin(),myvector.end());
+		// 1 10 20 30 30 20 2 3 4 5
+		//               ^
+		std::cout << "mylist contains:";
+		for (it=mylist.begin(); it!=mylist.end(); ++it)
+			std::cout << ' ' << *it;
+		std::cout << '\n';
+	}
+
+
+	std::cout << std::endl << "------------- erase" << std::endl;
+	std::cout << "------------- std" << std::endl;
+	{
+		std::list<int> mylist;
+		std::list<int>::iterator it1,it2;
+
+		// set some values:
+		for (int i=1; i<10; ++i) mylist.push_back(i*10);
+
+		// 10 20 30 40 50 60 70 80 90
+		it1 = it2 = mylist.begin(); // ^^
+		std::advance (it2,6);            // ^                 ^
+		++it1;                      //    ^              ^
+
+		it1 = mylist.erase (it1);   // 10 30 40 50 60 70 80 90
+		//    ^           ^
+
+		it2 = mylist.erase (it2);   // 10 30 40 50 60 80 90
+		//    ^           ^
+
+		++it1;                      //       ^        ^
+		--it2;                      //       ^     ^
+
+		mylist.erase (it1,it2);     // 10 30 60 80 90
+		//        ^
+
+		std::cout << "mylist contains:";
+		for (it1=mylist.begin(); it1!=mylist.end(); ++it1)
+			std::cout << ' ' << *it1;
+		std::cout << '\n';
+	}
+
+	std::cout << "------------- my" << std::endl;
+	{
+		ft::list<int> mylist;
+		ft::list<int>::iterator it1,it2;
+
+		// set some values:
+		for (int i=1; i<10; ++i) mylist.push_back(i*10);
+
+		// 10 20 30 40 50 60 70 80 90
+		it1 = it2 = mylist.begin(); // ^^
+		std::advance (it2,6);            // ^                 ^
+		++it1;                      //    ^              ^
+
+		it1 = mylist.erase (it1);   // 10 30 40 50 60 70 80 90
+		//    ^           ^
+
+		it2 = mylist.erase (it2);   // 10 30 40 50 60 80 90
+		//    ^           ^
+
+		++it1;                      //       ^        ^
+		--it2;                      //       ^     ^
+
+		mylist.erase (it1,it2);     // 10 30 60 80 90
+		//        ^
+
+		std::cout << "mylist contains:";
+		for (it1=mylist.begin(); it1!=mylist.end(); ++it1)
+			std::cout << ' ' << *it1;
 		std::cout << '\n';
 	}
 
