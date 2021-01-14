@@ -344,18 +344,18 @@ namespace ft {
 			f->_prev = p->_prev;
 			f->_prev->_next = f;
 
-			l->_prev->_next = p;
 			p->_prev = l->_prev;
-
-			while (f != l)
-			{
-				--x._length;
-				++_length;
-				++f;
-			}
+			p->_prev->_next = p;
 
 			before_f->_next = l;
 			l->_prev = before_f;
+
+			while (f != p)
+			{
+				--x._length;
+				++_length;
+				f = f->_next;
+			}
 		}
 
 		void remove (const value_type& val) {

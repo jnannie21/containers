@@ -8,3 +8,4 @@ a.out
 cmake-build-debug
 CMakeLists.txt
 *.gch
+a.out.dSYM
