@@ -281,12 +281,13 @@ namespace ft {
 
 			++position;
 			delete p;
+			--_length;
 			return position;
 		}
 
 		iterator erase (iterator first, iterator last) {
 			while (first != last)
-				erase(first);
+				first = erase(first);
 
 			return last;
 		}
