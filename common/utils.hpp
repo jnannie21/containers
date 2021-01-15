@@ -47,10 +47,10 @@ namespace ft {
 	template<bool Cond, class T = void> struct enable_if {};
 	template<class T> struct enable_if<true, T> { typedef T type; };
 
-	template <typename T>
-	struct is_type {
-		typedef void type;
-	};
+//	template<bool Cond> struct enable_if {};
+//	template<> struct enable_if<true> { typedef void type; };
+
+	template <class T> struct is_type { typedef void type; };
 
 	template <class InpIter>
 	struct is_pointer
