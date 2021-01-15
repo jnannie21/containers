@@ -18,7 +18,7 @@ namespace ft {
 		typedef T& reference;
 		typedef std::bidirectional_iterator_tag iterator_category;
 
-		template <class F, class R>
+		template <class ,class >
 		friend class list;
 
 	private:

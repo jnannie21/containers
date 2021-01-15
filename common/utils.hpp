@@ -43,7 +43,6 @@ namespace ft {
 	};
 
 
-
 	template<bool Cond, class T = void> struct enable_if {};
 	template<class T> struct enable_if<true, T> { typedef T type; };
 
@@ -51,6 +50,7 @@ namespace ft {
 //	template<> struct enable_if<true> { typedef void type; };
 
 	template <class T> struct is_type { typedef void type; };
+
 
 	template <class InpIter>
 	struct is_pointer
@@ -69,11 +69,11 @@ namespace ft {
 	struct is_iterator
 	{
 		template <class U>
-		static char is_iter(typename ft::is_type<typename U::value_type>::type* = 0,
-							typename ft::is_type<typename U::difference_type>* = 0,
-							typename ft::is_type<typename U::pointer>* = 0,
-							typename ft::is_type<typename U::reference>* = 0,
-							typename ft::is_type<typename U::iterator_category>* = 0);
+		static char is_iter(typename ft::is_type<typename U::value_type>::type*,
+							typename ft::is_type<typename U::difference_type>*,
+							typename ft::is_type<typename U::pointer>*,
+							typename ft::is_type<typename U::reference>*,
+							typename ft::is_type<typename U::iterator_category>*);
 
 		template <typename>
 		static double is_iter(...);

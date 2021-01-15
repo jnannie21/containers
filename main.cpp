@@ -6,7 +6,7 @@ int list_test();
 int vector_test();
 
 int main() {
-	list_test();
+//	list_test();
 	vector_test();
 
 	return 0;
