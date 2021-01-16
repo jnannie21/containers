@@ -497,7 +497,7 @@ namespace ft {
 //(2)
 	template <class T, class Alloc>
 	bool operator!= (const list<T,Alloc>& lhs, const list<T,Alloc>& rhs) {
-		return (!(lhs == rhs));
+		return !(lhs == rhs);
 	}
 
 //(3)

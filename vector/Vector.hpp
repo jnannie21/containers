@@ -310,7 +310,11 @@ namespace ft {
 			return first; // points to initial last
 		}
 
-
+		void swap (Vector& x) {
+			ft::swap(_array, x._array);
+			ft::swap(_size, x._size);
+			ft::swap(_capacity, x._capacity);
+		}
 
 		void clear() {
 			delete [] _array;
@@ -318,6 +322,50 @@ namespace ft {
 			reserve(_capacity);
 		}
 	};
+
+//	(1)
+	template <class T, class Alloc>
+	bool operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+		if (lhs.size() != rhs.size())
+			return false;
+
+		for (typename Vector<T,Alloc>::const_iterator lit = lhs.begin(), rit = rhs.begin(); lit != lhs.end(); ++lit, ++rit)
+		{
+			if (!(*lit == *rit))
+				return false;
+		}
+		return true;
+	}
+
+//	(2)
+	template <class T, class Alloc>
+	bool operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+		return !(lhs == rhs);
+	}
+
+//	(3)
+	template <class T, class Alloc>
+	bool operator<  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+		typename Vector<T,Alloc>::const_iterator lit = lhs.begin(), rit = rhs.begin();
+
+		for ( ; lit != lhs.end() && rit != rhs.end(); ++lit, ++rit)
+		{
+			if (*lit < *rit)
+				return true;
+			else if (*rit < *lit)
+				return false;
+		}
+		return (rit != rhs.end());
+	}
+	(4)
+	template <class T, class Alloc>
+	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	(5)
+	template <class T, class Alloc>
+	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	(6)
+	template <class T, class Alloc>
+	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
 }
 
 #endif //VECTOR_HPP
