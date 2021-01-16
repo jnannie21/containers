@@ -9,6 +9,7 @@
 #include "../common/reverse_iterator.hpp"
 #include "../common/utils.hpp"
 #include <cstring>
+#include <stdexcept>
 
 namespace ft {
 
@@ -62,7 +63,7 @@ namespace ft {
 
 //		copy (4)
 		Vector (const Vector& x)
-		: _alloc(), _array(NULL), _size(0), _capacity(0) {
+		: _alloc(x._alloc), _array(NULL), _size(0), _capacity(0) {
 			*this = x;
 		}
 
@@ -121,12 +122,90 @@ namespace ft {
 			return ft::min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(value_type)), std::numeric_limits<difference_type>::max());
 		}
 
-
-
-
+		void resize (size_type n, value_type val = value_type()) {
+			while (n < _size)
+				pop_back();
+			while (n > _size)
+				push_back(val);
+		}
 
 		size_type capacity() const {
 			return _capacity;
+		}
+
+		bool empty() const {
+			return (!_size);
+		}
+
+		void reserve (size_type n) {
+			if (n > _capacity) {
+				value_type* temp = new value_type[n];
+				std::memcpy(temp, _array, _size * sizeof(value_type));
+
+				delete [] _array;
+				_array = temp;
+				_capacity = n;
+			}
+		}
+
+		reference operator[] (size_type n) {
+			return _array[n];
+		}
+
+		const_reference operator[] (size_type n) const {
+			return _array[n];
+		}
+
+		reference at (size_type n) {
+			if (n >= _size)
+				throw std::out_of_range("out of bounds");
+			return _array[n];
+		}
+
+		const_reference at (size_type n) const {
+			if (n >= _size)
+				throw std::out_of_range("out of bounds");
+			return _array[n];
+		}
+
+		reference front() {
+			return *_array;
+		}
+
+		const_reference front() const {
+			return *_array;
+		}
+
+		reference back() {
+			return *(_array + (_size - 1));
+		}
+
+		const_reference back() const {
+			return *(_array + (_size - 1));
+		}
+
+//		range (1)
+		template <class InputIterator>
+		void assign (InputIterator first, InputIterator last,
+					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
+			clear();
+
+			size_type n = 0;
+			for (InputIterator temp = first; temp != last; ++temp)
+				++n;
+			reserve(n);
+
+			for (InputIterator temp = first; temp != last; ++temp)
+				push_back(*temp);
+		}
+
+//		fill (2)
+		void assign (size_type n, const value_type& val) {
+			clear();
+			reserve(n);
+
+			while (n--)
+				push_back(val);
 		}
 
 		void push_back (const value_type& val) {
@@ -142,20 +221,76 @@ namespace ft {
 			++_size;
 		}
 
+		void pop_back() {
+			if (_size > 0)
+				--_size;
+		}
+
 		void clear() {
 			delete [] _array;
 			_size = 0;
 			reserve(_capacity);
 		}
 
-		void reserve (size_type n) {
-			if (n > _capacity) {
-				value_type* temp = new value_type[n];
-				std::memcpy(temp, _array, _size * sizeof(value_type));
+//		single element (1)
+		iterator insert (iterator position, const value_type& val) {
+			value_type* p = position._p;
+			if (_size + 1 > _capacity)
+			{
+				if (_capacity == 0)
+					reserve(1);
+				else
+					reserve(_capacity * 2);
+			}
 
-				delete [] _array;
-				_array = temp;
-				_capacity = n;
+			size_type i = 0;
+			for (iterator temp = begin(); temp != end(); ++temp)
+			{
+				if (temp == position)
+				{
+					std::memmove(temp._p + 1, temp._p, (_size - i) * sizeof(value_type));
+					*temp = val;
+				}
+				++i;
+			}
+
+			++_size;
+		}
+
+//		fill (2)
+		void insert (iterator position, size_type n, const value_type& val) {
+			if (_size + n > _capacity)
+			{
+				if (_size + n > _capacity * 2)
+					reserve(_size + n);
+				else
+					reserve(_capacity * 2);
+			}
+
+			while (n--)
+				insert(position, val);
+		}
+
+//		range (3)
+		template <class InputIterator>
+		void insert (iterator position, InputIterator first, InputIterator last,
+					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
+			size_type n = 0;
+			for (InputIterator temp = first; temp != last; ++temp)
+				++n;
+
+			if (_size + n > _capacity)
+			{
+				if (_size + n > _capacity * 2)
+					reserve(_size + n);
+				else
+					reserve(_capacity * 2);
+			}
+
+			while (first != last)
+			{
+				insert(position, *first);
+				first++;
 			}
 		}
 

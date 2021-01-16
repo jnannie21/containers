@@ -77,7 +77,7 @@ namespace ft {
 
 		//copy (4)
 		list (const list& x)
-			: _alloc(), _before_first(NULL), _after_last(NULL), _length(0) {
+			: _alloc(x._alloc), _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node<value_type>();
 			_after_last = new node<value_type>();
 
@@ -177,7 +177,7 @@ namespace ft {
 		void assign (InputIterator first, InputIterator last,
 					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
 			clear();
-			_length = 0;
+//			_length = 0;
 
 			while (first != last)
 			{
@@ -189,7 +189,7 @@ namespace ft {
 		//fill (2)
 		void assign (size_type n, const value_type& val) {
 			clear();
-			_length = 0;
+//			_length = 0;
 
 			while (n--)
 				push_back(val);
