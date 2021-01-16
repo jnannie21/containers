@@ -357,15 +357,30 @@ namespace ft {
 		}
 		return (rit != rhs.end());
 	}
-	(4)
+
+//	(4)
 	template <class T, class Alloc>
-	bool operator<= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	(5)
+	bool operator<= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+		return !(rhs < lhs);
+	}
+
+//	(5)
 	template <class T, class Alloc>
-	bool operator>  (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
-	(6)
+	bool operator>  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+		return (rhs < lhs);
+	}
+
+//	(6)
 	template <class T, class Alloc>
-	bool operator>= (const vector<T,Alloc>& lhs, const vector<T,Alloc>& rhs);
+	bool operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+		return !(lhs < rhs);
+	}
+
+	template <class T, class Alloc>
+	void swap (Vector<T,Alloc>& x, Vector<T,Alloc>& y) {
+		x.swap(y);
+	}
+
 }
 
 #endif //VECTOR_HPP
