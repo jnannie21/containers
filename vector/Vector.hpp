@@ -234,41 +234,32 @@ namespace ft {
 
 //		single element (1)
 		iterator insert (iterator position, const value_type& val) {
-			value_type* p = position._p;
-			if (_size + 1 > _capacity)
-			{
-				if (_capacity == 0)
-					reserve(1);
-				else
-					reserve(_capacity * 2);
-			}
-
-			size_type i = 0;
-			for (iterator temp = begin(); temp != end(); ++temp)
-			{
-				if (temp == position)
-				{
-					std::memmove(temp._p + 1, temp._p, (_size - i) * sizeof(value_type));
-					*temp = val;
-				}
-				++i;
-			}
-
-			++_size;
+			insert(position, 1, val);
 		}
 
 //		fill (2)
 		void insert (iterator position, size_type n, const value_type& val) {
+			size_type i = 0;
+			for (iterator it = begin(); it != position; ++it)
+				++i;
+
 			if (_size + n > _capacity)
 			{
 				if (_size + n > _capacity * 2)
 					reserve(_size + n);
 				else
 					reserve(_capacity * 2);
+				position = iterator(_array + i);
 			}
 
+			std::memmove(position._p + n, position._p, (_size - i) * sizeof(value_type));
+
+			_size += n;
 			while (n--)
-				insert(position, val);
+			{
+				*position = val;
+				++position;
+			}
 		}
 
 //		range (3)
@@ -276,8 +267,12 @@ namespace ft {
 		void insert (iterator position, InputIterator first, InputIterator last,
 					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
 			size_type n = 0;
-			for (InputIterator temp = first; temp != last; ++temp)
+			for (InputIterator it = first; it != last; ++it)
 				++n;
+
+			size_type i = 0;
+			for (iterator it = begin(); it != position; ++it)
+				++i;
 
 			if (_size + n > _capacity)
 			{
@@ -285,11 +280,17 @@ namespace ft {
 					reserve(_size + n);
 				else
 					reserve(_capacity * 2);
+				position = iterator(_array + i);
 			}
+
+			std::memmove(position._p + n, position._p, (_size - i) * sizeof(value_type));
+
+			_size += n;
 
 			while (first != last)
 			{
-				insert(position, *first);
+				*position = *first;
+				++position;
 				first++;
 			}
 		}
