@@ -272,8 +272,8 @@ namespace ft {
 		}
 
 		iterator erase (iterator position) {
-			if (position == end())
-				return position;
+//			if (position == end())
+//				return position;
 
 			node<value_type>* p = position._p;
 			p->_prev->_next = p->_next;

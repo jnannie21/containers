@@ -123,6 +123,13 @@ namespace ft {
 		}
 
 		void resize (size_type n, value_type val = value_type()) {
+			if (n > _capacity)
+			{
+				if (n > _capacity * 2)
+					reserve(n);
+				else
+					reserve(_capacity * 2);
+			}
 			while (n < _size)
 				pop_back();
 			while (n > _size)
@@ -294,6 +301,12 @@ namespace ft {
 				first++;
 			}
 		}
+
+//		iterator erase (iterator position) {
+//
+//		}
+//		iterator erase (iterator first, iterator last);
+
 
 	};
 }
