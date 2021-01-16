@@ -233,12 +233,6 @@ namespace ft {
 				--_size;
 		}
 
-		void clear() {
-			delete [] _array;
-			_size = 0;
-			reserve(_capacity);
-		}
-
 //		single element (1)
 		iterator insert (iterator position, const value_type& val) {
 			insert(position, 1, val);
@@ -302,12 +296,27 @@ namespace ft {
 			}
 		}
 
-//		iterator erase (iterator position) {
-//
-//		}
-//		iterator erase (iterator first, iterator last);
+		iterator erase (iterator position) {
+			return erase(position, position + 1);
+		}
+
+		iterator erase (iterator first, iterator last) {
+			for (; last != end(); ++first, ++last)
+				*first = *last;
+
+			for (iterator it = first; it != last; ++it)
+				--_size;
+
+			return first; // points to initial last
+		}
 
 
+
+		void clear() {
+			delete [] _array;
+			_size = 0;
+			reserve(_capacity);
+		}
 	};
 }
 
