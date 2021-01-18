@@ -31,10 +31,15 @@ namespace ft {
 
 		const VectorIterator& operator=(const VectorIterator& rhs) { _p = rhs._p; return *this; }
 
-		template <class T1>
-		friend bool operator== (const VectorIterator<T1>& lhs, const VectorIterator<T1>& rhs);
-		template <class T1>
-		friend bool operator!= (const VectorIterator<T1>& lhs, const VectorIterator<T1>& rhs);
+		template <class U>
+		friend bool operator== (const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
+			return lhs._p == rhs._p;
+		}
+
+		template <class U>
+		friend bool operator!= (const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
+			return !(lhs == rhs);
+		}
 
 		reference operator*() const { return *_p; }
 		pointer operator->() const { return _p; }
@@ -70,7 +75,7 @@ namespace ft {
 			return temp;
 		}
 
-		friend VectorIterator  operator+ (difference_type n, const VectorIterator & it) const {
+		friend VectorIterator  operator+ (difference_type n, const VectorIterator & it) {
 			return it + n;
 		}
 
@@ -83,36 +88,30 @@ namespace ft {
 			return *this + (-n);
 		}
 
-		template <class Iter1, class Iter2>
-		friend typename VectorIterator<Iter1>::difference_type
-		operator-(const VectorIterator<Iter1>& it1, const VectorIterator<Iter2>& it2);
+		template <class U>
+		friend typename VectorIterator<U>::difference_type
+		operator-(const VectorIterator<U>& it1, const VectorIterator<U>& it2) {
+			return it1._p - it2._p;
+		}
 
 		reference operator[](difference_type n) const { return *(*this + n); }
+
+		template <class U>
+		friend bool operator<(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
+		{
+			return lhs._p < rhs._p;
+		}
 
 	};
 
 
-	template <class Iter1, class Iter2>
-	typename VectorIterator<Iter1>::difference_type
-	operator-(const VectorIterator<Iter1>& it1, const VectorIterator<Iter2>& it2) {
-		return it1._p - it2._p;
-	}
 
-	template <class T1>
-	bool operator== (const VectorIterator<T1>& lhs, const VectorIterator<T1>& rhs) {
-		return lhs._p == rhs._p;
-	}
 
-	template <class T1>
-	bool operator!= (const VectorIterator<T1>& lhs, const VectorIterator<T1>& rhs) {
-		return !(lhs == rhs);
-	}
 
-	template <class Iter1, class Iter2>
-	bool operator<(const VectorIterator<Iter1>& lhs, const VectorIterator<Iter2>& rhs)
-	{
-		return lhs._p > rhs._p;
-	}
+
+
+
+
 
 }
 

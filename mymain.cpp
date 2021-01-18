@@ -94,5 +94,14 @@ int main () {
 		std::cout << *it1++ << "\n";
 		std::cout << *it1 << "\n";
 
+		{
+			std::cout << "------------ my list" << std::endl;
+			int arr1[3] = {10, 20, 30};
+			ft::list<int> a(arr1, arr1 + 3);
+			int arr2[4] = {10, 20, 30, 0};
+			ft::list<int> b(arr2, arr2 + 4);
+			std::cout << (a == b) << std::endl;
+		}
+
 	}
 }
