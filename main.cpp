@@ -4,10 +4,13 @@
 
 int list_test();
 int vector_test();
+int reverse_iterator_test();
 
 int main() {
-	list_test();
-	vector_test();
+	reverse_iterator_test();
+//	list_test();
+//	vector_test();
+
 
 	return 0;
 }
