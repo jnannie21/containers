@@ -8,8 +8,6 @@
 #include "vector_iterator.hpp"
 #include "../common/reverse_iterator.hpp"
 #include "../common/utils.hpp"
-#include <cstring>
-#include <stdexcept>
 
 namespace ft {
 

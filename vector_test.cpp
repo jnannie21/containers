@@ -7,7 +7,7 @@
 #include "vector/vector.hpp"
 
 int vector_test () {
-	std::cout << std::endl << "------------- constructors" << std::endl;
+	std::cout << "------------- constructors" << std::endl;
 	std::cout << "------------- std" << std::endl;
 	{
 		// constructors used in the same order as described above:

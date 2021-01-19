@@ -8,7 +8,7 @@
 #include "vector/vector.hpp"
 
 int reverse_iterator_test () {
-	std::cout << std::endl << "------------- constructor" << std::endl;
+	std::cout << "------------- constructor" << std::endl;
 	std::cout << "------------- std" << std::endl;
 	{
 		std::vector<int> myvector;

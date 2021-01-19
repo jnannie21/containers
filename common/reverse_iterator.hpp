@@ -5,8 +5,6 @@
 #ifndef REVERSE_ITERATOR_HPP
 #define REVERSE_ITERATOR_HPP
 
-#include "../list/node.hpp"
-
 namespace ft {
 
 	template <class Iterator>
