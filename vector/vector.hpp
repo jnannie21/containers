@@ -5,7 +5,7 @@
 #ifndef VECTOR_HPP
 #define VECTOR_HPP
 
-#include "VectorIterator.hpp"
+#include "vector_iterator.hpp"
 #include "../common/reverse_iterator.hpp"
 #include "../common/utils.hpp"
 #include <cstring>
@@ -14,7 +14,7 @@
 namespace ft {
 
 	template < class T>
-	class Vector {
+	class vector {
 	public:
 		//typedefs
 		typedef T value_type;
@@ -22,11 +22,11 @@ namespace ft {
 		typedef const T& const_reference;
 		typedef T* pointer;
 		typedef const T* const_pointer;
-		typedef VectorIterator<value_type> iterator;
-		typedef VectorIterator<const value_type> const_iterator;
+		typedef vector_iterator<value_type> iterator;
+		typedef vector_iterator<const value_type> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef typename VectorIterator<value_type>::difference_type difference_type;
+		typedef typename vector_iterator<value_type>::difference_type difference_type;
 		typedef size_t size_type;
 
 	private:
@@ -36,35 +36,35 @@ namespace ft {
 
 	public:
 //		default (1)
-		explicit Vector ()
+		explicit vector ()
 		: _array(NULL), _size(0), _capacity(0) { }
 
 //		fill (2)
-		explicit Vector (size_type n, const value_type& val = value_type())
+		explicit vector (size_type n, const value_type& val = value_type())
 		: _array(NULL), _size(0), _capacity(0) {
 			assign(n, val);
 		}
 
 //		range (3)
 		template <class InputIterator>
-		Vector (InputIterator first, InputIterator last,
+		vector (InputIterator first, InputIterator last,
 		typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0)
 		: _array(NULL), _size(0), _capacity(0) {
 			assign(first, last);
 		}
 
 //		copy (4)
-		Vector (const Vector& x)
+		vector (const vector& x)
 		: _array(NULL), _size(0), _capacity(0) {
 			*this = x;
 		}
 
-		~Vector() {
+		~vector() {
 			delete [] _array;
 		}
 
 //		copy (1)
-		Vector& operator= (const Vector& x) {
+		vector& operator= (const vector& x) {
 			if (this == &x)
 				return *this;
 
@@ -308,7 +308,7 @@ namespace ft {
 			return first; // points to initial last
 		}
 
-		void swap (Vector& x) {
+		void swap (vector& x) {
 			ft::swap(_array, x._array);
 			ft::swap(_size, x._size);
 			ft::swap(_capacity, x._capacity);
@@ -324,11 +324,11 @@ namespace ft {
 
 //	(1)
 	template <class T>
-	bool operator== (const Vector<T>& lhs, const Vector<T>& rhs) {
+	bool operator== (const vector<T>& lhs, const vector<T>& rhs) {
 		if (lhs.size() != rhs.size())
 			return false;
 
-		for (typename Vector<T>::const_iterator lit = lhs.begin(), rit = rhs.begin(); lit != lhs.end(); ++lit, ++rit)
+		for (typename vector<T>::const_iterator lit = lhs.begin(), rit = rhs.begin(); lit != lhs.end(); ++lit, ++rit)
 		{
 			if (!(*lit == *rit))
 				return false;
@@ -338,14 +338,14 @@ namespace ft {
 
 //	(2)
 	template <class T>
-	bool operator!= (const Vector<T>& lhs, const Vector<T>& rhs) {
+	bool operator!= (const vector<T>& lhs, const vector<T>& rhs) {
 		return !(lhs == rhs);
 	}
 
 //	(3)
 	template <class T>
-	bool operator<  (const Vector<T>& lhs, const Vector<T>& rhs) {
-		typename Vector<T>::const_iterator lit = lhs.begin(), rit = rhs.begin();
+	bool operator<  (const vector<T>& lhs, const vector<T>& rhs) {
+		typename vector<T>::const_iterator lit = lhs.begin(), rit = rhs.begin();
 
 		for ( ; lit != lhs.end() && rit != rhs.end(); ++lit, ++rit)
 		{
@@ -359,24 +359,24 @@ namespace ft {
 
 //	(4)
 	template <class T>
-	bool operator<= (const Vector<T>& lhs, const Vector<T>& rhs) {
+	bool operator<= (const vector<T>& lhs, const vector<T>& rhs) {
 		return !(rhs < lhs);
 	}
 
 //	(5)
 	template <class T>
-	bool operator>  (const Vector<T>& lhs, const Vector<T>& rhs) {
+	bool operator>  (const vector<T>& lhs, const vector<T>& rhs) {
 		return (rhs < lhs);
 	}
 
 //	(6)
 	template <class T>
-	bool operator>= (const Vector<T>& lhs, const Vector<T>& rhs) {
+	bool operator>= (const vector<T>& lhs, const vector<T>& rhs) {
 		return !(lhs < rhs);
 	}
 
 	template <class T>
-	void swap (Vector<T>& x, Vector<T>& y) {
+	void swap (vector<T>& x, vector<T>& y) {
 		x.swap(y);
 	}
 
