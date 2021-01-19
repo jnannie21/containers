@@ -209,7 +209,7 @@ namespace ft {
 //		fill (2)
 		void assign (size_type n, const value_type& val) {
 			clear();
-			reserve(n);
+//			reserve(n);
 
 			while (n--)
 				push_back(val);
@@ -235,7 +235,13 @@ namespace ft {
 
 //		single element (1)
 		iterator insert (iterator position, const value_type& val) {
+			size_type i = 0;
+			for (iterator it = begin(); it != position; ++it)
+				++i;
+
 			insert(position, 1, val);
+
+			return iterator(_array + i);
 		}
 
 //		fill (2)
@@ -319,7 +325,8 @@ namespace ft {
 		void clear() {
 			delete [] _array;
 			_size = 0;
-			reserve(_capacity);
+			_array = new value_type[_capacity];
+//			reserve(_capacity);
 		}
 	};
 
