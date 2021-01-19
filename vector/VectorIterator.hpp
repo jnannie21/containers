@@ -21,8 +21,6 @@ namespace ft {
 	private:
 		value_type* _p;
 
-		value_type* getP() { return _p; }
-
 	public:
 		VectorIterator() : _p(NULL) { }
 		VectorIterator(const VectorIterator<value_type>& other) : _p(other._p) { }
@@ -100,6 +98,24 @@ namespace ft {
 		friend bool operator<(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
 		{
 			return lhs._p < rhs._p;
+		}
+
+		template <class U>
+		friend bool operator>(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
+		{
+			return rhs._p < lhs._p;
+		}
+
+		template <class U>
+		friend bool operator>=(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
+		{
+			return !(lhs._p < rhs._p);
+		}
+
+		template <class U>
+		friend bool operator<=(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
+		{
+			return !(lhs._p > rhs._p);
 		}
 
 	};
