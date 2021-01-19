@@ -13,16 +13,15 @@
 
 namespace ft {
 
-	template < class T, class Alloc = std::allocator<T> >
+	template < class T>
 	class Vector {
 	public:
 		//typedefs
 		typedef T value_type;
-		typedef Alloc allocator_type;
-		typedef typename allocator_type::reference reference;
-		typedef typename allocator_type::const_reference const_reference;
-		typedef typename allocator_type::pointer pointer;
-		typedef typename allocator_type::const_pointer const_pointer;
+		typedef T& reference;
+		typedef const T& const_reference;
+		typedef T* pointer;
+		typedef const T* const_pointer;
 		typedef VectorIterator<value_type> iterator;
 		typedef VectorIterator<const value_type> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
@@ -31,39 +30,32 @@ namespace ft {
 		typedef size_t size_type;
 
 	private:
-		allocator_type _alloc;
 		value_type* _array;
 		size_type _size;
 		size_type _capacity;
 
 	public:
 //		default (1)
-		explicit Vector (const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _array(NULL), _size(0), _capacity(0) { }
+		explicit Vector ()
+		: _array(NULL), _size(0), _capacity(0) { }
 
 //		fill (2)
-		explicit Vector (size_type n, const value_type& val = value_type(),
-		const allocator_type& alloc = allocator_type())
-		: _alloc(alloc), _array(NULL), _size(0), _capacity(0) {
-//			_array = new value_type[n];
-//			for (size_type i = 0; i < n; ++i)
-//				_array[i] = val;
-//			_size = n;
+		explicit Vector (size_type n, const value_type& val = value_type())
+		: _array(NULL), _size(0), _capacity(0) {
 			assign(n, val);
 		}
 
 //		range (3)
 		template <class InputIterator>
 		Vector (InputIterator first, InputIterator last,
-		const allocator_type& alloc = allocator_type(),
 		typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0)
-		: _alloc(alloc), _array(NULL), _size(0), _capacity(0) {
+		: _array(NULL), _size(0), _capacity(0) {
 			assign(first, last);
 		}
 
 //		copy (4)
 		Vector (const Vector& x)
-		: _alloc(x._alloc), _array(NULL), _size(0), _capacity(0) {
+		: _array(NULL), _size(0), _capacity(0) {
 			*this = x;
 		}
 
@@ -331,12 +323,12 @@ namespace ft {
 	};
 
 //	(1)
-	template <class T, class Alloc>
-	bool operator== (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+	template <class T>
+	bool operator== (const Vector<T>& lhs, const Vector<T>& rhs) {
 		if (lhs.size() != rhs.size())
 			return false;
 
-		for (typename Vector<T,Alloc>::const_iterator lit = lhs.begin(), rit = rhs.begin(); lit != lhs.end(); ++lit, ++rit)
+		for (typename Vector<T>::const_iterator lit = lhs.begin(), rit = rhs.begin(); lit != lhs.end(); ++lit, ++rit)
 		{
 			if (!(*lit == *rit))
 				return false;
@@ -345,15 +337,15 @@ namespace ft {
 	}
 
 //	(2)
-	template <class T, class Alloc>
-	bool operator!= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+	template <class T>
+	bool operator!= (const Vector<T>& lhs, const Vector<T>& rhs) {
 		return !(lhs == rhs);
 	}
 
 //	(3)
-	template <class T, class Alloc>
-	bool operator<  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
-		typename Vector<T,Alloc>::const_iterator lit = lhs.begin(), rit = rhs.begin();
+	template <class T>
+	bool operator<  (const Vector<T>& lhs, const Vector<T>& rhs) {
+		typename Vector<T>::const_iterator lit = lhs.begin(), rit = rhs.begin();
 
 		for ( ; lit != lhs.end() && rit != rhs.end(); ++lit, ++rit)
 		{
@@ -366,25 +358,25 @@ namespace ft {
 	}
 
 //	(4)
-	template <class T, class Alloc>
-	bool operator<= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+	template <class T>
+	bool operator<= (const Vector<T>& lhs, const Vector<T>& rhs) {
 		return !(rhs < lhs);
 	}
 
 //	(5)
-	template <class T, class Alloc>
-	bool operator>  (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+	template <class T>
+	bool operator>  (const Vector<T>& lhs, const Vector<T>& rhs) {
 		return (rhs < lhs);
 	}
 
 //	(6)
-	template <class T, class Alloc>
-	bool operator>= (const Vector<T,Alloc>& lhs, const Vector<T,Alloc>& rhs) {
+	template <class T>
+	bool operator>= (const Vector<T>& lhs, const Vector<T>& rhs) {
 		return !(lhs < rhs);
 	}
 
-	template <class T, class Alloc>
-	void swap (Vector<T,Alloc>& x, Vector<T,Alloc>& y) {
+	template <class T>
+	void swap (Vector<T>& x, Vector<T>& y) {
 		x.swap(y);
 	}
 

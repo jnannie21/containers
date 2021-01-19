@@ -15,7 +15,7 @@ namespace ft {
 		typedef T& reference;
 		typedef std::random_access_iterator_tag iterator_category;
 
-		template <class ,class >
+		template <class >
 		friend class Vector;
 
 	private:
@@ -27,16 +27,9 @@ namespace ft {
 		VectorIterator(value_type* p) : _p(p) { }
 		~VectorIterator() { }
 
-		const VectorIterator& operator=(const VectorIterator& rhs) { _p = rhs._p; return *this; }
-
-		template <class U>
-		friend bool operator== (const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
-			return lhs._p == rhs._p;
-		}
-
-		template <class U>
-		friend bool operator!= (const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
-			return !(lhs == rhs);
+		const VectorIterator& operator=(const VectorIterator& rhs) {
+			_p = rhs._p;
+			return *this;
 		}
 
 		reference operator*() const { return *_p; }
@@ -73,12 +66,13 @@ namespace ft {
 			return temp;
 		}
 
-		friend VectorIterator  operator+ (difference_type n, const VectorIterator & it) {
+		template <class U>
+		friend VectorIterator<U> operator+ (typename VectorIterator<U>::difference_type n, const VectorIterator<U> & it) {
 			return it + n;
 		}
 
 		VectorIterator& operator-=(difference_type n) {
-			*this += -n;
+			*this += (-n);
 			return *this;
 		}
 
@@ -95,39 +89,36 @@ namespace ft {
 		reference operator[](difference_type n) const { return *(*this + n); }
 
 		template <class U>
-		friend bool operator<(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
-		{
+		friend bool operator== (const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
+			return lhs._p == rhs._p;
+		}
+
+		template <class U>
+		friend bool operator!= (const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
+			return !(lhs == rhs);
+		}
+
+		template <class U>
+		friend bool operator<(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
 			return lhs._p < rhs._p;
 		}
 
 		template <class U>
-		friend bool operator>(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
-		{
-			return rhs._p < lhs._p;
+		friend bool operator>(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
+			return rhs < lhs;
 		}
 
 		template <class U>
-		friend bool operator>=(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
-		{
-			return !(lhs._p < rhs._p);
+		friend bool operator>=(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
+			return !(lhs < rhs);
 		}
 
 		template <class U>
-		friend bool operator<=(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs)
-		{
-			return !(lhs._p > rhs._p);
+		friend bool operator<=(const VectorIterator<U>& lhs, const VectorIterator<U>& rhs) {
+			return !(lhs > rhs);
 		}
 
 	};
-
-
-
-
-
-
-
-
-
 
 }
 
