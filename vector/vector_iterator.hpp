@@ -5,6 +5,8 @@
 #ifndef VECTOR_ITERATOR_HPP
 #define VECTOR_ITERATOR_HPP
 
+#include "../common/utils.hpp"
+
 namespace ft {
 	template <class T>
 	class vector_iterator {
@@ -17,6 +19,8 @@ namespace ft {
 
 		template <class >
 		friend class vector;
+		template <typename U>
+		friend class vector_iterator;
 
 	private:
 		value_type* _p;
@@ -24,6 +28,8 @@ namespace ft {
 	public:
 		vector_iterator() : _p(NULL) { }
 		vector_iterator(const vector_iterator<value_type>& other) : _p(other._p) { }
+		template <typename U>
+		vector_iterator(vector_iterator<U> const& other, typename ft::enable_if<!ft::is_const<U>::value>::type* = NULL) : _p(other._p) { }
 		vector_iterator(value_type* p) : _p(p) { }
 		~vector_iterator() { }
 

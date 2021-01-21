@@ -832,6 +832,28 @@ int vector_test () {
 		std::cout << '\n';
 	}
 
+
+	//std::cout << "------------- iterators convertibleness check (must be able to convert to const, and not to be able from const)" << std::endl;
+		{
+			std::vector<int> list;
+			std::vector<int>::const_iterator ci = list.begin();
+			std::vector<int>::iterator i = list.begin();
+			ci = i; // works fine as expected
+//		i = ci; // fails as expected
+//		i = i;  // works fine as expected
+//		ci = ci;  // works fine as expected
+		}
+//
+		{
+			ft::vector<int> list;
+			ft::vector<int>::const_iterator ci = list.begin();
+			ft::vector<int>::iterator i = list.begin();
+			ci = i; // works fine as expected
+//		i = ci; // fails as expected
+//		i = i;  // works fine as expected
+//		ci = ci;  // works fine as expected
+		}
+
 	return 0;
 }
 

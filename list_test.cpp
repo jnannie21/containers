@@ -1175,8 +1175,7 @@ int list_test ()
 		std::cout << '\n';
 	}
 
-	std::cout << "------------- iterators convertibleness check (must be able to convert to const, and not to be able from const)" << std::endl;
-	{
+	//std::cout << "------------- iterators convertibleness check (must be able to convert to const, and not to be able from const)" << std::endl;
 	{
 		std::list<int> list;
 		std::list<int>::const_iterator ci = list.begin();
