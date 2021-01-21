@@ -24,9 +24,9 @@ namespace ft {
 			if (this == &rhs)
 				return *this;
 
-			this->prev = rhs.prev;
-			this->next = rhs.next;
-			this->value = rhs.value;
+			prev = rhs.prev;
+			next = rhs.next;
+			value = rhs.value;
 
 			return *this;
 		}

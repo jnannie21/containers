@@ -30,25 +30,29 @@ namespace ft {
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef ptrdiff_t difference_type;
 		typedef size_t size_type;
+		typedef map_node<typename ft::remove_const<value_type>::type> node;
 
 		template <class Key, class T, class Compare>
 		class value_compare {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
 			friend class map;
-		protected:
-			Compare comp;
-			value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
-		public:
-			typedef bool result_type;
-			typedef value_type first_argument_type;
-			typedef value_type second_argument_type;
-			result_type operator() (const first_argument_type& x, const second_argument_type& y) const
-			{
-				return comp(x.first, y.first);
-			}
+
+			protected:
+				Compare comp;
+				value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
+
+			public:
+				typedef bool result_type;
+				typedef value_type first_argument_type;
+				typedef value_type second_argument_type;
+
+				result_type operator() (const first_argument_type& x, const second_argument_type& y) const
+				{
+					return comp(x.first, y.first);
+				}
 		}
 
 	private:
-		node<T> _root;
+		node* _root;
 		key_compare _comp;
 		size_type _size;
 
@@ -62,12 +66,29 @@ namespace ft {
 		map (InputIterator first, InputIterator last,
 			 const key_compare& comp = key_compare())
 			 : _root(), _comp(comp), _size() {
-
+			insert(first, last);
 		}
 
 //		copy (3)
 		map (const map& x)
-			: _root(), _comp(comp), _size() { }
+			: _root(), _comp(x._comp), _size() {
+			*this = x;
+		}
+
+		~map() {
+			clear();
+		}
+
+//		copy (1)
+		map& operator= (const map& x) {
+			if (this == &x)
+				return *this;
+
+			clear();
+			insert(x.begin(), x.end());
+			return *this;
+		}
+
 
 	};
 
