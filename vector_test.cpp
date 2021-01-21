@@ -832,18 +832,6 @@ int vector_test () {
 		std::cout << '\n';
 	}
 
-//	{
-//		std::vector<int> v4;
-//		v4.insert(v4.end(), 13);
-//		std::cout << *v4.begin() << std::endl;
-//	}
-//
-//	{
-//		ft::vector<int> v4;
-//		v4.insert(v4.end(), 13);
-//		std::cout << *v4.begin() << std::endl;
-//	}
-
 	return 0;
 }
 

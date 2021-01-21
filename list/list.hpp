@@ -5,7 +5,7 @@
 #ifndef LIST_HPP
 #define LIST_HPP
 
-#include "node.hpp"
+#include "list_node.hpp"
 #include "list_iterator.hpp"
 #include "../common/reverse_iterator.hpp"
 #include "../common/utils.hpp"
@@ -27,10 +27,11 @@ namespace ft {
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef ptrdiff_t difference_type;
 		typedef size_t size_type;
+		typedef list_node<typename ft::remove_const<value_type>::type> node;
 
 	private:
-		node<value_type>* _before_first;
-		node<value_type>* _after_last;
+		node* _before_first;
+		node* _after_last;
 		size_type _length;
 
 	public:
@@ -38,21 +39,21 @@ namespace ft {
 		//default (1)
 		explicit list ()
 						: _before_first(NULL), _after_last(NULL), _length(0) {
-			_before_first = new node<value_type>();
-			_after_last = new node<value_type>();
+			_before_first = new node();
+			_after_last = new node();
 
-			_before_first->_next = _after_last;
-			_after_last->_prev = _before_first;
+			_before_first->next = _after_last;
+			_after_last->prev = _before_first;
 	}
 
 		//fill (2)
 		explicit list (size_type n, const value_type& val = value_type())
 						: _before_first(NULL), _after_last(NULL), _length(0) {
-			_before_first = new node<value_type>();
-			_after_last = new node<value_type>();
+			_before_first = new node();
+			_after_last = new node();
 
-			_before_first->_next = _after_last;
-			_after_last->_prev = _before_first;
+			_before_first->next = _after_last;
+			_after_last->prev = _before_first;
 
 			assign(n, val);
 		}
@@ -62,11 +63,11 @@ namespace ft {
 		list (InputIterator first, InputIterator last,
 			  typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) //is_pointer<InputIterator>::value ||
 			  : _before_first(NULL), _after_last(NULL), _length(0) {
-			_before_first = new node<value_type>();
-			_after_last = new node<value_type>();
+			_before_first = new node();
+			_after_last = new node();
 
-			_before_first->_next = _after_last;
-			_after_last->_prev = _before_first;
+			_before_first->next = _after_last;
+			_after_last->prev = _before_first;
 
 			assign(first, last);
 		}
@@ -74,11 +75,11 @@ namespace ft {
 		//copy (4)
 		list (const list& x)
 			: _before_first(NULL), _after_last(NULL), _length(0) {
-			_before_first = new node<value_type>();
-			_after_last = new node<value_type>();
+			_before_first = new node();
+			_after_last = new node();
 
-			_before_first->_next = _after_last;
-			_after_last->_prev = _before_first;
+			_before_first->next = _after_last;
+			_after_last->prev = _before_first;
 
 			*this = x;
 		}
@@ -103,11 +104,11 @@ namespace ft {
 
 		//iterators
 		iterator begin() {
-			return iterator(_before_first->_next);
+			return iterator(_before_first->next);
 		}
 
 		const_iterator begin() const {
-			return const_iterator(reinterpret_cast< node<const value_type>* >(_before_first->_next));
+			return const_iterator(_before_first->next);
 		}
 
 		iterator end() {
@@ -115,7 +116,7 @@ namespace ft {
 		}
 
 		const_iterator end() const {
-			return const_iterator(reinterpret_cast< node<const value_type>* >(_after_last));
+			return const_iterator(_after_last);
 		}
 
 		reverse_iterator rbegin() {
@@ -144,27 +145,27 @@ namespace ft {
 		}
 
 		size_type max_size() const {
-			return ft::min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(node<value_type>)), std::numeric_limits<difference_type>::max());
+			return ft::min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(node)), std::numeric_limits<difference_type>::max());
 //			return ft::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
 		}
 
 		//element access
 		reference front() {
-			return _before_first->_next->_value;
+			return _before_first->next->value;
 //			return *begin();
 		}
 
 		const_reference front() const {
-			return _before_first->_next->_value;
+			return _before_first->next->value;
 //			return *begin();
 		}
 
 		reference back() {
-			return _after_last->_prev->_value;
+			return _after_last->prev->value;
 		}
 
 		const_reference back() const {
-			return _after_last->_prev->_value;
+			return _after_last->prev->value;
 		}
 
 		//modifiers
@@ -192,12 +193,12 @@ namespace ft {
 		}
 
 		void push_front (const value_type& val) {
-			node<value_type>* temp = new node<value_type>(val);
+			node* temp = new node(val);
 
-			temp->_prev = _before_first;
-			temp->_next = _before_first->_next;
-			temp->_next->_prev = temp;
-			_before_first->_next = temp;
+			temp->prev = _before_first;
+			temp->next = _before_first->next;
+			temp->next->prev = temp;
+			_before_first->next = temp;
 
 			_length++;
 		}
@@ -206,20 +207,20 @@ namespace ft {
 			if (_length == 0)
 				return ;
 
-			node<value_type>* temp = _before_first->_next;
-			_before_first->_next = _before_first->_next->_next;
-			_before_first->_next->_prev = _before_first;
+			node* temp = _before_first->next;
+			_before_first->next = _before_first->next->next;
+			_before_first->next->prev = _before_first;
 			delete temp;
 			_length--;
 		}
 
 		void push_back (const value_type& val) {
-			node<value_type>* temp = new node<value_type>(val);
+			node* temp = new node(val);
 
-			temp->_prev = _after_last->_prev;
-			temp->_next = _after_last;
-			temp->_prev->_next = temp;
-			_after_last->_prev = temp;
+			temp->prev = _after_last->prev;
+			temp->next = _after_last;
+			temp->prev->next = temp;
+			_after_last->prev = temp;
 
 			_length++;
 		}
@@ -227,9 +228,9 @@ namespace ft {
 		void pop_back() {
 			if (_length > 0)
 			{
-				node<value_type>* temp = _after_last->_prev;
-				_after_last->_prev = _after_last->_prev->_prev;
-				_after_last->_prev->_next = _after_last;
+				node* temp = _after_last->prev;
+				_after_last->prev = _after_last->prev->prev;
+				_after_last->prev->next = _after_last;
 				delete temp;
 				--_length;
 			}
@@ -237,14 +238,14 @@ namespace ft {
 
 		//single element (1)
 		iterator insert (iterator position, const value_type& val) {
-			node<value_type>* p = position._p;
+			node* p = position._p;
 
-			node<value_type>* temp = new node<value_type>(val);
+			node* temp = new node(val);
 
-			temp->_prev = p->_prev;
-			temp->_next = p;
-			temp->_prev->_next = temp;
-			p->_prev = temp;
+			temp->prev = p->prev;
+			temp->next = p;
+			temp->prev->next = temp;
+			p->prev = temp;
 
 			_length++;
 			return temp;
@@ -271,9 +272,9 @@ namespace ft {
 //			if (position == end())
 //				return position;
 
-			node<value_type>* p = position._p;
-			p->_prev->_next = p->_next;
-			p->_next->_prev = p->_prev;
+			node* p = position._p;
+			p->prev->next = p->next;
+			p->next->prev = p->prev;
 
 			++position;
 			delete p;
@@ -289,11 +290,11 @@ namespace ft {
 		}
 
 		void swap (list& x) {
-			ft::swap(_before_first->_next, x._before_first->_next);
-			ft::swap(_before_first->_next->_prev, x._before_first->_next->_prev);
+			ft::swap(_before_first->next, x._before_first->next);
+			ft::swap(_before_first->next->prev, x._before_first->next->prev);
 
-			ft::swap(_after_last->_prev, x._after_last->_prev);
-			ft::swap(_after_last->_prev->_next, x._after_last->_prev->_next);
+			ft::swap(_after_last->prev, x._after_last->prev);
+			ft::swap(_after_last->prev->next, x._after_last->prev->next);
 
 			ft::swap(_length, x._length);
 		}
@@ -329,26 +330,26 @@ namespace ft {
 			if (first == last)
 				return ;
 
-			node<value_type>* p = position._p;
-			node<value_type>* f = first._p;
-			node<value_type>* l = last._p;
+			node* p = position._p;
+			node* f = first._p;
+			node* l = last._p;
 
-			node<value_type>* before_f = f->_prev;
+			node* before_f = f->prev;
 
-			f->_prev = p->_prev;
-			f->_prev->_next = f;
+			f->prev = p->prev;
+			f->prev->next = f;
 
-			p->_prev = l->_prev;
-			p->_prev->_next = p;
+			p->prev = l->prev;
+			p->prev->next = p;
 
-			before_f->_next = l;
-			l->_prev = before_f;
+			before_f->next = l;
+			l->prev = before_f;
 
 			while (f != p)
 			{
 				--x._length;
 				++_length;
-				f = f->_next;
+				f = f->next;
 			}
 		}
 

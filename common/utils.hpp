@@ -120,6 +120,15 @@ namespace ft {
 		bool operator() (const T& x, const T& y) const {return x<y;}
 	};
 
+
+	template< class T > struct remove_const                { typedef T type; };
+	template< class T > struct remove_const<const T>       { typedef T type; };
+
+
+	template<class T> struct is_const { enum { value = false };	};
+	template<class T> struct is_const<const T> { enum { value = true };
+	};
+
 }
 
 #endif //UTILS_HPP

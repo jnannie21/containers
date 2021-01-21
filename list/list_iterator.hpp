@@ -5,7 +5,8 @@
 #ifndef LIST_ITERATOR_HPP
 #define LIST_ITERATOR_HPP
 
-#include "node.hpp"
+#include "list_node.hpp"
+#include "../common/utils.hpp"
 
 namespace ft {
 
@@ -17,17 +18,25 @@ namespace ft {
 		typedef T* pointer;
 		typedef T& reference;
 		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef list_node<typename ft::remove_const<T>::type> node;
 
 		template <class >
 		friend class list;
+		template <typename U>
+		friend class list_iterator;
 
 	private:
-		node<value_type>* _p;
+		node* _p;
+
+//	public:
+//		node* getP() const { return _p; }
 
 	public:
 		list_iterator() : _p(NULL) { }
 		list_iterator(const list_iterator<value_type>& other) : _p(other._p) { }
-		list_iterator(node<value_type>* p) : _p(p) { }
+		template <typename U>
+		list_iterator(list_iterator<U> const& other, typename ft::enable_if<!ft::is_const<U>::value>::type* = NULL) : _p(other._p) { }
+		list_iterator(node* p) : _p(p) { }
 		~list_iterator() { }
 
 		const list_iterator& operator=(const list_iterator& rhs) { _p = rhs._p; return *this; }
@@ -42,11 +51,11 @@ namespace ft {
 			return !(lhs == rhs);
 		}
 
-		reference operator*() const { return _p->_value; }
-		pointer operator->() const { return &_p->_value; }
+		reference operator*() const { return _p->value; }
+		pointer operator->() const { return &_p->value; }
 
 		list_iterator& operator++() { //prefix increment
-			_p = _p->_next;
+			_p = _p->next;
 			return *this;
 		}
 		list_iterator operator++(int) { //postfix increment
@@ -56,7 +65,7 @@ namespace ft {
 		}
 
 		list_iterator& operator--() {
-			_p = _p->_prev;
+			_p = _p->prev;
 			return *this;
 		}
 		list_iterator operator--(int) {

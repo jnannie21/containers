@@ -1175,5 +1175,27 @@ int list_test ()
 		std::cout << '\n';
 	}
 
+	std::cout << "------------- iterators convertibleness check (must be able to convert to const, and not to be able from const)" << std::endl;
+	{
+	{
+		std::list<int> list;
+		std::list<int>::const_iterator ci = list.begin();
+		std::list<int>::iterator i = list.begin();
+		ci = i; // works fine as expected
+//		i = ci; // fails as expected
+//		i = i;  // works fine as expected
+//		ci = ci;  // works fine as expected
+	}
+//
+	{
+		ft::list<int> list;
+		ft::list<int>::const_iterator ci = list.begin();
+		ft::list<int>::iterator i = list.begin();
+		ci = i; // works fine as expected
+//		i = ci; // fails as expected
+//		i = i;  // works fine as expected
+//		ci = ci;  // works fine as expected
+	}
+
 	return 0;
 }
