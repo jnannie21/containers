@@ -68,12 +68,12 @@ namespace ft {
 	template <typename Iter>
 	struct is_iterator
 	{
-		template <class U>
+		template <typename U>
 		static char is_iter(typename ft::is_type<typename U::value_type>::type*,
-							typename ft::is_type<typename U::difference_type>*,
-							typename ft::is_type<typename U::pointer>*,
-							typename ft::is_type<typename U::reference>*,
-							typename ft::is_type<typename U::iterator_category>*);
+							typename ft::is_type<typename U::difference_type>::type*,
+							typename ft::is_type<typename U::pointer>::type*,
+							typename ft::is_type<typename U::reference>::type*,
+							typename ft::is_type<typename U::iterator_category>::type*);
 
 		template <typename>
 		static double is_iter(...);
