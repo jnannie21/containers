@@ -27,7 +27,6 @@ namespace ft {
 			prev = rhs.prev;
 			next = rhs.next;
 			value = rhs.value;
-
 			return *this;
 		}
 

@@ -11,14 +11,14 @@ namespace ft {
 	class map_node {
 	public:
 		map_node* parent;
-		map_node* prev;
-		map_node* next;
+		map_node* left;
+		map_node* right;
 		T value;
 
 	public:
-		map_node() : prev(NULL), next(NULL), value() { }
-		map_node(const map_node& other) { *this = other; }
-		map_node(const T& value) : prev(NULL), next(NULL), value(value) { }
+		map_node() : parent(NULL), left(NULL), right(NULL), value() { }
+		map_node(const map_node& other) : parent(NULL), left(NULL), right(NULL), value() { *this = other; }
+		map_node(const T& value) : parent(NULL), left(NULL), right(NULL), value(value) { }
 		~node() { }
 
 		const map_node& operator=(const map_node& rhs) {
@@ -26,10 +26,9 @@ namespace ft {
 				return *this;
 
 			parent = rhs.parent;
-			prev = rhs.prev;
-			next = rhs.next;
+			left = rhs.left;
+			right = rhs.right;
 			value = rhs.value;
-
 			return *this;
 		}
 

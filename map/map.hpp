@@ -7,6 +7,7 @@
 
 #include "common/utils.hpp"
 #include "pair.hpp"
+#include "map_node.hpp"
 
 namespace ft {
 
@@ -53,30 +54,54 @@ namespace ft {
 
 	private:
 		node* _root;
+		node* _before_first;
+		node* _after_last;
 		key_compare _comp;
 		size_type _size;
 
 	public:
 //		empty (1)
 		explicit map (const key_compare& comp = key_compare())
-					: _root(), _comp(comp), _size() { }
+					: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(comp), _size(0) {
+			_before_first = new node();
+			_after_last = new node();
+
+			_before_first->right = _after_last;
+			_after_last->left = _before_first;
+//			_after_last->parent = _before_first;
+//			_before_first->parent = _after_last;
+		}
 
 //		range (2)
 		template <class InputIterator>
 		map (InputIterator first, InputIterator last,
 			 const key_compare& comp = key_compare())
-			 : _root(), _comp(comp), _size() {
+			 : _root(NULL), _before_first(NULL), _after_last(NULL), _comp(comp), _size(0) {
+			_before_first = new node();
+			_after_last = new node();
+
+			_before_first->right = _after_last;
+			_after_last->left = _before_first;
+
 			insert(first, last);
 		}
 
 //		copy (3)
 		map (const map& x)
-			: _root(), _comp(x._comp), _size() {
+			: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(x.comp), _size(0) {
+			_before_first = new node();
+			_after_last = new node();
+
+			_before_first->right = _after_last;
+			_after_last->left = _before_first;
+
 			*this = x;
 		}
 
 		~map() {
 			clear();
+			delete _before_first;
+			delete _after_last;
 		}
 
 //		copy (1)
@@ -89,6 +114,68 @@ namespace ft {
 			return *this;
 		}
 
+
+//		single element (1)
+		ft::pair<iterator,bool> insert (const value_type& val) {
+			node new_node = new node(val);
+			if (!_root)
+			{
+				_root = new_node;
+				_root->left = _before_first;
+				_root->right = _after_last;
+				_before_first->right = NULL;
+				_after_last->left = NULL;
+			}
+			else if (!add_new_node(_root, new_node))
+			{
+				free new_node;
+				return ft::pair<iterator,bool>(find(val.first), false);
+			}
+			++_size;
+			return ft::pair<iterator,bool>(new_node, true);
+		}
+
+		bool add_new_node(node* cur, node* new_node) {
+			if (cur == _before_first)
+			{
+				new_node->parent = _before_first->parent;
+				new_node->left = _before_first;
+			}
+			else if (cur == _after_last)
+			{
+				new_node->parent = _after_last->parent;
+				new_node->right = _after_last;
+			}
+			else if (new_node->value.first < cur->value.first)
+			{
+				if (cur->left)
+					return add_new_node(cur->left, new_node);
+				else
+				{
+					new_node->parent = cur;
+					cur->left = new_node;
+				}
+			}
+			else if (new_node->value.first < cur->value.first)
+			{
+				if (cur->right)
+					return add_new_node(cur->right, new_node);
+				else
+				{
+					new_node->parent = cur;
+					cur->right = new_node;
+				}
+			}
+			else
+				return false;
+			return true;
+		}
+
+//		with hint (2)
+		iterator insert (iterator position, const value_type& val);
+//		range (3)
+		template <class InputIterator>
+		void insert (InputIterator first, InputIterator last);
 
 	};
 
