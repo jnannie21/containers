@@ -114,7 +114,6 @@ namespace ft {
 			return *this;
 		}
 
-
 //		single element (1)
 		ft::pair<iterator,bool> insert (const value_type& val) {
 			node new_node = new node(val);
@@ -132,10 +131,53 @@ namespace ft {
 				return ft::pair<iterator,bool>(find(val.first), false);
 			}
 			++_size;
-			return ft::pair<iterator,bool>(new_node, true);
+			return ft::pair<iterator,bool>(iterator(new_node), true);
 		}
 
-		bool add_new_node(node* cur, node* new_node) {
+//		with hint (2)
+		iterator insert (iterator position, const value_type& val) {
+			if ((val.first < (*position).first && val.first > position._p->prev()->value.first)
+				|| (val.first > (*position).first && val.first < position._p->next()->value.first))
+			{
+				node new_node = new node(val);
+				add_new_node(position._p, new_node);
+				++size;
+				return new_node;
+			}
+			else
+				return insert(val).first;
+		}
+
+//		range (3)
+		template <class InputIterator>
+		void insert (InputIterator first, InputIterator last) {
+			while (first != last)
+			{
+				insert(*first);
+				first++;
+			}
+		}
+
+		iterator find (const key_type& k) {
+			return iterator(find_node(_root, k));
+		}
+
+		const_iterator find (const key_type& k) const {
+			return const_iterator(find_node(_root, k));
+		}
+
+
+	private:
+		node* find_node(const node* n, const key_type& k) {
+			if (n == _before_first || n == _after_last || k == n->value.first)
+				return n;
+			else if (k < n->value.first)
+				return find_node(n->left, k);
+			else
+				return find_node(n->right, k);
+		}
+
+		bool add_new_node(const node* cur, const node* new_node) {
 			if (cur == _before_first)
 			{
 				new_node->parent = _before_first->parent;
@@ -170,12 +212,6 @@ namespace ft {
 				return false;
 			return true;
 		}
-
-//		with hint (2)
-		iterator insert (iterator position, const value_type& val);
-//		range (3)
-		template <class InputIterator>
-		void insert (InputIterator first, InputIterator last);
 
 	};
 
