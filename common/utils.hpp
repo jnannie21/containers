@@ -12,6 +12,11 @@ namespace ft {
 		return !(b < a) ? a : b;
 	}
 
+	template<class T>
+	const T &max(const T &a, const T &b) {
+		return (b < a) ? a : b;
+	}
+
 	template <class T> void swap ( T& a, T& b )
 	{
 		T c(a); a=b; b=c;

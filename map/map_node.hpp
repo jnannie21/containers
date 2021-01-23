@@ -13,12 +13,13 @@ namespace ft {
 		map_node* parent;
 		map_node* left;
 		map_node* right;
+		int height;
 		T value;
 
 	public:
-		map_node() : parent(NULL), left(NULL), right(NULL), value() { }
-		map_node(const map_node& other) : parent(NULL), left(NULL), right(NULL), value() { *this = other; }
-		map_node(const T& value) : parent(NULL), left(NULL), right(NULL), value(value) { }
+		map_node() : parent(NULL), left(NULL), right(NULL), height(1), value() { }
+		map_node(const map_node& other) : parent(NULL), left(NULL), right(NULL), height(1), value() { *this = other; }
+		map_node(const T& value) : parent(NULL), left(NULL), right(NULL), height(1), value(value) { }
 		~map_node() { }
 
 		const map_node& operator=(const map_node& rhs) {
@@ -28,32 +29,9 @@ namespace ft {
 			parent = rhs.parent;
 			left = rhs.left;
 			right = rhs.right;
+			height = rhs.height;
 			value = rhs.value;
 			return *this;
-		}
-
-		map_node* prev() {
-			map_node* temp = this;
-
-//			if (this == _before_first)
-//				return _before_first;
-
-			if (temp->left)
-			{
-				temp = temp->left;
-				while (temp->right)
-					temp = temp->right;
-			}
-			else
-			{
-				while (temp && temp != _before_first && temp->value >= this->value)
-					temp = temp->parent;
-			}
-			return (temp);
-		}
-
-		map_node* next() {
-
 		}
 
 	};

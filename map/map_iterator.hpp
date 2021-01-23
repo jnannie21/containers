@@ -6,6 +6,7 @@
 #define MAP_ITERATOR_HPP
 
 #include "map_node.hpp"
+#include "../common/utils.hpp"
 
 namespace ft {
 
@@ -28,14 +29,18 @@ namespace ft {
 		class map_iterator;
 
 	private:
-		node *_p;
+		node* _p;
+		node* _before_first;
+		node* _after_last;
 
 	public:
-		map_iterator() : _p(NULL) { }
-		map_iterator(const map_iterator<value_type>& other) : _p(other._p) { }
+		map_iterator() : _p(NULL), _before_first(NULL), _after_last(NULL) { }
+		map_iterator(const map_iterator<value_type>& other)
+				: _p(other._p), _before_first(other._before_first), _after_last(other._after_last) { }
 		template <typename U>
-		map_iterator(map_iterator<U> const& other, typename ft::enable_if<!ft::is_const<U>::value>::type* = NULL) : _p(other._p) { }
-		map_iterator(node* p) : _p(p) { }
+		map_iterator(map_iterator<U> const& other, typename ft::enable_if<!ft::is_const<U>::value>::type* = NULL)
+				: _p(other._p), _before_first(other._before_first), _after_last(other._after_last) { }
+		map_iterator(node* p) : _p(p), _before_first(find_before_first()), _after_last(find_after_last()) { }
 		~map_iterator() { }
 
 		const map_iterator& operator=(const map_iterator& rhs) { _p = rhs._p; return *this; }
@@ -54,7 +59,7 @@ namespace ft {
 		pointer operator->() const { return &_p->value; }
 
 		map_iterator& operator++() { //prefix increment
-			_p = _p->next();
+			_p = next_node();
 			return *this;
 		}
 		map_iterator operator++(int) { //postfix increment
@@ -64,7 +69,7 @@ namespace ft {
 		}
 
 		map_iterator& operator--() {
-			_p = _p->prev();
+			_p = prev_node();
 			return *this;
 		}
 		map_iterator operator--(int) {
@@ -73,7 +78,60 @@ namespace ft {
 			return temp;
 		}
 
-	}
+	private:
+		node* prev_node() {
+			node* temp = _p;
+
+			if (temp->left)
+			{
+				temp = temp->left;
+				while (temp->right)
+					temp = temp->right;
+			}
+			else
+			{
+				if (temp != _before_first)
+					while (temp->value >= _p->value)
+						temp = temp->parent;
+			}
+			return (temp);
+		}
+
+		node* next_node() {
+			node* temp = _p;
+
+			if (temp->right)
+			{
+				temp = temp->right;
+				while (temp->left)
+					temp = temp->left;
+			}
+			else
+			{
+				if (temp != _after_last)
+					while (temp->value <= _p->value)
+						temp = temp->parent;
+			}
+			return (temp);
+		}
+
+		node* find_before_first() {
+			node* temp = _p;
+
+			while (temp->left)
+				temp = temp->left;
+			return temp;
+		}
+
+		node* find_after_last() {
+			node* temp = _p;
+
+			while (temp->right)
+				temp = temp->right;
+			return temp;
+		}
+
+	};
 
 }
 
