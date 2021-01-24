@@ -20,13 +20,11 @@ namespace ft {
 		typedef std::bidirectional_iterator_tag iterator_category;
 		typedef map_node<typename ft::remove_const<T>::type> node;
 
-		template<class>
-		friend
-		class map;
+		template<class, class, class>
+		friend class map;
 
-		template<typename U>
-		friend
-		class map_iterator;
+		template<class>
+		friend class map_iterator;
 
 	private:
 		node* _p;
@@ -82,7 +80,14 @@ namespace ft {
 		node* prev_node() {
 			node* temp = _p;
 
-			if (temp->left)
+			if (temp == _after_last)
+			{
+				if (_after_last->parent)
+					return _after_last->parent;
+				else
+					return _after_last->left;
+			}
+			else if (temp->left)
 			{
 				temp = temp->left;
 				while (temp->right)
@@ -100,7 +105,14 @@ namespace ft {
 		node* next_node() {
 			node* temp = _p;
 
-			if (temp->right)
+			if (temp == _before_first)
+			{
+				if (_before_first->parent)
+					return _before_first->parent;
+				else
+					return _before_first->right;
+			}
+			else if (temp->right)
 			{
 				temp = temp->right;
 				while (temp->left)
@@ -118,6 +130,8 @@ namespace ft {
 		node* find_before_first() {
 			node* temp = _p;
 
+			while (temp->parent)
+				temp = temp->parent;
 			while (temp->left)
 				temp = temp->left;
 			return temp;
@@ -126,6 +140,8 @@ namespace ft {
 		node* find_after_last() {
 			node* temp = _p;
 
+			while (temp->parent)
+				temp = temp->parent;
 			while (temp->right)
 				temp = temp->right;
 			return temp;

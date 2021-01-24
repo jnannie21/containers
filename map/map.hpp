@@ -68,9 +68,7 @@ namespace ft {
 					: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(comp), _val_comp(_comp), _size(0) {
 			_before_first = new node();
 			_after_last = new node();
-
-			_before_first->right = _after_last;
-			_after_last->left = _before_first;
+			link_pseudo();
 //			_after_last->parent = _before_first;
 //			_before_first->parent = _after_last;
 		}
@@ -83,8 +81,7 @@ namespace ft {
 			_before_first = new node();
 			_after_last = new node();
 
-			_before_first->right = _after_last;
-			_after_last->left = _before_first;
+			link_pseudo();
 
 			insert(first, last);
 		}
@@ -95,8 +92,7 @@ namespace ft {
 			_before_first = new node();
 			_after_last = new node();
 
-			_before_first->right = _after_last;
-			_after_last->left = _before_first;
+			link_pseudo();
 
 			*this = x;
 		}
@@ -133,25 +129,71 @@ namespace ft {
 			return const_iterator(_after_last);
 		}
 
+		reverse_iterator rbegin() {
+			return reverse_iterator(end());
+		}
+
+		const_reverse_iterator rbegin() const {
+			return const_reverse_iterator(end());
+		}
+
+		reverse_iterator rend() {
+			return reverse_iterator(begin());
+		}
+
+		const_reverse_iterator rend() const {
+			return const_reverse_iterator(begin());
+		}
+
+		bool empty() const {
+			return (!_size);
+		}
+
+		size_type size() const {
+			return _size;
+		}
+
+		size_type max_size() const {
+			return ft::min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(node)), std::numeric_limits<difference_type>::max());
+		}
+
+		mapped_type& operator[] (const key_type& k) {
+			value_type val(k, mapped_type());
+			iterator it = insert(val).first;
+			return (*it).second;
+		}
+
+
+
+
+
 
 
 
 
 //		single element (1)
 		ft::pair<iterator,bool> insert (const value_type& val) {
-			node new_node = new node(val);
+			node* new_node = new node(val);
 			if (!_root)
 			{
 				_root = new_node;
+				_root->height = 2;
 				_root->left = _before_first;
 				_root->right = _after_last;
 				_before_first->right = NULL;
 				_after_last->left = NULL;
+				_before_first->parent = _root;
+				_after_last->parent = _root;
 			}
-			else if (!add_new_node(_root, new_node))
+			else
 			{
-				delete new_node;
-				return ft::pair<iterator,bool>(find(val.first), false);
+				node* n = add_new_node(_root, new_node);
+				if (n != new_node)
+				{
+					delete new_node;
+					return ft::pair<iterator,bool>(n, false);
+				}
+				_root = find_root(_root);
 			}
 			++_size;
 			return ft::pair<iterator,bool>(iterator(new_node), true);
@@ -159,13 +201,22 @@ namespace ft {
 
 //		with hint (2)
 		iterator insert (iterator position, const value_type& val) {
-			if ((_val_comp(val, *position) && _val_comp(position.prev_node()->value, val))
-				|| (_val_comp(*position, val) && _val_comp(val, position.next_node()->value)))
+			if (position._p != _after_last && position._p != _before_first
+				&& ((_val_comp(val, *position) && _val_comp(position.prev_node()->value, val))
+				|| (_val_comp(*position, val) && _val_comp(val, position.next_node()->value))))
 			{
 				node new_node = new node(val);
-				add_new_node(position._p, new_node);
+				unlink_pseudo();
+				node* n = add_new_node(position._p, new_node);
+				link_pseudo();
+				if (n != new_node)
+				{
+					delete new_node;
+					return iterator(n);
+				}
+				_root = find_root(_root);
 				++_size;
-				return new_node;
+				return iterator(new_node);
 			}
 			else
 				return insert(val).first;
@@ -177,7 +228,7 @@ namespace ft {
 			while (first != last)
 			{
 				insert(*first);
-				first++;
+				++first;
 			}
 		}
 
@@ -188,10 +239,15 @@ namespace ft {
 
 //		(2)
 		size_type erase (const key_type& k) {
-			node* n = find_node(_root, k);
-			if (n == _after_last)
+			unlink_pseudo();
+			node* found = find_node(_root, k);
+			if (found == NULL)
+			{
+				link_pseudo();
 				return 0;
-			_root = delete_node(_root, n->value.first);
+			}
+			_root = delete_node(_root, k);
+			link_pseudo();
 			--_size;
 			return 1;
 		}
@@ -212,124 +268,107 @@ namespace ft {
 		}
 
 		iterator find (const key_type& k) {
-			return iterator(find_node(_root, k));
+			node* found = find_node(_root, k);
+			if (!found)
+				found = _after_last;
+			return iterator(found);
 		}
 
 		const_iterator find (const key_type& k) const {
-			return const_iterator(find_node(_root, k));
+			node* found = find_node(_root, k);
+			if (!found)
+				found = _after_last;
+			return const_iterator(found);
 		}
 
 
 	private:
-//		friend bool operator< (const key_type & lhs, const key_type & rhs) {
-//			return _comp(lhs, rhs);
-//		}
-//
-//		friend bool operator> (const key_type & lhs, const key_type & rhs) {
-//			return rhs < lhs;
-//		}
-//
-//		friend bool operator< (const value_type & lhs, const value_type & rhs) {
-//			return value_compare(_comp)(lhs, rhs);
-//		}
-//
-//		friend bool operator> (const value_type & lhs, const value_type & rhs) {
-//			return rhs < lhs;
-//		}
-
-		node* delete_node(node *root, key_type key) {
-			if (root == _before_first || root == _after_last)
-				return root == _before_first ? _before_first : _after_last;
-			if (root == NULL)
-				return NULL;
-			if (key < root->value.first)
-				root->left = delete_node(root->left, key);
-			else if (key > root->value.first)
-				root->right = delete_node(root->right, key);
-			else
+		void unlink_pseudo() {
+			if (_root)
 			{
-				if ((root->left == NULL) || (root->right == NULL))
-				{
-					node *temp = root->left ? root->left : root->right;
-					if (temp == NULL)
-					{
-						temp = root;
-						root = NULL;
-					}
-					else
-					{
-						temp->parent = root->parent;
-						*root = *temp;
-					}
-					delete temp;
-				}
-				else
-				{
-					node *temp = iterator(root->right).next_node();
-					if (temp != _after_last)
-					{
-						root->value = temp->value;
-						root->right = delete_node(root->right, temp->value.first);
-					}
-					else
-					{
-						temp = iterator(root->left).prev_node();
-						if (temp != _before_first)
-						{
-							root->value = temp->value;
-							root->left = delete_node(root->left, temp->value.first);
-						}
-						else
-						{
-							delete root;
-							return NULL;
-						}
-					}
-				}
+				_before_first->parent->left = NULL;
+				_after_last->parent->right = NULL;
+				_before_first->parent = NULL;
+				_after_last->parent = NULL;
+				_before_first->right = _after_last;
+				_after_last->left = _before_first;
 			}
-
-			if (root == NULL)
-				return NULL;
-
-			root->height = 1 + ft::max(node_height(root->left), node_height(root->right));
-			int balance_factor = node_balance_factor(root);
-			if (balance_factor > 1)
-			{
-				if (node_balance_factor(root->left) >= 0)
-				{
-					return right_rotate(root);
-				}
-				else
-				{
-					root->left = left_rotate(root->left);
-					return right_rotate(root);
-				}
-			}
-			if (balance_factor < -1)
-			{
-				if (node_balance_factor(root->right) <= 0)
-				{
-					return left_rotate(root);
-				}
-				else
-				{
-					root->right = right_rotate(root->right);
-					return left_rotate(root);
-				}
-			}
-			return root;
 		}
 
-//		node* node_with_minimum_value(node *node) {
-//			node *current = node;
-//			while (current->left != NULL)
-//				current = current->left;
-//			return current;
-//		}
+		void link_pseudo() {
+			if (!_root)
+			{
+				_before_first->right = _after_last;
+				_after_last->left = _before_first;
+				_before_first->parent = NULL;
+				_after_last->parent = NULL;
+			}
+			else
+			{
+				node* temp = _root;
+				while (temp->left)
+					temp = temp->left;
+				_before_first->parent = temp;
+				_before_first->right = NULL;
+				temp->left = _before_first;
+				temp = _root;
+				while (temp->right)
+					temp = temp->right;
+				_after_last->parent = temp;
+				_after_last->left = NULL;
+				temp->right = _after_last;
+			}
+		}
 
-		node* find_node(const node* n, const key_type& k) {
-			if (n == _before_first || n == _after_last)
-				return _after_last;
+		node* find_root(node* cur) {
+			while (cur->parent)
+				cur = cur->parent;
+			return cur;
+		}
+
+		node* delete_node(node *n, const key_type& k) {
+			if (n == NULL)
+				return n;
+			if (_comp(k, n->value.first))
+				n->left = delete_node(n->left, k);
+			else if (_comp(n->value.first, k))
+				n->right = delete_node(n->right, k);
+			else if ((n->left == NULL) || (n->right == NULL))
+			{
+				node* temp = NULL;
+				if (n->left)
+					temp = n->left;
+				else if (n->right)
+					temp = n->right;
+				else
+				{
+					delete n;
+					return NULL;
+				}
+				temp->parent = n->parent;
+				*n = *temp;
+				delete temp;
+			}
+			else
+			{
+				node* temp = get_next_node(n->right);
+				n->value = temp->value;
+				n->right = delete_node(n->right, temp->value.first);
+			}
+			if (n != NULL)
+				n = balance_node(n);
+			return n;
+		}
+
+		node* get_next_node(node* n) {
+			while (n->left != NULL)
+				n = n->left;
+			return n;
+		}
+
+		node* find_node(node* n, const key_type& k) {
+			if (n == NULL)
+				return NULL;
 			else if (_comp(k, n->value.first))
 				return find_node(n->left, k);
 			else if (_comp(n->value.first, k))
@@ -338,41 +377,21 @@ namespace ft {
 				return n;
 		}
 
-		bool add_new_node(const node* cur, const node* new_node) {
-			if (cur == _before_first)
-			{
-				new_node->parent = _before_first->parent;
-				new_node->left = _before_first;
-			}
-			else if (cur == _after_last)
-			{
-				new_node->parent = _after_last->parent;
-				new_node->right = _after_last;
-			}
-			else if (_value_comp(new_node->value, cur->value))
+		node* add_new_node(node* cur, node* new_node) {
+			if (_val_comp(new_node->value, cur->value))
 			{
 				if (cur->left)
-				{
-					if (!add_new_node(cur->left, new_node))
-						return false;
-					else
-						balance_node(cur, new_node->value.first);
-				}
+					new_node = add_new_node(cur->left, new_node);
 				else
 				{
 					new_node->parent = cur;
 					cur->left = new_node;
 				}
 			}
-			else if (_value_comp(cur->value, new_node->value))
+			else if (_val_comp(cur->value, new_node->value))
 			{
 				if (cur->right)
-				{
-					if (!add_new_node(cur->right, new_node))
-						return false;
-					else
-						balance_node(cur, new_node->value.first);
-				}
+					new_node = add_new_node(cur->right, new_node);
 				else
 				{
 					new_node->parent = cur;
@@ -380,37 +399,35 @@ namespace ft {
 				}
 			}
 			else
-				return false;
-			return true;
+				return cur;
+			balance_node(cur);
+			return new_node;
 		}
 
-		node* balance_node(node* n, key_type key) {
+		node* balance_node(node* n) {
 			n->height = 1 + ft::max<int>(node_height(n->left), node_height(n->right));
 			int balance_factor = node_balance_factor(n);
 			if (balance_factor > 1)
 			{
-				if (key < n->left->value.first)
-				{
+				if (node_balance_factor(n->left) >= 0)
 					return right_rotate(n);
-				}
-				else if (key > n->left->value.first)
+				else
 				{
 					n->left = left_rotate(n->left);
 					return right_rotate(n);
 				}
 			}
-			if (balance_factor < -1)
+			else if (balance_factor < -1)
 			{
-				if (key > n->right->value.first)
-				{
+				if (node_balance_factor(n->right) <= 0)
 					return left_rotate(n);
-				}
-				else if (key < n->right->value.first)
+				else
 				{
 					n->right = right_rotate(n->right);
 					return left_rotate(n);
 				}
 			}
+			return n;
 		}
 
 		int node_balance_factor(node* n) {
@@ -426,28 +443,28 @@ namespace ft {
 			return 0;
 		}
 
-		node *right_rotate(node *y) {
-			node *x = y->left;
-			node *T2 = x->right;
-			x->right = y;
-			x->parent = y->parent;
-			y->left = T2;
-			y->parent = x;
-			y->height = ft::max(node_height(y->left), node_height(y->right)) + 1;
-			x->height = ft::max(node_height(x->left), node_height(x->right)) + 1;
-			return x;
+		node *right_rotate(node *r) {
+			node *l = r->left;
+			node *r2 = l->right;
+			l->right = r;
+			l->parent = r->parent;
+			r->left = r2;
+			r->parent = l;
+			r->height = ft::max(node_height(r->left), node_height(r->right)) + 1;
+			l->height = ft::max(node_height(l->left), node_height(l->right)) + 1;
+			return l;
 		}
 
-		node *left_rotate(node *x) {
-			node *y = x->right;
-			node *T2 = y->left;
-			y->left = x;
-			y->parent = x->parent;
-			x->right = T2;
-			x->parent = y;
-			x->height = ft::max(node_height(x->left), node_height(x->right)) + 1;
-			y->height = ft::max(node_height(y->left), node_height(y->right)) + 1;
-			return y;
+		node *left_rotate(node *l) {
+			node *r = l->right;
+			node *l2 = r->left;
+			r->left = l;
+			r->parent = l->parent;
+			l->right = l2;
+			l->parent = r;
+			l->height = ft::max(node_height(l->left), node_height(l->right)) + 1;
+			r->height = ft::max(node_height(r->left), node_height(r->right)) + 1;
+			return r;
 		}
 
 	};
