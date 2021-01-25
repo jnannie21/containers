@@ -28,17 +28,15 @@ namespace ft {
 
 	private:
 		node* _p;
-		node* _before_first;
-		node* _after_last;
 
 	public:
-		map_iterator() : _p(NULL), _before_first(NULL), _after_last(NULL) { }
+		map_iterator() : _p(NULL) { }
 		map_iterator(const map_iterator<value_type>& other)
-				: _p(other._p), _before_first(other._before_first), _after_last(other._after_last) { }
+				: _p(other._p) { }
 		template <typename U>
 		map_iterator(map_iterator<U> const& other, typename ft::enable_if<!ft::is_const<U>::value>::type* = NULL)
-				: _p(other._p), _before_first(other._before_first), _after_last(other._after_last) { }
-		map_iterator(node* p) : _p(p), _before_first(find_before_first()), _after_last(find_after_last()) { }
+				: _p(other._p) { }
+		map_iterator(node* p) : _p(p) { }
 		~map_iterator() { }
 
 		const map_iterator& operator=(const map_iterator& rhs) { _p = rhs._p; return *this; }
@@ -80,12 +78,11 @@ namespace ft {
 		node* prev_node() {
 			node* temp = _p;
 
-			if (temp == _after_last)
+			if (temp->height == 0)
 			{
-				if (_after_last->parent)
-					return _after_last->parent;
-				else
-					return _after_last->left;
+				if (temp->parent->left == temp)
+					return temp;
+				return temp->parent;
 			}
 			else if (temp->left)
 			{
@@ -95,9 +92,8 @@ namespace ft {
 			}
 			else
 			{
-				if (temp != _before_first)
-					while (temp->value >= _p->value)
-						temp = temp->parent;
+				while (temp->value >= _p->value)
+					temp = temp->parent;
 			}
 			return (temp);
 		}
@@ -105,46 +101,26 @@ namespace ft {
 		node* next_node() {
 			node* temp = _p;
 
-			if (temp == _before_first)
+			if (temp->height == 0)
 			{
-				if (_before_first->parent)
-					return _before_first->parent;
-				else
-					return _before_first->right;
+				if (temp->parent->right == temp)
+					return temp;
+				return temp->parent;
 			}
 			else if (temp->right)
 			{
 				temp = temp->right;
+
 				while (temp->left)
 					temp = temp->left;
 			}
 			else
 			{
-				if (temp != _after_last)
-					while (temp->value <= _p->value)
-						temp = temp->parent;
+				while (temp->value <= _p->value)
+					temp = temp->parent;
+
 			}
 			return (temp);
-		}
-
-		node* find_before_first() {
-			node* temp = _p;
-
-			while (temp->parent)
-				temp = temp->parent;
-			while (temp->left)
-				temp = temp->left;
-			return temp;
-		}
-
-		node* find_after_last() {
-			node* temp = _p;
-
-			while (temp->parent)
-				temp = temp->parent;
-			while (temp->right)
-				temp = temp->right;
-			return temp;
 		}
 
 	};
