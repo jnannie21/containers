@@ -362,7 +362,8 @@ namespace ft {
 				move_node(n, next);
 
 //				n->value = next->value;
-				next->right = deleting(next->right, n->value.first);
+				next->right = deleting(next->right, k);
+//				next->right = deleting(next->right, n->value.first);
 			}
 			if (n != NULL)
 				n = balance_node(n);

@@ -46,7 +46,7 @@ int map_test () {
 		first['c']=50;
 
 		std::cout << first['a'] << " " << first['b'] << " " << first['c'] << std::endl;
-//		first['d']=70;
+		first['d']=70;
 //		ft::map<char,int> second (first.begin(),first.end());
 //
 //		ft::map<char,int> third (second);
@@ -55,6 +55,8 @@ int map_test () {
 //
 //		bool(*fn_pt)(char,char) = fncomp;
 //		ft::map<char,int,bool(*)(char,char)> fifth (fn_pt); // function pointer as Compare
+//
+//		ft::map<char,int> one_more = ft::map<char,int>();
 
 	}
 	return 0;
