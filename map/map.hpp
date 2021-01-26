@@ -183,7 +183,8 @@ namespace ft {
 					delete new_node;
 					return ft::pair<iterator,bool>(n, false);
 				}
-				_root = find_root(_root);
+//				_root = find_root(_root);
+//				std::cout << _root->value.second << std::endl;
 			}
 			++_size;
 			return ft::pair<iterator,bool>(iterator(new_node), true);
@@ -201,7 +202,7 @@ namespace ft {
 					delete new_node;
 					return iterator(n);
 				}
-				_root = find_root(_root);
+//				_root = find_root(_root);
 				++_size;
 				return iterator(new_node);
 			}
@@ -242,8 +243,8 @@ namespace ft {
 			while (first != last)
 			{
 				temp = first;
-				print_tree(_root, "", true);
-				std::cout << _size << std::endl;
+//				print_tree(_root, "", true);
+//				std::cout << _size << std::endl;
 				++first;
 				erase(temp);
 			}
@@ -338,6 +339,12 @@ namespace ft {
 		pair<iterator,iterator>             equal_range (const key_type& k) {
 			return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
+
+		void print() {
+			print_tree(_root, "", true);
+		}
+
+
 
 
 	private:
@@ -501,6 +508,7 @@ namespace ft {
 		node* add_new_node(node* cur, node* new_node) {
 			unlink_pseudo();
 			new_node = adding(cur, new_node);
+			_root = find_root(new_node);
 			link_pseudo();
 			return new_node;
 		}
@@ -575,6 +583,13 @@ namespace ft {
 			node *r2 = l->right;
 			l->right = r;
 			l->parent = r->parent;
+			if (l->parent)
+			{
+				if (l->parent->left == r)
+					l->parent->left = l;
+				else
+					l->parent->right = l;
+			}
 			r->left = r2;
 			r->parent = l;
 			r->height = ft::max(node_height(r->left), node_height(r->right)) + 1;
@@ -587,6 +602,13 @@ namespace ft {
 			node *l2 = r->left;
 			r->left = l;
 			r->parent = l->parent;
+			if (r->parent)
+			{
+				if (r->parent->left == l)
+					r->parent->left = r;
+				else
+					r->parent->right = r;
+			}
 			l->right = l2;
 			l->parent = r;
 			l->height = ft::max(node_height(l->left), node_height(l->right)) + 1;
@@ -613,6 +635,7 @@ namespace ft {
 				print_tree(root->right, indent, true);
 			}
 		}
+
 
 	};
 

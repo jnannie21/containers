@@ -43,12 +43,12 @@ namespace ft {
 		const map_iterator& operator=(const map_iterator& rhs) { _p = rhs._p; return *this; }
 
 		template <class U>
-		friend bool operator== (const map_iterator<U>& lhs, const map_iterator<U>& rhs) {
+		friend bool operator== (const map_iterator<U, Compare>& lhs, const map_iterator<U, Compare>& rhs) {
 			return lhs._p == rhs._p;
 		}
 
 		template <class U>
-		friend bool operator!= (const map_iterator<U>& lhs, const map_iterator<U>& rhs) {
+		friend bool operator!= (const map_iterator<U, Compare>& lhs, const map_iterator<U, Compare>& rhs) {
 			return !(lhs == rhs);
 		}
 
