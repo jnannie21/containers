@@ -358,39 +358,26 @@ namespace ft {
 				node* next = n->right;
 				while (next->left != NULL)
 					next = next->left;
-
-				move_node(n, next);
-
-//				n->value = next->value;
+				swap_node(n, next);
 				next->right = deleting(next->right, k);
-//				next->right = deleting(next->right, n->value.first);
 			}
-			if (n != NULL)
+			if (n)
 				n = balance_node(n);
 			return n;
 		}
 
-		void move_node(node*& n, node*& next) {
+		void swap_node(node*& n, node*& next) {
 			ft::swap(next->left, n->left);
-			if (next->left == next)
-				next->left = n;
-			if (n->left == n)
-				n->left = next;
 			ft::swap(next->right, n->right);
-			if (next->right == next)
-				next->right = n;
-			if (n->right == n)
-				n->right = next;
 			ft::swap(next->parent, n->parent);
-			if (next->parent == next)
-				next->parent = n;
 			if (n->parent == n)
+			{
 				n->parent = next;
+				next->right = n;
+			}
 
-			if (next->left)
-				next->left->parent = next;
-			if (next->right)
-				next->right->parent = next;
+			next->left->parent = next;
+			next->right->parent = next;
 			if (next->parent)
 			{
 				if (next->parent->right == n)
@@ -403,13 +390,10 @@ namespace ft {
 				n->left->parent = n;
 			if (n->right)
 				n->right->parent = n;
-			if (n->parent)
-			{
-				if (n->parent->right == next)
-					n->parent->right = n;
-				else
-					n->parent->left = n;
-			}
+			if (n->parent->right == next)
+				n->parent->right = n;
+			else
+				n->parent->left = n;
 		}
 
 		node* find_node(node* n, const key_type& k) {
