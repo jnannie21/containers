@@ -27,8 +27,8 @@ namespace ft {
 		typedef const value_type& const_reference;
 		typedef value_type* pointer;
 		typedef const value_type* const_pointer;
-		typedef map_iterator<value_type> iterator;
-		typedef map_iterator<const value_type> const_iterator;
+		typedef map_iterator<value_type, key_compare> iterator;
+		typedef map_iterator<const value_type, key_compare> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef ptrdiff_t difference_type;
@@ -167,12 +167,6 @@ namespace ft {
 			return (*it).second;
 		}
 
-
-
-
-
-
-
 //		single element (1)
 		ft::pair<iterator,bool> insert (const value_type& val) {
 			node* new_node = new node(val);
@@ -198,8 +192,7 @@ namespace ft {
 //		with hint (2)
 		iterator insert (iterator position, const value_type& val) {
 			if (position._p != _after_last && position._p != _before_first
-				&& ((_val_comp(val, *position) && _val_comp(position.prev_node()->value, val))
-				|| (_val_comp(*position, val) && _val_comp(val, position.next_node()->value))))
+				&& ((_val_comp(val, position.next_node()->value) && _val_comp(position.prev_node()->value, val))))
 			{
 				node new_node = new node(val);
 				node* n = add_new_node(position._p, new_node);
@@ -228,16 +221,16 @@ namespace ft {
 
 //		(1)
 		void erase (iterator position) {
-			erase((*position).first);
+			delete_exact_node(position._p);
+			--_size;
+//			erase((*position).first);
 		}
 
 //		(2)
 		size_type erase (const key_type& k) {
 			node* found = find_node(_root, k);
-			if (found == NULL)
-			{
+			if (!found)
 				return 0;
-			}
 			delete_node(k);
 			--_size;
 			return 1;
@@ -250,16 +243,34 @@ namespace ft {
 			{
 				temp = first;
 				print_tree(_root, "", true);
+				std::cout << _size << std::endl;
 				++first;
-//				std::cout << (*temp).second << std::endl;
-//				std::cout << (*first).second << std::endl;
 				erase(temp);
-
 			}
+		}
+
+		void swap (map& x) {
+			ft::swap(_root, x._root);
+
+			ft::swap(_before_first->next, x._before_first->next);
+			ft::swap(_before_first->next->prev, x._before_first->next->prev);
+
+			ft::swap(_after_last->prev, x._after_last->prev);
+			ft::swap(_after_last->prev->next, x._after_last->prev->next);
+
+			ft::swap(_size, x._size);
 		}
 
 		void clear() {
 			erase(begin(), end());
+		}
+
+		key_compare key_comp() const {
+			return _comp;
+		}
+
+		value_compare value_comp() const {
+			return _val_comp;
 		}
 
 		iterator find (const key_type& k) {
@@ -274,6 +285,58 @@ namespace ft {
 			if (!found)
 				found = _after_last;
 			return const_iterator(found);
+		}
+
+		size_type count (const key_type& k) const {
+			return !(find(k) == end());
+		}
+
+		iterator lower_bound (const key_type& k) {
+			ft::pair<iterator,bool> p;
+			iterator it;
+			p = insert(k);
+			it = p.first;
+			if (p.second)
+			{
+				++it;
+				delete_node(k);
+			}
+			return it;
+		}
+
+		const_iterator lower_bound (const key_type& k) const {
+			ft::pair<iterator,bool> p;
+			iterator it;
+			p = insert(k);
+			it = p.first;
+			if (p.second)
+			{
+				++it;
+				delete_node(k);
+			}
+			return const_iterator(it);
+		}
+
+		iterator upper_bound (const key_type& k) {
+			iterator it = lower_bound(k);
+			if (!_comp(k, (*it).first))
+				++it;
+			return it;
+		}
+
+		const_iterator upper_bound (const key_type& k) const {
+			iterator it = lower_bound(k);
+			if (!_comp(k, (*it).first))
+				++it;
+			return const_iterator(it);
+		}
+
+		pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
+			return ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+		}
+
+		pair<iterator,iterator>             equal_range (const key_type& k) {
+			return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
 
 
@@ -315,6 +378,27 @@ namespace ft {
 			return cur;
 		}
 
+		void delete_exact_node(node* n) {
+			unlink_pseudo();
+			node* parent = n->parent;
+			if (parent)
+			{
+				if (parent->left == n)
+					parent->left = deleting(n, n->value.first);
+				else
+					parent->right = deleting(n, n->value.first);
+				while (parent->parent)
+				{
+					balance_node(parent);
+					parent = parent->parent;
+				}
+				_root = balance_node(parent);
+			}
+			else
+				_root = deleting(n, n->value.first);
+			link_pseudo();
+		}
+
 		void delete_node(const key_type& k) {
 			unlink_pseudo();
 			_root = deleting(_root, k);
@@ -340,7 +424,6 @@ namespace ft {
 					delete n;
 					return NULL;
 				}
-
 				temp->parent = n->parent;
 				if (temp->parent)
 				{
@@ -349,7 +432,6 @@ namespace ft {
 					else
 						temp->parent->right = temp;
 				}
-
 				delete n;
 				n = temp;
 			}
@@ -359,7 +441,8 @@ namespace ft {
 				while (next->left != NULL)
 					next = next->left;
 				swap_node(n, next);
-				next->right = deleting(next->right, k);
+				next->value = n->value;
+				n->right = deleting(n->right, next->value.first);
 			}
 			if (n)
 				n = balance_node(n);
@@ -394,6 +477,7 @@ namespace ft {
 				n->parent->right = n;
 			else
 				n->parent->left = n;
+			ft::swap(next, n);
 		}
 
 		node* find_node(node* n, const key_type& k) {
@@ -478,7 +562,6 @@ namespace ft {
 			if (n)
 				return node_height(n->left) - node_height(n->right);
 			return 0;
-
 		}
 
 		int node_height(node* n) {
@@ -512,12 +595,16 @@ namespace ft {
 		}
 
 		void print_tree(node *root, std::string indent, bool last) {
-			if (root != nullptr) {
+			if (root != nullptr)
+			{
 				std::cout << indent;
-				if (last) {
+				if (last)
+				{
 					std::cout << "R---- ";
 					indent += "   ";
-				} else {
+				}
+				else
+				{
 					std::cout << "L---- ";
 					indent += "|  ";
 				}

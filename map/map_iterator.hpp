@@ -10,7 +10,7 @@
 
 namespace ft {
 
-	template<class T>
+	template<class T, class Compare = ft::less<typename T::first_type> >
 	class map_iterator {
 	public:
 		typedef T value_type;
@@ -23,20 +23,21 @@ namespace ft {
 		template<class, class, class>
 		friend class map;
 
-		template<class>
+		template<class, class>
 		friend class map_iterator;
 
 	private:
 		node* _p;
+		Compare _comp;
 
 	public:
-		map_iterator() : _p(NULL) { }
-		map_iterator(const map_iterator<value_type>& other)
-				: _p(other._p) { }
-		template <typename U>
+		map_iterator() : _p(NULL), _comp() { }
+		map_iterator(const map_iterator& other)
+				: _p(other._p), _comp(other._comp) { }
+		template <class U>
 		map_iterator(map_iterator<U> const& other, typename ft::enable_if<!ft::is_const<U>::value>::type* = NULL)
-				: _p(other._p) { }
-		map_iterator(node* p) : _p(p) { }
+				: _p(other._p), _comp(other._comp) { }
+		map_iterator(node* p) : _p(p), _comp() { }
 		~map_iterator() { }
 
 		const map_iterator& operator=(const map_iterator& rhs) { _p = rhs._p; return *this; }
@@ -92,7 +93,7 @@ namespace ft {
 			}
 			else
 			{
-				while (temp->value >= _p->value)
+				while (!_comp(temp->value.first, _p->value.first))
 					temp = temp->parent;
 			}
 			return (temp);
@@ -110,15 +111,13 @@ namespace ft {
 			else if (temp->right)
 			{
 				temp = temp->right;
-
 				while (temp->left)
 					temp = temp->left;
 			}
 			else
 			{
-				while (temp->value <= _p->value)
+				while (!_comp(_p->value.first, temp->value.first))
 					temp = temp->parent;
-
 			}
 			return (temp);
 		}
