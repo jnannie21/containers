@@ -41,11 +41,11 @@ namespace ft {
 		bool operator()(const T& val1, const T& val2) { return val1 == val2; }
 	};
 
-	template <class T>
-	class less_than_binary_pred {
-	public:
-		bool operator()(const T& val1, const T& val2) { return val1 < val2; }
-	};
+//	template <class T>
+//	class less_than_binary_pred {
+//	public:
+//		bool operator()(const T& val1, const T& val2) { return val1 < val2; }
+//	};
 
 
 	template<bool Cond, class T = void> struct enable_if {};

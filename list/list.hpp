@@ -401,7 +401,8 @@ namespace ft {
 
 		//(1)
 		void merge (list& x) {
-			merge(x, ft::less_than_binary_pred<value_type>());
+			merge(x, ft::less<value_type>());
+			merge(x, ft::less<value_type>());
 		}
 
 		//(2)
@@ -427,7 +428,8 @@ namespace ft {
 
 		//(1)
 		void sort() {
-			sort(ft::less_than_binary_pred<value_type>());
+			sort(ft::less<value_type>());
+//			sort(ft::less_than_binary_pred<value_type>());
 		}
 
 		//(2)
