@@ -224,17 +224,17 @@ namespace ft {
 		void erase (iterator position) {
 			delete_exact_node(position._p);
 			--_size;
-//			erase((*position).first);
 		}
 
 //		(2)
 		size_type erase (const key_type& k) {
-			node* found = find_node(_root, k);
-			if (!found)
+			if (delete_node(k))
+			{
+				--_size;
+				return 1;
+			}
+			else
 				return 0;
-			delete_node(k);
-			--_size;
-			return 1;
 		}
 
 //		(3)
@@ -243,8 +243,6 @@ namespace ft {
 			while (first != last)
 			{
 				temp = first;
-//				print_tree(_root, "", true);
-//				std::cout << _size << std::endl;
 				++first;
 				erase(temp);
 			}
@@ -391,9 +389,9 @@ namespace ft {
 			if (parent)
 			{
 				if (parent->left == n)
-					parent->left = deleting(n, n->value.first);
+					parent->left = deleting(n, n->value.first).first;
 				else
-					parent->right = deleting(n, n->value.first);
+					parent->right = deleting(n, n->value.first).first;
 				while (parent->parent)
 				{
 					balance_node(parent);
@@ -402,23 +400,33 @@ namespace ft {
 				_root = balance_node(parent);
 			}
 			else
-				_root = deleting(n, n->value.first);
+				_root = deleting(n, n->value.first).first;
 			link_pseudo();
 		}
 
-		void delete_node(const key_type& k) {
+		bool delete_node(const key_type& k) {
 			unlink_pseudo();
-			_root = deleting(_root, k);
+			ft::pair<node*, bool> res;
+			res = deleting(_root, k);
+			_root = res.first;
 			link_pseudo();
+			return res.second;
 		}
 
-		node* deleting(node *n, const key_type& k) {
+		ft::pair<node*, bool> deleting(node *n, const key_type& k) {
+			ft::pair<node*, bool> ret(NULL, false);
 			if (n == NULL)
-				return n;
-			if (_comp(k, n->value.first))
-				n->left = deleting(n->left, k);
+				return ret;
+			else if (_comp(k, n->value.first))
+			{
+				ret = deleting(n->left, k);
+				n->left = ret.first;
+			}
 			else if (_comp(n->value.first, k))
-				n->right = deleting(n->right, k);
+			{
+				ret = deleting(n->right, k);
+				n->right = ret.first;
+			}
 			else if ((n->left == NULL) || (n->right == NULL))
 			{
 				node* temp = NULL;
@@ -429,7 +437,7 @@ namespace ft {
 				else
 				{
 					delete n;
-					return NULL;
+					return ft::pair<node*, bool>(NULL, true);
 				}
 				temp->parent = n->parent;
 				if (temp->parent)
@@ -441,6 +449,7 @@ namespace ft {
 				}
 				delete n;
 				n = temp;
+				ret.second = true;
 			}
 			else
 			{
@@ -449,11 +458,12 @@ namespace ft {
 					next = next->left;
 				swap_node(n, next);
 				next->value = n->value;
-				n->right = deleting(n->right, next->value.first);
+				ret = deleting(n->right, next->value.first);
+				n->right = ret.first;
 			}
 			if (n)
 				n = balance_node(n);
-			return n;
+			return ft::pair<node*, bool>(n, ret.second);
 		}
 
 		void swap_node(node*& n, node*& next) {
@@ -508,7 +518,7 @@ namespace ft {
 		node* add_new_node(node* cur, node* new_node) {
 			unlink_pseudo();
 			new_node = adding(cur, new_node);
-			_root = find_root(new_node);
+			_root = find_root(_root);
 			link_pseudo();
 			return new_node;
 		}
