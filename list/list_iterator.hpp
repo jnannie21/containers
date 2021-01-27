@@ -28,9 +28,6 @@ namespace ft {
 	private:
 		node* _p;
 
-//	public:
-//		node* getP() const { return _p; }
-
 	public:
 		list_iterator() : _p(NULL) { }
 		list_iterator(const list_iterator<value_type>& other) : _p(other._p) { }

@@ -146,18 +146,15 @@ namespace ft {
 
 		size_type max_size() const {
 			return ft::min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(node)), std::numeric_limits<difference_type>::max());
-//			return ft::min<size_type>(_alloc.max_size(), std::numeric_limits<difference_type>::max());
 		}
 
 		//element access
 		reference front() {
 			return _before_first->next->value;
-//			return *begin();
 		}
 
 		const_reference front() const {
 			return _before_first->next->value;
-//			return *begin();
 		}
 
 		reference back() {
@@ -174,19 +171,14 @@ namespace ft {
 		void assign (InputIterator first, InputIterator last,
 					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
 			clear();
-//			_length = 0;
 
-			while (first != last)
-			{
+			for ( ; first != last; ++first)
 				push_back(*first);
-				first++;
-			}
 		}
 
 		//fill (2)
 		void assign (size_type n, const value_type& val) {
 			clear();
-//			_length = 0;
 
 			while (n--)
 				push_back(val);
@@ -200,7 +192,7 @@ namespace ft {
 			temp->next->prev = temp;
 			_before_first->next = temp;
 
-			_length++;
+			++_length;
 		}
 
 		void pop_front() {
@@ -211,7 +203,7 @@ namespace ft {
 			_before_first->next = _before_first->next->next;
 			_before_first->next->prev = _before_first;
 			delete temp;
-			_length--;
+			--_length;
 		}
 
 		void push_back (const value_type& val) {
@@ -222,18 +214,15 @@ namespace ft {
 			temp->prev->next = temp;
 			_after_last->prev = temp;
 
-			_length++;
+			++_length;
 		}
 
 		void pop_back() {
-			if (_length > 0)
-			{
-				node* temp = _after_last->prev;
-				_after_last->prev = _after_last->prev->prev;
-				_after_last->prev->next = _after_last;
-				delete temp;
-				--_length;
-			}
+			node* temp = _after_last->prev;
+			_after_last->prev = _after_last->prev->prev;
+			_after_last->prev->next = _after_last;
+			delete temp;
+			--_length;
 		}
 
 		//single element (1)
@@ -247,8 +236,8 @@ namespace ft {
 			temp->prev->next = temp;
 			p->prev = temp;
 
-			_length++;
-			return temp;
+			++_length;
+			return iterator(temp);
 		}
 
 		//fill (2)
@@ -264,19 +253,16 @@ namespace ft {
 			while (first != last)
 			{
 				insert(position, *first);
-				first++;
+				++first;
 			}
 		}
 
 		iterator erase (iterator position) {
-//			if (position == end())
-//				return position;
-
 			node* p = position._p;
+			++position;
 			p->prev->next = p->next;
 			p->next->prev = p->prev;
 
-			++position;
 			delete p;
 			--_length;
 			return position;
@@ -300,10 +286,10 @@ namespace ft {
 		}
 
 		void resize (size_type n, value_type val = value_type()) {
-			while (_length > n)
-				pop_back();
 			while (_length < n)
 				push_back(val);
+			while (_length > n)
+				pop_back();
 		}
 
 		void clear() {
@@ -402,7 +388,6 @@ namespace ft {
 		//(1)
 		void merge (list& x) {
 			merge(x, ft::less<value_type>());
-			merge(x, ft::less<value_type>());
 		}
 
 		//(2)
@@ -429,7 +414,6 @@ namespace ft {
 		//(1)
 		void sort() {
 			sort(ft::less<value_type>());
-//			sort(ft::less_than_binary_pred<value_type>());
 		}
 
 		//(2)
