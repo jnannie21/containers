@@ -280,29 +280,23 @@ namespace ft {
 		}
 
 		iterator lower_bound (const key_type& k) {
-			std::pair<iterator,bool> p;
-			iterator it;
-			p = insert(value_type(k, mapped_type()));
-			it = p.first;
-			if (p.second)
-			{
-				++it;
-				delete_node(k);
-			}
-			return it;
+			unlink_pseudo();
+			node* n = finding_near_node(_root, k);
+			link_pseudo();
+			if (_comp(k, n->value.first))
+				return ++iterator(n);
+			return iterator(n);
 		}
 
 		const_iterator lower_bound (const key_type& k) const {
-			std::pair<iterator,bool> p;
-			iterator it;
-			p = insert(value_type(k, mapped_type()));
-			it = p.first;
-			if (p.second)
-			{
-				++it;
-				delete_node(k);
-			}
-			return const_iterator(it);
+			unlink_pseudo();
+			node* n = finding_near_node(_root, k);
+			link_pseudo();
+			if (_comp(k, n->value.first))
+				return ++iterator(n);
+			else if (_comp(n->value.first, k))
+				return --iterator(n);
+			return iterator(n);
 		}
 
 		iterator upper_bound (const key_type& k) {
@@ -327,12 +321,30 @@ namespace ft {
 			return std::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
 
-		void print() {
-			print_tree(_root, "", true);
-		}
+//		void print() {
+//			print_tree(_root, "", true);
+//		}
 
 
 	private:
+		node* finding_near_node(node* n, const key_type& k) const {
+			if (n == NULL)
+				return NULL;
+			else if (_comp(k, n->value.first))
+			{
+				node* temp = finding_near_node(n->left, k);
+				if (temp)
+					return temp;
+			}
+			else if (_comp(n->value.first, k))
+			{
+				node* temp = finding_near_node(n->right, k);
+				if (temp)
+					return temp;
+			}
+			return n;
+		}
+
 		void unlink_pseudo() const {
 			if (_root)
 			{
