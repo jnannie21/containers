@@ -199,7 +199,6 @@ namespace ft {
 //		fill (2)
 		void assign (size_type n, const value_type& val) {
 			clear();
-//			reserve(n);
 
 			while (n--)
 				push_back(val);
@@ -288,7 +287,7 @@ namespace ft {
 			{
 				*position = *first;
 				++position;
-				first++;
+				++first;
 			}
 		}
 
@@ -316,7 +315,6 @@ namespace ft {
 			delete [] _array;
 			_size = 0;
 			_array = new value_type[_capacity];
-//			reserve(_capacity);
 		}
 	};
 
