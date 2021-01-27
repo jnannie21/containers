@@ -7,7 +7,7 @@
 
 #include "map_iterator.hpp"
 #include "../common/utils.hpp"
-#include "pair.hpp"
+//#include "pair.hpp"
 #include "map_node.hpp"
 #include "../common/reverse_iterator.hpp"
 
@@ -21,7 +21,7 @@ namespace ft {
 		//typedefs
 		typedef Key key_type;
 		typedef T mapped_type;
-		typedef ft::pair<const key_type, mapped_type> value_type;
+		typedef std::pair<const key_type, mapped_type> value_type;
 		typedef Compare key_compare;
 		typedef value_type& reference;
 		typedef const value_type& const_reference;
@@ -168,26 +168,16 @@ namespace ft {
 		}
 
 //		single element (1)
-		ft::pair<iterator,bool> insert (const value_type& val) {
+		std::pair<iterator,bool> insert (const value_type& val) {
 			node* new_node = new node(val);
-			if (!_root)
+			node* n = add_new_node(_root, new_node);
+			if (n != new_node)
 			{
-				_root = new_node;
-				link_pseudo();
-			}
-			else
-			{
-				node* n = add_new_node(_root, new_node);
-				if (n != new_node)
-				{
-					delete new_node;
-					return ft::pair<iterator,bool>(n, false);
-				}
-//				_root = find_root(_root);
-//				std::cout << _root->value.second << std::endl;
+				delete new_node;
+				return std::pair<iterator,bool>(n, false);
 			}
 			++_size;
-			return ft::pair<iterator,bool>(iterator(new_node), true);
+			return std::pair<iterator,bool>(iterator(new_node), true);
 		}
 
 //		with hint (2)
@@ -195,14 +185,13 @@ namespace ft {
 			if (position._p != _after_last && position._p != _before_first
 				&& ((_val_comp(val, position.next_node()->value) && _val_comp(position.prev_node()->value, val))))
 			{
-				node new_node = new node(val);
+				node* new_node = new node(val);
 				node* n = add_new_node(position._p, new_node);
 				if (n != new_node)
 				{
 					delete new_node;
 					return iterator(n);
 				}
-//				_root = find_root(_root);
 				++_size;
 				return iterator(new_node);
 			}
@@ -251,11 +240,11 @@ namespace ft {
 		void swap (map& x) {
 			ft::swap(_root, x._root);
 
-			ft::swap(_before_first->next, x._before_first->next);
-			ft::swap(_before_first->next->prev, x._before_first->next->prev);
+			ft::swap(_before_first->parent, x._before_first->parent);
+			ft::swap(_before_first->parent->left, x._before_first->parent->left);
 
-			ft::swap(_after_last->prev, x._after_last->prev);
-			ft::swap(_after_last->prev->next, x._after_last->prev->next);
+			ft::swap(_after_last->parent, x._after_last->parent);
+			ft::swap(_after_last->parent->right, x._after_last->parent->right);
 
 			ft::swap(_size, x._size);
 		}
@@ -291,9 +280,9 @@ namespace ft {
 		}
 
 		iterator lower_bound (const key_type& k) {
-			ft::pair<iterator,bool> p;
+			std::pair<iterator,bool> p;
 			iterator it;
-			p = insert(k);
+			p = insert(value_type(k, mapped_type()));
 			it = p.first;
 			if (p.second)
 			{
@@ -304,9 +293,9 @@ namespace ft {
 		}
 
 		const_iterator lower_bound (const key_type& k) const {
-			ft::pair<iterator,bool> p;
+			std::pair<iterator,bool> p;
 			iterator it;
-			p = insert(k);
+			p = insert(value_type(k, mapped_type()));
 			it = p.first;
 			if (p.second)
 			{
@@ -330,12 +319,12 @@ namespace ft {
 			return const_iterator(it);
 		}
 
-		pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
-			return ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+		std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
+			return std::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
 		}
 
-		pair<iterator,iterator>             equal_range (const key_type& k) {
-			return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+		std::pair<iterator,iterator>             equal_range (const key_type& k) {
+			return std::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
 
 		void print() {
@@ -343,10 +332,8 @@ namespace ft {
 		}
 
 
-
-
 	private:
-		void unlink_pseudo() {
+		void unlink_pseudo() const {
 			if (_root)
 			{
 				_before_first->parent->left = NULL;
@@ -356,7 +343,7 @@ namespace ft {
 			}
 		}
 
-		void link_pseudo() {
+		void link_pseudo() const {
 			if (!_root)
 			{
 				_before_first->parent = _after_last;
@@ -406,15 +393,15 @@ namespace ft {
 
 		bool delete_node(const key_type& k) {
 			unlink_pseudo();
-			ft::pair<node*, bool> res;
+			std::pair<node*, bool> res;
 			res = deleting(_root, k);
 			_root = res.first;
 			link_pseudo();
 			return res.second;
 		}
 
-		ft::pair<node*, bool> deleting(node *n, const key_type& k) {
-			ft::pair<node*, bool> ret(NULL, false);
+		std::pair<node*, bool> deleting(node *n, const key_type& k) {
+			std::pair<node*, bool> ret(NULL, false);
 			if (n == NULL)
 				return ret;
 			else if (_comp(k, n->value.first))
@@ -434,18 +421,16 @@ namespace ft {
 					temp = n->left;
 				else if (n->right)
 					temp = n->right;
-				else
+				if (temp)
 				{
-					delete n;
-					return ft::pair<node*, bool>(NULL, true);
-				}
-				temp->parent = n->parent;
-				if (temp->parent)
-				{
-					if (temp->parent->left == n)
-						temp->parent->left = temp;
-					else
-						temp->parent->right = temp;
+					temp->parent = n->parent;
+					if (temp->parent)
+					{
+						if (temp->parent->left == n)
+							temp->parent->left = temp;
+						else
+							temp->parent->right = temp;
+					}
 				}
 				delete n;
 				n = temp;
@@ -457,16 +442,17 @@ namespace ft {
 				while (next->left != NULL)
 					next = next->left;
 				swap_node(n, next);
-				next->value = n->value;
-				ret = deleting(n->right, next->value.first);
-				n->right = ret.first;
+				ret = deleting(next->right, n->value.first);
+				next->right = ret.first;
+				n = next;
 			}
 			if (n)
 				n = balance_node(n);
-			return ft::pair<node*, bool>(n, ret.second);
+			ret.first = n;
+			return ret;
 		}
 
-		void swap_node(node*& n, node*& next) {
+		void swap_node(node*& n, node*& next) {		//swap pointers but not values
 			ft::swap(next->left, n->left);
 			ft::swap(next->right, n->right);
 			ft::swap(next->parent, n->parent);
@@ -490,21 +476,23 @@ namespace ft {
 				n->left->parent = n;
 			if (n->right)
 				n->right->parent = n;
-			if (n->parent->right == next)
-				n->parent->right = n;
-			else
-				n->parent->left = n;
-			ft::swap(next, n);
+			if (n->parent != next)
+			{
+				if (n->parent->right == next)
+					n->parent->right = n;
+				else
+					n->parent->left = n;
+			}
 		}
 
-		node* find_node(node* n, const key_type& k) {
+		node* find_node(node* n, const key_type& k) const {
 			unlink_pseudo();
 			n = finding(n, k);
 			link_pseudo();
 			return n;
 		}
 
-		node* finding(node* n, const key_type& k) {
+		node* finding(node* n, const key_type& k) const {
 			if (n == NULL)
 				return NULL;
 			else if (_comp(k, n->value.first))
@@ -517,8 +505,13 @@ namespace ft {
 
 		node* add_new_node(node* cur, node* new_node) {
 			unlink_pseudo();
-			new_node = adding(cur, new_node);
-			_root = find_root(_root);
+			if (!_root)
+				_root = new_node;
+			else
+			{
+				new_node = adding(cur, new_node);
+				_root = find_root(_root);
+			}
 			link_pseudo();
 			return new_node;
 		}
@@ -601,6 +594,8 @@ namespace ft {
 					l->parent->right = l;
 			}
 			r->left = r2;
+			if (r2)
+				r2->parent = r;
 			r->parent = l;
 			r->height = ft::max(node_height(r->left), node_height(r->right)) + 1;
 			l->height = ft::max(node_height(l->left), node_height(l->right)) + 1;
@@ -620,6 +615,8 @@ namespace ft {
 					r->parent->right = r;
 			}
 			l->right = l2;
+			if (l2)
+				l2->parent = l;
 			l->parent = r;
 			l->height = ft::max(node_height(l->left), node_height(l->right)) + 1;
 			r->height = ft::max(node_height(r->left), node_height(r->right)) + 1;
