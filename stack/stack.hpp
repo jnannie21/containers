@@ -38,7 +38,40 @@ namespace ft {
 			return _c.back();
 		}
 
+		void push (const value_type& val) {
+			_c.push_back(val);
+		}
+
+		void pop() {
+			_c.pop_back();
+		}
+
+		friend bool operator== (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
+			return lhs._c == rhs._c;
+		}
+
+		friend bool operator!= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
+			return lhs._c != rhs._c;
+		}
+
+		friend bool operator<  (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
+			return lhs._c < rhs._c;
+		}
+
+		friend bool operator<= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
+			return lhs._c <= rhs._c;
+		}
+
+		friend bool operator>  (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
+			return lhs._c > rhs._c;
+		}
+
+		friend bool operator>= (const stack<T,Container>& lhs, const stack<T,Container>& rhs) {
+			return lhs._c >= rhs._c;
+		}
+
 	};
+
 
 } //namespace ft
 

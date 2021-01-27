@@ -1138,7 +1138,7 @@ int list_test ()
 	}
 
 
-	std::cout << std::endl << "------------- list comparisons" << std::endl;
+	std::cout << std::endl << "------------- swap (list overload)" << std::endl;
 	std::cout << "------------- std" << std::endl;
 	{
 		std::list<int> foo (3,100);   // three ints with a value of 100
@@ -1157,7 +1157,7 @@ int list_test ()
 		std::cout << '\n';
 	}
 
-	std::cout << "------------- swap (list overload)" << std::endl;
+	std::cout << "------------- my" << std::endl;
 	{
 		ft::list<int> foo (3,100);   // three ints with a value of 100
 		ft::list<int> bar (5,200);   // five ints with a value of 200
