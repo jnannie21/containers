@@ -1,6 +1,6 @@
 CC = clang++
 CFLAGS = -c -g -Wall -Wextra -Werror -std=c++98
-MAIN_SOURCES = 	main.cpp list_test.cpp vector_test.cpp reverse_iterator_test.cpp map_test.cpp stack_test.cpp
+MAIN_SOURCES = 	main.cpp list_test.cpp vector_test.cpp reverse_iterator_test.cpp map_test.cpp stack_test.cpp queue_test.cpp
 NAME = a.out
 
 OBJECTS = $(MAIN_SOURCES:.cpp=.o)
