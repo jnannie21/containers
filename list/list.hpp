@@ -418,23 +418,29 @@ namespace ft {
 
 		//(2)
 		template <class Compare>
-		void sort (Compare comp) {
+		void sort (Compare comp) { // bubble sort
 			if (empty())
 				return ;
 
-			iterator prev = begin(), next = ++begin();
-
-			while (next != end())
+			iterator prev = begin();
+			iterator next = ++begin();
+			bool swapped = true;
+			while (swapped)
 			{
-				while (comp(*next, *prev) && next != begin())
+				swapped = false;
+				while (next != end())
 				{
-					splice(prev, *this, next);
-					ft::swap(prev, next);
-					--prev;
-					--next;
+					if (comp(*next, *prev))
+					{
+						splice(prev, *this, next);
+						ft::swap(prev, next);
+						swapped = true;
+					}
+					++prev;
+					++next;
 				}
-				++next;
-				++prev;
+				prev = begin();
+				next = ++begin();
 			}
 		}
 
