@@ -7,6 +7,7 @@
 
 #include "set_iterator.hpp"
 #include "../common/utils.hpp"
+#include "../common/pair.hpp"
 #include "set_node.hpp"
 #include "../common/reverse_iterator.hpp"
 
@@ -142,16 +143,16 @@ namespace ft {
 		}
 
 //		single element (1)
-		std::pair<iterator,bool> insert (const value_type& val) {
+		ft::pair<iterator,bool> insert (const value_type& val) {
 			node* new_node = new node(val);
 			node* n = add_new_node(_root, new_node);
 			if (n != new_node)
 			{
 				delete new_node;
-				return std::pair<iterator,bool>(n, false);
+				return ft::pair<iterator,bool>(n, false);
 			}
 			++_size;
-			return std::pair<iterator,bool>(iterator(new_node), true);
+			return ft::pair<iterator,bool>(iterator(new_node), true);
 		}
 
 //		with hint (2)
@@ -287,12 +288,12 @@ namespace ft {
 			return const_iterator(it);
 		}
 
-		std::pair<const_iterator,const_iterator> equal_range (const value_type& val) const {
-			return std::pair<const_iterator, const_iterator>(lower_bound(val), upper_bound(val));
+		ft::pair<const_iterator,const_iterator> equal_range (const value_type& val) const {
+			return ft::pair<const_iterator, const_iterator>(lower_bound(val), upper_bound(val));
 		}
 
-		std::pair<iterator,iterator>             equal_range (const value_type& val) {
-			return std::pair<iterator, iterator>(lower_bound(val), upper_bound(val));
+		ft::pair<iterator,iterator>             equal_range (const value_type& val) {
+			return ft::pair<iterator, iterator>(lower_bound(val), upper_bound(val));
 		}
 
 //		void print() {
@@ -379,15 +380,15 @@ namespace ft {
 
 		bool delete_node(const value_type& val) {
 			unlink_pseudo();
-			std::pair<node*, bool> res;
+			ft::pair<node*, bool> res;
 			res = deleting(_root, val);
 			_root = res.first;
 			link_pseudo();
 			return res.second;
 		}
 
-		std::pair<node*, bool> deleting(node *n, const value_type& val) {
-			std::pair<node*, bool> ret(NULL, false);
+		ft::pair<node*, bool> deleting(node *n, const value_type& val) {
+			ft::pair<node*, bool> ret(NULL, false);
 			if (n == NULL)
 				return ret;
 			else if (_comp(val, n->value))

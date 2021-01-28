@@ -7,7 +7,7 @@
 
 #include "map_iterator.hpp"
 #include "../common/utils.hpp"
-//#include "..common/pair.hpp"
+#include "../common/pair.hpp"
 #include "map_node.hpp"
 #include "../common/reverse_iterator.hpp"
 
@@ -21,7 +21,7 @@ namespace ft {
 		//typedefs
 		typedef Key key_type;
 		typedef T mapped_type;
-		typedef std::pair<const key_type, mapped_type> value_type;
+		typedef ft::pair<const key_type, mapped_type> value_type;
 		typedef Compare key_compare;
 		typedef value_type& reference;
 		typedef const value_type& const_reference;
@@ -168,16 +168,16 @@ namespace ft {
 		}
 
 //		single element (1)
-		std::pair<iterator,bool> insert (const value_type& val) {
+		ft::pair<iterator,bool> insert (const value_type& val) {
 			node* new_node = new node(val);
 			node* n = add_new_node(_root, new_node);
 			if (n != new_node)
 			{
 				delete new_node;
-				return std::pair<iterator,bool>(n, false);
+				return ft::pair<iterator,bool>(n, false);
 			}
 			++_size;
-			return std::pair<iterator,bool>(iterator(new_node), true);
+			return ft::pair<iterator,bool>(iterator(new_node), true);
 		}
 
 //		with hint (2)
@@ -313,12 +313,12 @@ namespace ft {
 			return const_iterator(it);
 		}
 
-		std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
-			return std::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+		ft::pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
+			return ft::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
 		}
 
-		std::pair<iterator,iterator>             equal_range (const key_type& k) {
-			return std::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+		ft::pair<iterator,iterator>             equal_range (const key_type& k) {
+			return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
 
 //		void print() {
@@ -405,15 +405,15 @@ namespace ft {
 
 		bool delete_node(const key_type& k) {
 			unlink_pseudo();
-			std::pair<node*, bool> res;
+			ft::pair<node*, bool> res;
 			res = deleting(_root, k);
 			_root = res.first;
 			link_pseudo();
 			return res.second;
 		}
 
-		std::pair<node*, bool> deleting(node *n, const key_type& k) {
-			std::pair<node*, bool> ret(NULL, false);
+		ft::pair<node*, bool> deleting(node *n, const key_type& k) {
+			ft::pair<node*, bool> ret(NULL, false);
 			if (n == NULL)
 				return ret;
 			else if (_comp(k, n->value.first))

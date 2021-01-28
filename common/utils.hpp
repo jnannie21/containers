@@ -41,18 +41,10 @@ namespace ft {
 		bool operator()(const T& val1, const T& val2) { return val1 == val2; }
 	};
 
-//	template <class T>
-//	class less_than_binary_pred {
-//	public:
-//		bool operator()(const T& val1, const T& val2) { return val1 < val2; }
-//	};
-
 
 	template<bool Cond, class T = void> struct enable_if {};
 	template<class T> struct enable_if<true, T> { typedef T type; };
 
-//	template<bool Cond> struct enable_if {};
-//	template<> struct enable_if<true> { typedef void type; };
 
 	template <class T> struct is_type { typedef void type; };
 
@@ -97,21 +89,11 @@ namespace ft {
 		template <typename>
 		static double is_input_iter(...);
 
-//		static std::input_iterator_tag* input_iterator;
-//		static std::forward_iterator_tag* forward_iterator;
-//		static std::bidirectional_iterator_tag* bidirectional_iterator;
-//		static std::random_access_iterator_tag* random_access_iterator;
 		static std::output_iterator_tag* output_iterator;
 
 		enum { value = ((is_iterator<InpIter>::value
 						&& !(sizeof(is_input_iter<InpIter>(output_iterator)) == sizeof(char))))
 		};
-//		enum { value = (sizeof(is_input_iter<InpIter>(input_iterator)) == sizeof(char)
-//						|| sizeof(is_input_iter<InpIter>(forward_iterator)) == sizeof(char)
-//						|| sizeof(is_input_iter<InpIter>(bidirectional_iterator)) == sizeof(char)
-//						|| sizeof(is_input_iter<InpIter>(random_access_iterator)) == sizeof(char)
-//						|| is_pointer<InpIter>::value)
-//		};
 	};
 
 	template <class Arg1, class Arg2, class Result>

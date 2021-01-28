@@ -285,6 +285,7 @@ int list_test ()
 
 		if (i<mylist.max_size()) mylist.resize(i);
 		else std::cout << "That size exceeds the limit.\n";
+		std::cout << "max size: " << mylist.max_size() << std::endl;
 	}
 
 	std::cout << "------------- my" << std::endl;
@@ -296,6 +297,7 @@ int list_test ()
 
 		if (i<mylist.max_size()) mylist.resize(i);
 		else std::cout << "That size exceeds the limit.\n";
+		std::cout << "max size: " << mylist.max_size() << std::endl;
 	}
 
 

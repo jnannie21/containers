@@ -10,8 +10,8 @@ namespace ft {
 	template <class T1, class T2>
 	struct pair {
 	public:
-		typedef typename ft::remove_const<T1>::type first_type;
-		typedef typename ft::remove_const<T2>::type second_type;
+		typedef T1 first_type;
+		typedef T2 second_type;
 
 	public:
 		first_type first;

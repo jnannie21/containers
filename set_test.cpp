@@ -263,7 +263,7 @@ int set_test () {
 	{
 		ft::set<int> myset;
 		ft::set<int>::iterator it;
-		std::pair<ft::set<int>::iterator,bool> ret;
+		ft::pair<ft::set<int>::iterator,bool> ret;
 
 		// set some initial values:
 		for (int i=1; i<=5; ++i) myset.insert(i*10);    // set: 10 20 30 40 50
@@ -638,7 +638,7 @@ int set_test () {
 
 		for (int i=1; i<=5; i++) myset.insert(i*10);   // myset: 10 20 30 40 50
 
-		std::pair<ft::set<int>::const_iterator,ft::set<int>::const_iterator> ret;
+		ft::pair<ft::set<int>::const_iterator,ft::set<int>::const_iterator> ret;
 		ret = myset.equal_range(30);
 
 		std::cout << "the lower bound points to: " << *ret.first << '\n';
