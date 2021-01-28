@@ -321,10 +321,9 @@ namespace ft {
 			return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
 
-//		void print() {
-//			print_tree(_root, "", true);
-//		}
-
+		void print() {
+			print_tree(_root, "", true);
+		}
 
 	private:
 		node* finding_near_node(node* n, const key_type& k) const {
@@ -635,11 +634,11 @@ namespace ft {
 			return r;
 		}
 
-		void print_tree(node *root, std::string indent, bool last) {
-			if (root != nullptr)
+		void print_tree(node *n, std::string indent, bool right) {
+			if (n != NULL)
 			{
 				std::cout << indent;
-				if (last)
+				if (right)
 				{
 					std::cout << "R---- ";
 					indent += "   ";
@@ -649,12 +648,11 @@ namespace ft {
 					std::cout << "L---- ";
 					indent += "|  ";
 				}
-				std::cout << root->value.first << " " << root->value.second << std::endl;
-				print_tree(root->left, indent, false);
-				print_tree(root->right, indent, true);
+				std::cout << n->value.first << " " << n->value.second << std::endl;
+				print_tree(n->left, indent, false);
+				print_tree(n->right, indent, true);
 			}
 		}
-
 
 	};
 
