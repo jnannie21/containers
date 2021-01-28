@@ -1,57 +1,36 @@
 //
-// Created by jnannie on 1/19/21.
+// Created by jnannie on 1/28/21.
 //
 
-#ifndef MAP_HPP
-#define MAP_HPP
+#ifndef SET_HPP
+#define SET_HPP
 
-#include "map_iterator.hpp"
+#include "set_iterator.hpp"
 #include "../common/utils.hpp"
-//#include "..common/pair.hpp"
-#include "map_node.hpp"
+#include "set_node.hpp"
 #include "../common/reverse_iterator.hpp"
 
 namespace ft {
-
-	template < class Key,                                     // map::key_type
-			class T,                                       // map::mapped_type
-			class Compare = ft::less<Key>                      // map::key_compare
-	> class map {
+	template < class T,                        // set::key_type/value_type
+			class Compare = ft::less<T>        // set::key_compare/value_compare
+	> class set {
 	public:
 		//typedefs
-		typedef Key key_type;
-		typedef T mapped_type;
-		typedef std::pair<const key_type, mapped_type> value_type;
+		typedef T key_type;
+		typedef T value_type;
 		typedef Compare key_compare;
+		typedef Compare value_compare;
 		typedef value_type& reference;
 		typedef const value_type& const_reference;
 		typedef value_type* pointer;
 		typedef const value_type* const_pointer;
-		typedef map_iterator<value_type, key_compare> iterator;
-		typedef map_iterator<const value_type, key_compare> const_iterator;
+		typedef set_iterator<value_type, key_compare> iterator;
+		typedef set_iterator<const value_type, key_compare> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
 		typedef ptrdiff_t difference_type;
 		typedef size_t size_type;
-		typedef map_node<typename ft::remove_const<value_type>::type> node;
-
-		class value_compare {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
-			friend class map;
-
-			protected:
-				Compare comp;
-				value_compare (Compare c) : comp(c) {}  // constructed with map's comparison object
-
-			public:
-				typedef bool result_type;
-				typedef value_type first_argument_type;
-				typedef value_type second_argument_type;
-
-				result_type operator() (const first_argument_type& x, const second_argument_type& y) const
-				{
-					return comp(x.first, y.first);
-				}
-		};
+		typedef set_node<typename ft::remove_const<value_type>::type> node;
 
 	private:
 		node* _root;
@@ -61,10 +40,11 @@ namespace ft {
 		value_compare _val_comp;
 		size_type _size;
 
+
 	public:
 //		empty (1)
-		explicit map (const key_compare& comp = key_compare())
-					: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(comp), _val_comp(_comp), _size(0) {
+		explicit set (const key_compare& comp = key_compare())
+				: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(comp), _val_comp(_comp), _size(0) {
 			_before_first = new node();
 			_after_last = new node();
 			_before_first->height = 0;
@@ -75,9 +55,9 @@ namespace ft {
 
 //		range (2)
 		template <class InputIterator>
-		map (InputIterator first, InputIterator last,
-			 const key_compare& comp = key_compare())
-			 : _root(NULL), _before_first(NULL), _after_last(NULL), _comp(comp), _val_comp(_comp), _size(0) {
+		set (InputIterator first, InputIterator last,
+		const key_compare& comp = key_compare())
+		: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(comp), _val_comp(_comp), _size(0) {
 			_before_first = new node();
 			_after_last = new node();
 			_before_first->height = 0;
@@ -89,8 +69,8 @@ namespace ft {
 		}
 
 //		copy (3)
-		map (const map& x)
-			: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(x._comp), _val_comp(_comp), _size(0) {
+		set (const set& x)
+				: _root(NULL), _before_first(NULL), _after_last(NULL), _comp(x._comp), _val_comp(_comp), _size(0) {
 			_before_first = new node();
 			_after_last = new node();
 			_before_first->height = 0;
@@ -101,14 +81,14 @@ namespace ft {
 			*this = x;
 		}
 
-		~map() {
+		~set() {
 			clear();
 			delete _before_first;
 			delete _after_last;
 		}
 
 //		copy (1)
-		map& operator= (const map& x) {
+		set& operator= (const set& x) {
 			if (this == &x)
 				return *this;
 
@@ -159,12 +139,6 @@ namespace ft {
 
 		size_type max_size() const {
 			return ft::min<size_type>(std::numeric_limits<size_type>::max() / (sizeof(node)), std::numeric_limits<difference_type>::max());
-		}
-
-		mapped_type& operator[] (const key_type& k) {
-			value_type val(k, mapped_type());
-			iterator it = insert(val).first;
-			return (*it).second;
 		}
 
 //		single element (1)
@@ -237,7 +211,7 @@ namespace ft {
 			}
 		}
 
-		void swap (map& x) {
+		void swap (set& x) {
 			ft::swap(_root, x._root);
 
 			ft::swap(_before_first->parent, x._before_first->parent);
@@ -261,64 +235,64 @@ namespace ft {
 			return _val_comp;
 		}
 
-		iterator find (const key_type& k) {
-			node* found = find_node(_root, k);
+		iterator find (const value_type& val) {
+			node* found = find_node(_root, val);
 			if (!found)
 				found = _after_last;
 			return iterator(found);
 		}
 
-		const_iterator find (const key_type& k) const {
-			node* found = find_node(_root, k);
+		const_iterator find (const value_type& val) const {
+			node* found = find_node(_root, val);
 			if (!found)
 				found = _after_last;
 			return const_iterator(found);
 		}
 
-		size_type count (const key_type& k) const {
-			return !(find(k) == end());
+		size_type count (const value_type& val) const {
+			return !(find(val) == end());
 		}
 
-		iterator lower_bound (const key_type& k) {
+		iterator lower_bound (const value_type& val) {
 			unlink_pseudo();
-			node* n = finding_near_node(_root, k);
+			node* n = finding_near_node(_root, val);
 			link_pseudo();
-			if (_comp(k, n->value.first))
+			if (_comp(val, n->value))
 				return ++iterator(n);
 			return iterator(n);
 		}
 
-		const_iterator lower_bound (const key_type& k) const {
+		const_iterator lower_bound (const value_type& val) const {
 			unlink_pseudo();
-			node* n = finding_near_node(_root, k);
+			node* n = finding_near_node(_root, val);
 			link_pseudo();
-			if (_comp(k, n->value.first))
+			if (_comp(val, n->value))
 				return ++const_iterator(n);
-			else if (_comp(n->value.first, k))
+			else if (_comp(n->value, val))
 				return --const_iterator(n);
 			return const_iterator(n);
 		}
 
-		iterator upper_bound (const key_type& k) {
-			iterator it = lower_bound(k);
-			if (!_comp(k, (*it).first))
+		iterator upper_bound (const value_type& val) {
+			iterator it = lower_bound(val);
+			if (!_comp(val, *it))
 				++it;
 			return it;
 		}
 
-		const_iterator upper_bound (const key_type& k) const {
-			iterator it = lower_bound(k);
-			if (!_comp(k, (*it).first))
+		const_iterator upper_bound (const value_type& val) const {
+			iterator it = lower_bound(val);
+			if (!_comp(val, *it))
 				++it;
 			return const_iterator(it);
 		}
 
-		std::pair<const_iterator,const_iterator> equal_range (const key_type& k) const {
-			return std::pair<const_iterator, const_iterator>(lower_bound(k), upper_bound(k));
+		std::pair<const_iterator,const_iterator> equal_range (const value_type& val) const {
+			return std::pair<const_iterator, const_iterator>(lower_bound(val), upper_bound(val));
 		}
 
-		std::pair<iterator,iterator>             equal_range (const key_type& k) {
-			return std::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
+		std::pair<iterator,iterator>             equal_range (const value_type& val) {
+			return std::pair<iterator, iterator>(lower_bound(val), upper_bound(val));
 		}
 
 //		void print() {
@@ -327,18 +301,18 @@ namespace ft {
 
 
 	private:
-		node* finding_near_node(node* n, const key_type& k) const {
+		node* finding_near_node(node* n, const value_type& val) const {
 			if (n == NULL)
 				return NULL;
-			else if (_comp(k, n->value.first))
+			else if (_comp(val, n->value))
 			{
-				node* temp = finding_near_node(n->left, k);
+				node* temp = finding_near_node(n->left, val);
 				if (temp)
 					return temp;
 			}
-			else if (_comp(n->value.first, k))
+			else if (_comp(n->value, val))
 			{
-				node* temp = finding_near_node(n->right, k);
+				node* temp = finding_near_node(n->right, val);
 				if (temp)
 					return temp;
 			}
@@ -388,9 +362,9 @@ namespace ft {
 			if (parent)
 			{
 				if (parent->left == n)
-					parent->left = deleting(n, n->value.first).first;
+					parent->left = deleting(n, n->value).first;
 				else
-					parent->right = deleting(n, n->value.first).first;
+					parent->right = deleting(n, n->value).first;
 				while (parent->parent)
 				{
 					balance_node(parent);
@@ -399,31 +373,31 @@ namespace ft {
 				_root = balance_node(parent);
 			}
 			else
-				_root = deleting(n, n->value.first).first;
+				_root = deleting(n, n->value).first;
 			link_pseudo();
 		}
 
-		bool delete_node(const key_type& k) {
+		bool delete_node(const value_type& val) {
 			unlink_pseudo();
 			std::pair<node*, bool> res;
-			res = deleting(_root, k);
+			res = deleting(_root, val);
 			_root = res.first;
 			link_pseudo();
 			return res.second;
 		}
 
-		std::pair<node*, bool> deleting(node *n, const key_type& k) {
+		std::pair<node*, bool> deleting(node *n, const value_type& val) {
 			std::pair<node*, bool> ret(NULL, false);
 			if (n == NULL)
 				return ret;
-			else if (_comp(k, n->value.first))
+			else if (_comp(val, n->value))
 			{
-				ret = deleting(n->left, k);
+				ret = deleting(n->left, val);
 				n->left = ret.first;
 			}
-			else if (_comp(n->value.first, k))
+			else if (_comp(n->value, val))
 			{
-				ret = deleting(n->right, k);
+				ret = deleting(n->right, val);
 				n->right = ret.first;
 			}
 			else if ((n->left == NULL) || (n->right == NULL))
@@ -454,7 +428,7 @@ namespace ft {
 				while (next->left != NULL)
 					next = next->left;
 				swap_node(n, next);
-				ret = deleting(next->right, n->value.first);
+				ret = deleting(next->right, n->value);
 				next->right = ret.first;
 				n = next;
 			}
@@ -497,20 +471,20 @@ namespace ft {
 			}
 		}
 
-		node* find_node(node* n, const key_type& k) const {
+		node* find_node(node* n, const value_type& val) const {
 			unlink_pseudo();
-			n = finding(n, k);
+			n = finding(n, val);
 			link_pseudo();
 			return n;
 		}
 
-		node* finding(node* n, const key_type& k) const {
+		node* finding(node* n, const value_type& val) const {
 			if (n == NULL)
 				return NULL;
-			else if (_comp(k, n->value.first))
-				return finding(n->left, k);
-			else if (_comp(n->value.first, k))
-				return finding(n->right, k);
+			else if (_comp(val, n->value))
+				return finding(n->left, val);
+			else if (_comp(n->value, val))
+				return finding(n->right, val);
 			else
 				return n;
 		}
@@ -655,10 +629,8 @@ namespace ft {
 			}
 		}
 
-
 	};
 
 }
 
-
-#endif //MAP_HPP
+#endif //SET_HPP
