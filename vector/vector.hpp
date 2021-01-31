@@ -11,6 +11,7 @@
 #include <cstddef>
 #include <limits>
 #include <stdexcept>
+#include <cstring>
 
 namespace ft {
 
