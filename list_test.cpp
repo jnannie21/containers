@@ -278,10 +278,10 @@ int list_test ()
 	std::cout << std::endl << "------------- max_size" << std::endl;
 	std::cout << "------------- std" << std::endl;
 	{
-		size_t i;
+		std::size_t i;
 		std::list<int> mylist;
 
-		i = std::numeric_limits<size_t>::max();
+		i = std::numeric_limits<std::size_t>::max();
 
 		if (i<mylist.max_size()) mylist.resize(i);
 		else std::cout << "That size exceeds the limit.\n";
@@ -290,10 +290,10 @@ int list_test ()
 
 	std::cout << "------------- my" << std::endl;
 	{
-		size_t i;
+		std::size_t i;
 		ft::list<int> mylist;
 
-		i = std::numeric_limits<size_t>::max();
+		i = std::numeric_limits<std::size_t>::max();
 
 		if (i<mylist.max_size()) mylist.resize(i);
 		else std::cout << "That size exceeds the limit.\n";

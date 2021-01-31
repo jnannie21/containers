@@ -5,6 +5,8 @@
 #ifndef MAP_NODE_HPP
 #define MAP_NODE_HPP
 
+#include <cstddef>
+
 namespace ft {
 
 	template < typename T >

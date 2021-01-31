@@ -9,6 +9,8 @@
 #include "list_iterator.hpp"
 #include "../common/reverse_iterator.hpp"
 #include "../common/utils.hpp"
+#include <cstddef>
+#include <limits>
 
 namespace ft {
 
@@ -25,8 +27,8 @@ namespace ft {
 		typedef list_iterator<const value_type> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef ptrdiff_t difference_type;
-		typedef size_t size_type;
+		typedef std::ptrdiff_t difference_type;
+		typedef std::size_t size_type;
 		typedef list_node<typename ft::remove_const<value_type>::type> node;
 
 	private:
@@ -61,7 +63,7 @@ namespace ft {
 		//range (3)
 		template <class InputIterator>
 		list (InputIterator first, InputIterator last,
-			  typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) //is_pointer<InputIterator>::value ||
+			  typename ft::enable_if<ft::is_input_iterator<InputIterator>::value>::type* = 0)
 			  : _before_first(NULL), _after_last(NULL), _length(0) {
 			_before_first = new node();
 			_after_last = new node();
@@ -169,7 +171,7 @@ namespace ft {
 		//range (1)
 		template <class InputIterator>
 		void assign (InputIterator first, InputIterator last,
-					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
+					 typename ft::enable_if<ft::is_input_iterator<InputIterator>::value>::type* = 0) {
 			clear();
 
 			for ( ; first != last; ++first)
@@ -249,7 +251,7 @@ namespace ft {
 		//range (3)
 		template <class InputIterator>
 		void insert (iterator position, InputIterator first, InputIterator last,
-					 typename enable_if<is_input_iterator<InputIterator>::value>::type* = 0) {
+					 typename ft::enable_if<ft::is_input_iterator<InputIterator>::value>::type* = 0) {
 			while (first != last)
 			{
 				insert(position, *first);

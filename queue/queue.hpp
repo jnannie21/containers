@@ -6,15 +6,16 @@
 #define QUEUE_HPP
 
 #include "../list/list.hpp"
+#include <cstddef>
 
 namespace ft {
 
-	template <class T, class Container = list<T> >
+	template <class T, class Container = ft::list<T> >
 	class queue {
 	public:
 		typedef T value_type;
 		typedef Container container_type;
-		typedef size_t size_type;
+		typedef std::size_t size_type;
 
 	private:
 		container_type _c;

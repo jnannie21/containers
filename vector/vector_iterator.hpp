@@ -6,6 +6,8 @@
 #define VECTOR_ITERATOR_HPP
 
 #include "../common/utils.hpp"
+#include <iterator>
+#include <cstddef>
 
 namespace ft {
 	template <class T>

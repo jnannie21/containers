@@ -5,6 +5,9 @@
 #ifndef UTILS_HPP
 #define UTILS_HPP
 
+#include <cstddef>
+#include <iterator>
+
 namespace ft {
 
 	template<class T>

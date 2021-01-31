@@ -5,6 +5,8 @@
 #ifndef LIST_NODE_HPP
 #define LIST_NODE_HPP
 
+#include <cstddef>
+
 namespace ft {
 
 	template < typename T >

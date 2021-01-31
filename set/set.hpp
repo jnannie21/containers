@@ -10,6 +10,8 @@
 #include "../common/pair.hpp"
 #include "set_node.hpp"
 #include "../common/reverse_iterator.hpp"
+#include <cstddef>
+#include <limits>
 
 namespace ft {
 	template < class T,                        // set::key_type/value_type
@@ -29,8 +31,8 @@ namespace ft {
 		typedef set_iterator<const value_type, key_compare> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef ptrdiff_t difference_type;
-		typedef size_t size_type;
+		typedef std::ptrdiff_t difference_type;
+		typedef std::size_t size_type;
 		typedef set_node<typename ft::remove_const<value_type>::type> node;
 
 	private:

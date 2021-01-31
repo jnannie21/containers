@@ -8,6 +8,9 @@
 #include "vector_iterator.hpp"
 #include "../common/reverse_iterator.hpp"
 #include "../common/utils.hpp"
+#include <cstddef>
+#include <limits>
+#include <stdexcept>
 
 namespace ft {
 
@@ -24,8 +27,8 @@ namespace ft {
 		typedef vector_iterator<const value_type> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef ptrdiff_t difference_type;
-		typedef size_t size_type;
+		typedef std::ptrdiff_t difference_type;
+		typedef std::size_t size_type;
 
 	private:
 		value_type* _array;

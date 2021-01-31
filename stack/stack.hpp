@@ -6,6 +6,7 @@
 #define STACK_HPP
 
 #include "../list/list.hpp"
+#include <cstddef>
 
 namespace ft {
 
@@ -14,7 +15,7 @@ namespace ft {
 	public:
 		typedef T value_type;
 		typedef Container container_type;
-		typedef size_t size_type;
+		typedef std::size_t size_type;
 
 	private:
 		container_type _c;

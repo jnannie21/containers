@@ -200,7 +200,7 @@ int vector_test () {
 		myvector.resize(12);
 
 		std::cout << "myvector contains:";
-		for (size_t i=0;i<myvector.size();i++)
+		for (std::size_t i=0;i<myvector.size();i++)
 			std::cout << ' ' << myvector[i];
 		std::cout << '\n';
 	}
@@ -217,7 +217,7 @@ int vector_test () {
 		myvector.resize(12);
 
 		std::cout << "myvector contains:";
-		for (size_t i=0;i<myvector.size();i++)
+		for (std::size_t i=0;i<myvector.size();i++)
 			std::cout << ' ' << myvector[i];
 		std::cout << '\n';
 	}

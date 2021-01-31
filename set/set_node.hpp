@@ -5,6 +5,8 @@
 #ifndef SET_NODE_HPP
 #define SET_NODE_HPP
 
+#include <cstddef>
+
 namespace ft {
 
 	template<typename T>

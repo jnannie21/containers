@@ -10,6 +10,8 @@
 #include "../common/pair.hpp"
 #include "map_node.hpp"
 #include "../common/reverse_iterator.hpp"
+#include <cstddef>
+#include <limits>
 
 namespace ft {
 
@@ -31,8 +33,8 @@ namespace ft {
 		typedef map_iterator<const value_type, key_compare> const_iterator;
 		typedef ft::reverse_iterator<iterator> reverse_iterator;
 		typedef ft::reverse_iterator<const_iterator> const_reverse_iterator;
-		typedef ptrdiff_t difference_type;
-		typedef size_t size_type;
+		typedef std::ptrdiff_t difference_type;
+		typedef std::size_t size_type;
 		typedef map_node<typename ft::remove_const<value_type>::type> node;
 
 		class value_compare {   // in C++98, it is required to inherit binary_function<value_type,value_type,bool>
@@ -321,9 +323,9 @@ namespace ft {
 			return ft::pair<iterator, iterator>(lower_bound(k), upper_bound(k));
 		}
 
-		void print() {
-			print_tree(_root, "", true);
-		}
+//		void print() {
+//			print_tree(_root, "", true);
+//		}
 
 	private:
 		node* finding_near_node(node* n, const key_type& k) const {
@@ -634,25 +636,25 @@ namespace ft {
 			return r;
 		}
 
-		void print_tree(node *n, std::string indent, bool right) {
-			if (n != NULL)
-			{
-				std::cout << indent;
-				if (right)
-				{
-					std::cout << "R---- ";
-					indent += "   ";
-				}
-				else
-				{
-					std::cout << "L---- ";
-					indent += "|  ";
-				}
-				std::cout << n->value.first << " " << n->value.second << std::endl;
-				print_tree(n->left, indent, false);
-				print_tree(n->right, indent, true);
-			}
-		}
+//		void print_tree(node *n, std::string indent, bool right) {
+//			if (n != NULL)
+//			{
+//				std::cout << indent;
+//				if (right)
+//				{
+//					std::cout << "R---- ";
+//					indent += "   ";
+//				}
+//				else
+//				{
+//					std::cout << "L---- ";
+//					indent += "|  ";
+//				}
+//				std::cout << n->value.first << " " << n->value.second << std::endl;
+//				print_tree(n->left, indent, false);
+//				print_tree(n->right, indent, true);
+//			}
+//		}
 
 	};
 
