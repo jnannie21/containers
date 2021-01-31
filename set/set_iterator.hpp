@@ -7,7 +7,6 @@
 
 #include "set_node.hpp"
 #include "../common/utils.hpp"
-#include <iterator>
 #include <cstddef>
 
 namespace ft {
@@ -19,7 +18,7 @@ namespace ft {
 		typedef std::ptrdiff_t difference_type;
 		typedef const T* pointer;
 		typedef const T& reference;
-		typedef std::bidirectional_iterator_tag iterator_category;
+		typedef ft::bidirectional_iterator_tag iterator_category;
 		typedef set_node<typename ft::remove_const<T>::type> node;
 
 		template<class, class>

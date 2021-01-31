@@ -6,9 +6,15 @@
 #define UTILS_HPP
 
 #include <cstddef>
-#include <iterator>
 
 namespace ft {
+
+	struct input_iterator_tag { };
+	struct output_iterator_tag { };
+	struct forward_iterator_tag : public input_iterator_tag { };
+	struct bidirectional_iterator_tag : public forward_iterator_tag { };
+	struct random_access_iterator_tag : public bidirectional_iterator_tag { };
+
 
 	template<class T>
 	const T &min(const T &a, const T &b) {
@@ -92,7 +98,7 @@ namespace ft {
 		template <class>
 		static double is_input_iter(...);
 
-		static std::output_iterator_tag* output_iterator;
+		static ft::output_iterator_tag* output_iterator;
 
 		enum { value = ((is_iterator<InpIter>::value
 						&& !(sizeof(is_input_iter<InpIter>(output_iterator)) == sizeof(char))))
@@ -117,6 +123,8 @@ namespace ft {
 
 	template<class T> struct is_const { enum { value = false };	};
 	template<class T> struct is_const<const T> { enum { value = true };};
+
+
 
 }
 

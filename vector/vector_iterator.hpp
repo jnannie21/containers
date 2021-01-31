@@ -6,7 +6,6 @@
 #define VECTOR_ITERATOR_HPP
 
 #include "../common/utils.hpp"
-#include <iterator>
 #include <cstddef>
 
 namespace ft {
@@ -17,7 +16,7 @@ namespace ft {
 		typedef std::ptrdiff_t difference_type;
 		typedef T* pointer;
 		typedef T& reference;
-		typedef std::random_access_iterator_tag iterator_category;
+		typedef ft::random_access_iterator_tag iterator_category;
 
 		template <class >
 		friend class vector;
