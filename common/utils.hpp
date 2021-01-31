@@ -45,7 +45,7 @@ namespace ft {
 	};
 
 
-	template<bool Cond, class T = void> struct enable_if {};
+	template<bool Cond, class T = void> struct enable_if { };
 	template<class T> struct enable_if<true, T> { typedef T type; };
 
 
@@ -65,17 +65,17 @@ namespace ft {
 
 	};
 
-	template <typename Iter>
+	template <class Iter>
 	struct is_iterator
 	{
-		template <typename U>
+		template <class U>
 		static char is_iter(typename ft::is_type<typename U::value_type>::type*,
 							typename ft::is_type<typename U::difference_type>::type*,
 							typename ft::is_type<typename U::pointer>::type*,
 							typename ft::is_type<typename U::reference>::type*,
 							typename ft::is_type<typename U::iterator_category>::type*);
 
-		template <typename>
+		template <class>
 		static double is_iter(...);
 
 		enum { value = (sizeof(is_iter<Iter>(NULL, NULL, NULL, NULL, NULL)) == sizeof(char)
@@ -83,13 +83,13 @@ namespace ft {
 		};
 	};
 
-	template <typename InpIter>
+	template <class InpIter>
 	struct is_input_iterator
 	{
 		template <class U>
 		static char is_input_iter(typename U::iterator_category*);
 
-		template <typename>
+		template <class>
 		static double is_input_iter(...);
 
 		static std::output_iterator_tag* output_iterator;
@@ -116,8 +116,7 @@ namespace ft {
 
 
 	template<class T> struct is_const { enum { value = false };	};
-	template<class T> struct is_const<const T> { enum { value = true };
-	};
+	template<class T> struct is_const<const T> { enum { value = true };};
 
 }
 

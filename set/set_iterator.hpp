@@ -16,7 +16,7 @@ namespace ft {
 	class set_iterator {
 	public:
 		typedef T value_type;
-		typedef ptrdiff_t difference_type;
+		typedef std::ptrdiff_t difference_type;
 		typedef const T* pointer;
 		typedef const T& reference;
 		typedef std::bidirectional_iterator_tag iterator_category;
@@ -47,11 +47,6 @@ namespace ft {
 		template <class U>
 		friend bool operator== (const set_iterator<U, Compare>& lhs, const set_iterator<U, Compare>& rhs) {
 			return lhs._p == rhs._p;
-		}
-
-		template <class U>
-		friend bool operator!= (const set_iterator<U, Compare>& lhs, const set_iterator<U, Compare>& rhs) {
-			return !(lhs == rhs);
 		}
 
 		reference operator*() const { return _p->value; }
@@ -125,6 +120,11 @@ namespace ft {
 		}
 
 	};
+
+	template <class U, class Compare>
+	bool operator!= (const set_iterator<U, Compare>& lhs, const set_iterator<U, Compare>& rhs) {
+		return !(lhs == rhs);
+	}
 
 }
 

@@ -16,7 +16,7 @@ namespace ft {
 	class list_iterator {
 	public:
 		typedef T value_type;
-		typedef ptrdiff_t difference_type;
+		typedef std::ptrdiff_t difference_type;
 		typedef T* pointer;
 		typedef T& reference;
 		typedef std::bidirectional_iterator_tag iterator_category;
@@ -24,6 +24,7 @@ namespace ft {
 
 		template <class >
 		friend class list;
+
 		template <class >
 		friend class list_iterator;
 
@@ -33,7 +34,7 @@ namespace ft {
 	public:
 		list_iterator() : _p(NULL) { }
 		list_iterator(const list_iterator<value_type>& other) : _p(other._p) { }
-		template <typename U>
+		template <class U>
 		list_iterator(list_iterator<U> const& other, typename ft::enable_if<!ft::is_const<U>::value>::type* = NULL) : _p(other._p) { }
 		list_iterator(node* p) : _p(p) { }
 		~list_iterator() { }
@@ -43,11 +44,6 @@ namespace ft {
 		template <class U>
 		friend bool operator== (const list_iterator<U>& lhs, const list_iterator<U>& rhs) {
 			return lhs._p == rhs._p;
-		}
-
-		template <class U>
-		friend bool operator!= (const list_iterator<U>& lhs, const list_iterator<U>& rhs) {
-			return !(lhs == rhs);
 		}
 
 		reference operator*() const { return _p->value; }
@@ -75,6 +71,11 @@ namespace ft {
 
 	};
 
+
+	template <class U>
+	bool operator!= (const list_iterator<U>& lhs, const list_iterator<U>& rhs) {
+		return !(lhs == rhs);
+	}
 
 } //namespace ft
 

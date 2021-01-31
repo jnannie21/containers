@@ -9,7 +9,7 @@
 
 namespace ft {
 
-	template < typename T >
+	template < class T >
 	class map_node {
 	public:
 		map_node* parent;

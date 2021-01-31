@@ -9,7 +9,7 @@
 
 namespace ft {
 
-	template < typename T >
+	template < class T >
 	class list_node {
 	public:
 		list_node* prev;

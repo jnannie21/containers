@@ -9,7 +9,7 @@
 
 namespace ft {
 
-	template<typename T>
+	template<class T>
 	class set_node {
 	public:
 		set_node *parent;

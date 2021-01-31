@@ -3,6 +3,7 @@
 //
 
 #include <iostream>
+#include "list/list.hpp"
 
 int reverse_iterator_test();
 int list_test();
@@ -27,7 +28,6 @@ int main() {
 	queue_test();
 	std::cout << std::endl << "------------- \033[1;32m set tests\033[0m" << std::endl;
 	set_test();
-
 
 	return 0;
 }
