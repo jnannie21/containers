@@ -24,7 +24,7 @@ namespace ft {
 
 		template <class >
 		friend class list;
-		template <typename U>
+		template <class >
 		friend class list_iterator;
 
 	private:

@@ -21,7 +21,7 @@ namespace ft {
 
 		template <class >
 		friend class vector;
-		template <typename U>
+		template <class >
 		friend class vector_iterator;
 
 	private:
